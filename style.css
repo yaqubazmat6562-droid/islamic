@@ -1,13 +1,6 @@
-```css
 /* =========================================================
-   ISLAMICWAY WEBSITE
-   PART 2 — CSS
-========================================================= */
-
-
-/* =========================================================
-   GOOGLE FONT / BASIC RESET
-========================================================= */
+   ISLAMICWAY WEBSITE - GREEN THEME
+   ========================================================= */
 
 * {
     margin: 0;
@@ -15,17 +8,14 @@
     box-sizing: border-box;
 }
 
-html {
-    scroll-behavior: smooth;
-}
+html { scroll-behavior: smooth; }
 
 body {
     font-family: "Inter", sans-serif;
-    background: #020d25;
+    background: #0a1f0f;
     color: #ffffff;
     min-height: 100vh;
 }
-
 
 /* =========================================================
    MAIN WEBSITE
@@ -35,21 +25,10 @@ body {
     width: 100%;
     min-height: 100vh;
     overflow: hidden;
-
     background:
-        radial-gradient(
-            circle at 50% 0%,
-            rgba(0, 119, 255, 0.18),
-            transparent 35%
-        ),
-        linear-gradient(
-            180deg,
-            #020b20 0%,
-            #031435 50%,
-            #020b20 100%
-        );
+        radial-gradient(circle at 50% 0%, rgba(34, 139, 34, 0.18), transparent 35%),
+        linear-gradient(180deg, #061a0a 0%, #0a2e12 50%, #061a0a 100%);
 }
-
 
 /* =========================================================
    HEADER
@@ -65,43 +44,23 @@ body {
 .header-container {
     max-width: 1350px;
     margin: auto;
-
     min-height: 68px;
-
     display: flex;
     align-items: center;
     justify-content: space-between;
-
     padding: 10px 25px;
-
-    border: 1px solid rgba(0, 153, 255, 0.45);
-
+    border: 1px solid rgba(34, 200, 80, 0.45);
     border-radius: 30px;
-
-    background:
-        linear-gradient(
-            90deg,
-            rgba(2, 22, 55, 0.96),
-            rgba(3, 31, 72, 0.94)
-        );
-
-    box-shadow:
-        0 10px 35px rgba(0, 0, 0, 0.35),
-        inset 0 0 25px rgba(0, 132, 255, 0.05);
-
+    background: linear-gradient(90deg, rgba(8, 35, 15, 0.96), rgba(12, 55, 22, 0.94));
+    box-shadow: 0 10px 35px rgba(0, 0, 0, 0.35), inset 0 0 25px rgba(34, 180, 80, 0.05);
     backdrop-filter: blur(20px);
 }
 
-
-/* =========================================================
-   LOGO
-========================================================= */
-
+/* LOGO */
 .logo {
     display: flex;
     align-items: center;
     gap: 12px;
-
     cursor: pointer;
     user-select: none;
 }
@@ -109,28 +68,15 @@ body {
 .logo-icon {
     width: 45px;
     height: 45px;
-
     display: flex;
     align-items: center;
     justify-content: center;
-
     border-radius: 14px;
-
     font-size: 27px;
-
-    color: #8bdcff;
-
-    background:
-        linear-gradient(
-            145deg,
-            #063e80,
-            #021b45
-        );
-
-    border: 1px solid rgba(0, 180, 255, 0.55);
-
-    box-shadow:
-        0 0 18px rgba(0, 160, 255, 0.35);
+    color: #8bffb0;
+    background: linear-gradient(145deg, #0a5c22, #062e10);
+    border: 1px solid rgba(50, 220, 100, 0.55);
+    box-shadow: 0 0 18px rgba(34, 200, 80, 0.35);
 }
 
 .logo-text h2 {
@@ -142,15 +88,11 @@ body {
 
 .logo-text span {
     font-size: 10px;
-    color: #9bc4e8;
+    color: #9be8b0;
     letter-spacing: 0.5px;
 }
 
-
-/* =========================================================
-   NAVIGATION
-========================================================= */
-
+/* NAVIGATION */
 .navigation {
     display: flex;
     align-items: center;
@@ -159,3367 +101,1271 @@ body {
 
 .nav-link {
     text-decoration: none;
-
-    color: #dcecff;
-
+    color: #dcffe4;
     font-size: 14px;
     font-weight: 500;
-
     padding: 11px 15px;
-
     border-radius: 25px;
-
-    transition:
-        color 0.3s ease,
-        background 0.3s ease,
-        box-shadow 0.3s ease,
-        transform 0.3s ease;
+    transition: color 0.3s ease, background 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
 }
 
 .nav-link:hover {
     color: #ffffff;
-
-    background: rgba(0, 153, 255, 0.12);
-
-    box-shadow:
-        0 0 15px rgba(0, 153, 255, 0.12);
+    background: rgba(34, 200, 80, 0.12);
+    box-shadow: 0 0 15px rgba(34, 200, 80, 0.12);
 }
 
 .nav-link.active {
     color: #ffffff;
-
-    background:
-        linear-gradient(
-            135deg,
-            #078cf5,
-            #0065c8
-        );
-
-    box-shadow:
-        0 5px 20px rgba(0, 132, 255, 0.3);
+    background: linear-gradient(135deg, #1eaa4e, #0d7a2e);
+    box-shadow: 0 5px 20px rgba(34, 200, 80, 0.3);
 }
 
-
-/* =========================================================
-   HEADER ACTIONS
-========================================================= */
-
+/* HEADER ACTIONS */
 .header-actions {
     display: flex;
     align-items: center;
     gap: 10px;
 }
 
-.icon-button,
-.theme-button,
-.language-button {
+.icon-button, .theme-button, .language-button {
     border: none;
-
     cursor: pointer;
-
     color: #ffffff;
-
     background: transparent;
-
     transition: 0.3s ease;
 }
 
-.icon-button {
-    font-size: 18px;
-}
-
-.icon-button:hover {
-    transform: scale(1.15);
-}
+.icon-button { font-size: 18px; }
+.icon-button:hover { transform: scale(1.15); }
 
 .theme-button {
     width: 35px;
     height: 35px;
-
     border-radius: 50%;
-
     background: rgba(255, 255, 255, 0.08);
 }
-
-.theme-button:hover {
-    background: rgba(0, 153, 255, 0.2);
-}
+.theme-button:hover { background: rgba(34, 200, 80, 0.2); }
 
 .language-button {
     padding: 9px 16px;
-
-    border: 1px solid rgba(0, 153, 255, 0.5);
-
+    border: 1px solid rgba(34, 200, 80, 0.5);
     border-radius: 22px;
-
     font-family: "Amiri", serif;
     font-size: 14px;
-
-    background: rgba(0, 65, 130, 0.25);
+    background: rgba(12, 80, 30, 0.25);
 }
-
 .language-button:hover {
-    background: rgba(0, 140, 255, 0.2);
-
-    box-shadow:
-        0 0 15px rgba(0, 150, 255, 0.25);
+    background: rgba(34, 200, 80, 0.2);
+    box-shadow: 0 0 15px rgba(34, 200, 80, 0.25);
 }
 
+/* PAGE SYSTEM */
+.page { width: 100%; min-height: 100vh; }
+.page.active-page { display: block; }
+.page:not(.active-page) { display: none; }
 
-/* =========================================================
-   PAGE SYSTEM
-========================================================= */
-
-.page {
-    width: 100%;
-    min-height: 100vh;
-}
-
-.page.active-page {
-    display: block;
-}
-
-.page:not(.active-page) {
-    display: none;
-}
-
-
-/* =========================================================
-   HERO
-========================================================= */
-
+/* HERO */
 .hero {
     max-width: 1450px;
-
     min-height: 560px;
-
     margin: 0 auto;
-
     position: relative;
-
     overflow: hidden;
-
     display: flex;
     align-items: center;
-
     padding: 70px 7%;
-
     border-radius: 0 0 30px 30px;
-
     background:
-        radial-gradient(
-            circle at 75% 55%,
-            rgba(0, 143, 255, 0.32),
-            transparent 30%
-        ),
-        radial-gradient(
-            circle at 25% 30%,
-            rgba(0, 80, 190, 0.28),
-            transparent 35%
-        ),
-        linear-gradient(
-            110deg,
-            #02132f,
-            #04265a,
-            #031a3c
-        );
-
-    border: 1px solid rgba(0, 135, 255, 0.2);
+        radial-gradient(circle at 75% 55%, rgba(34, 180, 80, 0.32), transparent 30%),
+        radial-gradient(circle at 25% 30%, rgba(20, 120, 50, 0.28), transparent 35%),
+        linear-gradient(110deg, #061a0a, #0a3a15, #082a10);
+    border: 1px solid rgba(34, 200, 80, 0.2);
 }
-
-
-/* Decorative Islamic arch */
 
 .hero::before {
     content: "";
-
     position: absolute;
-
     width: 700px;
     height: 700px;
-
     right: -180px;
     top: -200px;
-
-    border: 2px solid rgba(67, 180, 255, 0.08);
-
+    border: 2px solid rgba(80, 220, 130, 0.08);
     border-radius: 50% 50% 0 0;
-
     transform: rotate(-12deg);
 }
 
-
-/* Blue light */
-
 .hero::after {
     content: "";
-
     position: absolute;
-
     width: 450px;
     height: 450px;
-
     right: 10%;
     top: 10%;
-
-    background: rgba(0, 135, 255, 0.13);
-
+    background: rgba(34, 180, 80, 0.13);
     filter: blur(80px);
-
     border-radius: 50%;
 }
 
-
-/* =========================================================
-   HERO CONTENT
-========================================================= */
-
-.hero-content {
-    position: relative;
-
-    z-index: 5;
-
-    max-width: 650px;
-}
+.hero-content { position: relative; z-index: 5; max-width: 650px; }
 
 .bismillah {
-    color: #55caff;
-
+    color: #55ff99;
     font-size: 13px;
-
     letter-spacing: 1px;
-
     margin-bottom: 22px;
 }
 
 .hero h1 {
     font-family: "Amiri", serif;
-
     font-size: clamp(42px, 5vw, 72px);
-
     line-height: 1.05;
-
     font-weight: 700;
-
     margin-bottom: 25px;
-
-    text-shadow:
-        0 4px 20px rgba(0, 0, 0, 0.25);
+    text-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
 }
 
 .hero h1 span {
-    color: #62d4ff;
-
-    text-shadow:
-        0 0 25px rgba(48, 196, 255, 0.25);
+    color: #62ff9a;
+    text-shadow: 0 0 25px rgba(48, 255, 120, 0.25);
 }
 
 .hero p {
     max-width: 600px;
-
-    color: #c1d9ee;
-
+    color: #c1eed0;
     font-size: 16px;
-
     line-height: 1.8;
-
     margin-bottom: 30px;
 }
 
-
-/* =========================================================
-   PRIMARY BUTTON
-========================================================= */
-
 .primary-button {
     display: inline-flex;
-
     align-items: center;
     justify-content: center;
-
     gap: 13px;
-
     border: none;
-
     cursor: pointer;
-
     padding: 15px 24px;
-
     border-radius: 30px;
-
     color: #ffffff;
-
     font-size: 15px;
     font-weight: 600;
-
-    background:
-        linear-gradient(
-            135deg,
-            #0b9cff,
-            #0069d4
-        );
-
-    box-shadow:
-        0 10px 30px rgba(0, 133, 255, 0.3);
-
+    background: linear-gradient(135deg, #1ea84e, #0d7a2e);
+    box-shadow: 0 10px 30px rgba(34, 200, 80, 0.3);
     transition: 0.3s ease;
 }
 
-.primary-button span {
-    font-size: 20px;
-}
-
+.primary-button span { font-size: 20px; }
 .primary-button:hover {
     transform: translateY(-3px);
-
-    box-shadow:
-        0 15px 35px rgba(0, 153, 255, 0.45);
+    box-shadow: 0 15px 35px rgba(34, 200, 80, 0.45);
 }
-
-
-/* =========================================================
-   MOSQUE DECORATION
-========================================================= */
 
 .hero-mosque {
     position: absolute;
-
     right: 7%;
     bottom: 30px;
-
     z-index: 3;
-
     font-size: 260px;
-
     opacity: 0.85;
-
-    filter:
-        drop-shadow(
-            0 0 35px rgba(0, 164, 255, 0.45)
-        );
-
+    filter: drop-shadow(0 0 35px rgba(34, 200, 80, 0.45));
     user-select: none;
 }
 
-
-/* =========================================================
-   QUICK ACCESS
-========================================================= */
-
+/* QUICK ACCESS */
 .quick-section {
     max-width: 1200px;
-
     margin: 30px auto;
-
     padding: 0 20px;
-
     display: grid;
-
-    grid-template-columns:
-        repeat(6, 1fr);
-
+    grid-template-columns: repeat(6, 1fr);
     gap: 15px;
 }
 
 .quick-card {
     min-height: 145px;
-
     padding: 20px 14px;
-
     display: flex;
-
     flex-direction: column;
-
     align-items: center;
-
     justify-content: center;
-
     text-align: center;
-
     cursor: pointer;
-
     border-radius: 20px;
-
-    border: 1px solid rgba(0, 139, 255, 0.35);
-
-    background:
-        linear-gradient(
-            145deg,
-            rgba(3, 35, 78, 0.9),
-            rgba(2, 18, 48, 0.9)
-        );
-
-    transition:
-        transform 0.3s ease,
-        border 0.3s ease,
-        box-shadow 0.3s ease;
+    border: 1px solid rgba(34, 200, 80, 0.35);
+    background: linear-gradient(145deg, rgba(12, 55, 25, 0.9), rgba(6, 28, 12, 0.9));
+    transition: transform 0.3s ease, border 0.3s ease, box-shadow 0.3s ease;
 }
 
 .quick-card:hover {
     transform: translateY(-7px);
-
-    border-color: rgba(0, 186, 255, 0.75);
-
-    box-shadow:
-        0 15px 35px rgba(0, 95, 190, 0.25),
-        inset 0 0 25px rgba(0, 140, 255, 0.05);
+    border-color: rgba(34, 220, 100, 0.75);
+    box-shadow: 0 15px 35px rgba(20, 120, 50, 0.25), inset 0 0 25px rgba(34, 180, 80, 0.05);
 }
 
 .quick-icon {
     font-size: 28px;
-
     margin-bottom: 10px;
-
-    filter:
-        drop-shadow(
-            0 0 10px rgba(0, 183, 255, 0.5)
-        );
+    filter: drop-shadow(0 0 10px rgba(34, 220, 100, 0.5));
 }
 
-.quick-card h3 {
-    font-size: 14px;
+.quick-card h3 { font-size: 14px; margin-bottom: 6px; }
+.quick-card p { color: #91d8a8; font-size: 10px; line-height: 1.4; }
+.arrow { color: #35ff80; font-size: 18px; margin-top: 7px; }
 
-    margin-bottom: 6px;
-}
-
-.quick-card p {
-    color: #91b5d8;
-
-    font-size: 10px;
-
-    line-height: 1.4;
-}
-
-.arrow {
-    color: #35baff;
-
-    font-size: 18px;
-
-    margin-top: 7px;
-}
-
-
-/* =========================================================
-   INFORMATION SECTION
-========================================================= */
-
+/* INFORMATION SECTION */
 .information-section {
     max-width: 1200px;
-
     margin: 35px auto;
-
     padding: 0 20px;
-
     display: grid;
-
-    grid-template-columns:
-        1fr 1.25fr 0.85fr;
-
+    grid-template-columns: 1fr 1.25fr 0.85fr;
     gap: 18px;
 }
 
-
-/* =========================================================
-   COMMON CARD
-========================================================= */
-
-.verse-card,
-.prayer-card,
-.inspiration-card {
+.verse-card, .prayer-card, .inspiration-card {
     min-height: 300px;
-
     border-radius: 20px;
-
-    border: 1px solid rgba(0, 135, 255, 0.35);
-
-    background:
-        linear-gradient(
-            145deg,
-            rgba(4, 40, 87, 0.95),
-            rgba(2, 19, 48, 0.95)
-        );
-
-    box-shadow:
-        0 10px 35px rgba(0, 0, 0, 0.15);
-
+    border: 1px solid rgba(34, 200, 80, 0.35);
+    background: linear-gradient(145deg, rgba(12, 55, 25, 0.95), rgba(6, 28, 12, 0.95));
+    box-shadow: 0 10px 35px rgba(0, 0, 0, 0.15);
     overflow: hidden;
 }
 
-
-/* =========================================================
-   VERSE CARD
-========================================================= */
-
 .verse-card {
     padding: 35px 25px;
-
     text-align: center;
-
     display: flex;
-
     flex-direction: column;
-
     align-items: center;
-
     justify-content: center;
 }
 
-.card-label {
-    color: #3bc4ff;
-
-    font-size: 12px;
-
-    margin-bottom: 25px;
-
-    letter-spacing: 1px;
-}
+.card-label { color: #3bff88; font-size: 12px; margin-bottom: 25px; letter-spacing: 1px; }
 
 .arabic-text {
     direction: rtl;
-
     font-family: "Amiri", serif;
-
     font-size: 34px;
-
     line-height: 1.7;
-
     color: #ffffff;
-
     margin-bottom: 15px;
-
-    text-shadow:
-        0 0 18px rgba(0, 180, 255, 0.25);
+    text-shadow: 0 0 18px rgba(34, 200, 80, 0.25);
 }
 
 .translation {
-    color: #d4e7f8;
-
+    color: #d4f8e0;
     font-family: "Amiri", serif;
-
     font-size: 18px;
-
     font-style: italic;
-
     margin-bottom: 10px;
 }
 
-.verse-card small {
-    color: #6fa5cc;
+.verse-card small { color: #6fbc8a; font-size: 11px; }
 
-    font-size: 11px;
-}
-
-
-/* =========================================================
-   PRAYER CARD
-========================================================= */
-
-.prayer-card {
-    padding: 25px;
-}
+/* PRAYER CARD */
+.prayer-card { padding: 25px; }
 
 .prayer-header {
     display: flex;
-
     align-items: center;
-
     justify-content: space-between;
-
     margin-bottom: 18px;
 }
 
-.prayer-header h2 {
-    font-family: "Amiri", serif;
-
-    font-size: 25px;
-
-    margin-bottom: 5px;
-}
-
-.prayer-header p {
-    color: #8eb5d8;
-
-    font-size: 11px;
-}
+.prayer-header h2 { font-family: "Amiri", serif; font-size: 25px; margin-bottom: 5px; }
+.prayer-header p { color: #8ed8a8; font-size: 11px; }
 
 .date-box {
     padding: 8px 12px;
-
     border-radius: 10px;
-
-    background: rgba(0, 125, 240, 0.12);
-
-    border: 1px solid rgba(0, 153, 255, 0.2);
-
-    color: #72cfff;
-
+    background: rgba(34, 140, 60, 0.12);
+    border: 1px solid rgba(34, 200, 80, 0.2);
+    color: #72ffae;
     font-size: 11px;
-
     display: flex;
-
     gap: 6px;
-
     align-items: center;
 }
 
-.prayer-list {
-    width: 100%;
-}
+.prayer-list { width: 100%; }
 
 .prayer-row {
     min-height: 38px;
-
     display: flex;
-
     align-items: center;
-
     justify-content: space-between;
-
-    border-bottom: 1px solid rgba(130, 190, 230, 0.08);
-
-    color: #8fdcff;
-
+    border-bottom: 1px solid rgba(140, 220, 170, 0.08);
+    color: #8fffb0;
     font-size: 12px;
 }
 
-.prayer-row strong {
-    color: #ffffff;
-
-    font-weight: 500;
-}
+.prayer-row strong { color: #ffffff; font-weight: 500; }
 
 .secondary-button {
     border: none;
-
     cursor: pointer;
-
     display: block;
-
     margin: 18px auto 0;
-
     padding: 10px 18px;
-
     border-radius: 25px;
-
     color: #ffffff;
-
-    background:
-        linear-gradient(
-            135deg,
-            #087fdc,
-            #005bb8
-        );
-
+    background: linear-gradient(135deg, #1a8a42, #0d6a28);
     font-size: 11px;
-
     transition: 0.3s ease;
 }
 
 .secondary-button:hover {
     transform: translateY(-2px);
-
-    box-shadow:
-        0 8px 20px rgba(0, 128, 255, 0.25);
+    box-shadow: 0 8px 20px rgba(34, 200, 80, 0.25);
 }
 
-
-/* =========================================================
-   INSPIRATION CARD
-========================================================= */
-
+/* INSPIRATION CARD */
 .inspiration-card {
     padding: 30px 22px;
-
     display: flex;
-
     flex-direction: column;
-
     align-items: center;
-
     justify-content: center;
-
     text-align: center;
-
     background:
-        radial-gradient(
-            circle at 50% 25%,
-            rgba(0, 135, 255, 0.18),
-            transparent 45%
-        ),
-        linear-gradient(
-            145deg,
-            #05265a,
-            #021634
-        );
+        radial-gradient(circle at 50% 25%, rgba(34, 200, 80, 0.18), transparent 45%),
+        linear-gradient(145deg, #0a3a15, #061f0a);
 }
 
 .star {
-    color: #50caff;
-
+    color: #50ff90;
     font-size: 22px;
-
     margin-bottom: 18px;
-
-    text-shadow:
-        0 0 15px #159ee8;
+    text-shadow: 0 0 15px #159ee8;
 }
 
 .inspiration-card blockquote {
     font-family: "Amiri", serif;
-
     font-size: 19px;
-
     line-height: 1.65;
-
     font-style: italic;
-
-    color: #e2f2ff;
-
+    color: #e2ffe8;
     margin-bottom: 15px;
 }
 
-.inspiration-card span {
-    color: #74acd3;
+.inspiration-card span { color: #74d395; font-size: 11px; }
 
-    font-size: 11px;
-}
-
-
-/* =========================================================
-   ARTICLES
-========================================================= */
-
+/* ARTICLES */
 .articles-section {
     max-width: 1200px;
-
     margin: 50px auto;
-
     padding: 0 20px 60px;
 }
 
 .section-heading {
     display: flex;
-
     align-items: center;
-
     justify-content: space-between;
-
     margin-bottom: 25px;
 }
 
-.section-heading > div {
-    display: flex;
-
-    align-items: center;
-
-    gap: 12px;
-}
-
-.section-heading > div > span {
-    color: #49caff;
-
-    font-size: 24px;
-}
-
-.section-heading h2 {
-    font-family: "Amiri", serif;
-
-    font-size: 28px;
-}
+.section-heading > div { display: flex; align-items: center; gap: 12px; }
+.section-heading > div > span { color: #49ff90; font-size: 24px; }
+.section-heading h2 { font-family: "Amiri", serif; font-size: 28px; }
 
 .section-heading button {
     border: none;
-
     background: transparent;
-
-    color: #42c4ff;
-
+    color: #42ff8a;
     cursor: pointer;
-
     font-size: 12px;
-
     transition: 0.3s ease;
 }
 
-.section-heading button:hover {
-    color: #ffffff;
-}
-
-
-/* =========================================================
-   ARTICLE GRID
-========================================================= */
+.section-heading button:hover { color: #ffffff; }
 
 .article-grid {
     display: grid;
-
-    grid-template-columns:
-        repeat(3, 1fr);
-
+    grid-template-columns: repeat(3, 1fr);
     gap: 18px;
 }
 
 .article-card {
     min-height: 280px;
-
     cursor: pointer;
-
     overflow: hidden;
-
     border-radius: 20px;
-
-    border: 1px solid rgba(0, 135, 255, 0.28);
-
-    background:
-        linear-gradient(
-            145deg,
-            #052b60,
-            #021936
-        );
-
+    border: 1px solid rgba(34, 200, 80, 0.28);
+    background: linear-gradient(145deg, #0a3a18, #061f0c);
     transition: 0.3s ease;
 }
 
 .article-card:hover {
     transform: translateY(-6px);
-
-    border-color: rgba(0, 180, 255, 0.65);
-
-    box-shadow:
-        0 15px 35px rgba(0, 100, 200, 0.22);
+    border-color: rgba(34, 220, 100, 0.65);
+    box-shadow: 0 15px 35px rgba(20, 120, 50, 0.22);
 }
 
 .article-image {
     height: 125px;
-
     display: flex;
-
     align-items: center;
-
     justify-content: center;
-
     font-size: 55px;
-
     background:
-        radial-gradient(
-            circle,
-            rgba(0, 155, 255, 0.3),
-            transparent 65%
-        ),
-        #031b3c;
+        radial-gradient(circle, rgba(34, 200, 80, 0.3), transparent 65%),
+        #062210;
 }
 
-.article-content {
-    padding: 20px;
-}
+.article-content { padding: 20px; }
+.article-content > span { color: #3bff88; font-size: 10px; text-transform: uppercase; letter-spacing: 1px; }
+.article-content h3 { font-family: "Amiri", serif; font-size: 21px; margin: 8px 0; }
+.article-content p { color: #91d3a8; font-size: 12px; line-height: 1.6; margin-bottom: 12px; }
+.article-content button { border: none; background: transparent; color: #49ffa0; cursor: pointer; font-size: 11px; }
 
-.article-content > span {
-    color: #3fc5ff;
-
-    font-size: 10px;
-
-    text-transform: uppercase;
-
-    letter-spacing: 1px;
-}
-
-.article-content h3 {
-    font-family: "Amiri", serif;
-
-    font-size: 21px;
-
-    margin: 8px 0;
-}
-
-.article-content p {
-    color: #91b3d1;
-
-    font-size: 12px;
-
-    line-height: 1.6;
-
-    margin-bottom: 12px;
-}
-
-.article-content button {
-    border: none;
-
-    background: transparent;
-
-    color: #49c8ff;
-
-    cursor: pointer;
-
-    font-size: 11px;
-}
-
-
-/* =========================================================
-   BLANK / INNER PAGES
-========================================================= */
-
+/* BLANK PAGES */
 .blank-page {
     min-height: calc(100vh - 160px);
-
     padding: 100px 20px;
-
     display: flex;
-
     align-items: center;
-
     justify-content: center;
-
-    background:
-        radial-gradient(
-            circle at center,
-            rgba(0, 115, 255, 0.13),
-            transparent 45%
-        );
+    background: radial-gradient(circle at center, rgba(34, 180, 80, 0.13), transparent 45%);
 }
 
 .page-content {
     width: min(700px, 90%);
-
     min-height: 400px;
-
     display: flex;
-
     flex-direction: column;
-
     align-items: center;
-
     justify-content: center;
-
     text-align: center;
-
     padding: 50px;
-
     border-radius: 25px;
-
-    border: 1px solid rgba(0, 145, 255, 0.35);
-
-    background:
-        linear-gradient(
-            145deg,
-            rgba(4, 40, 87, 0.85),
-            rgba(2, 19, 48, 0.9)
-        );
-
-    box-shadow:
-        0 20px 50px rgba(0, 0, 0, 0.25),
-        inset 0 0 40px rgba(0, 140, 255, 0.04);
+    border: 1px solid rgba(34, 200, 80, 0.35);
+    background: linear-gradient(145deg, rgba(12, 55, 25, 0.85), rgba(6, 28, 12, 0.9));
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25), inset 0 0 40px rgba(34, 180, 80, 0.04);
 }
 
 .page-icon {
     width: 90px;
     height: 90px;
-
     display: flex;
-
     align-items: center;
-
     justify-content: center;
-
     margin-bottom: 25px;
-
     border-radius: 25px;
-
     font-size: 45px;
-
-    color: #62d6ff;
-
-    background:
-        rgba(0, 120, 255, 0.12);
-
-    border: 1px solid rgba(0, 165, 255, 0.4);
-
-    box-shadow:
-        0 0 35px rgba(0, 153, 255, 0.2);
+    color: #62ffa0;
+    background: rgba(34, 180, 80, 0.12);
+    border: 1px solid rgba(34, 200, 80, 0.4);
+    box-shadow: 0 0 35px rgba(34, 200, 80, 0.2);
 }
 
-.page-content h1 {
-    font-family: "Amiri", serif;
+.page-content h1 { font-family: "Amiri", serif; font-size: 45px; margin-bottom: 10px; }
+.page-content p { color: #83d3a0; font-size: 14px; }
 
-    font-size: 45px;
-
-    margin-bottom: 10px;
-}
-
-.page-content p {
-    color: #83afd2;
-
-    font-size: 14px;
-}
-
-
-/* =========================================================
-   FOOTER
-========================================================= */
-
+/* FOOTER */
 .footer {
-    border-top: 1px solid rgba(0, 130, 255, 0.2);
-
-    background:
-        #010a1c;
-
+    border-top: 1px solid rgba(34, 200, 80, 0.2);
+    background: #041308;
     padding: 30px 5%;
 }
 
 .footer-container {
     max-width: 1200px;
-
     margin: auto;
-
     display: flex;
-
     align-items: center;
-
     justify-content: space-between;
-
     gap: 25px;
 }
 
-.footer-logo {
-    display: flex;
+.footer-logo { display: flex; align-items: center; gap: 10px; }
+.footer-logo .logo-icon { width: 38px; height: 38px; font-size: 21px; }
+.footer-logo h2 { font-family: "Amiri", serif; font-size: 19px; }
+.footer-logo p { color: #66ac7c; font-size: 9px; }
 
-    align-items: center;
+.footer-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 18px; }
+.footer-links a { text-decoration: none; color: #78be8e; font-size: 11px; transition: 0.3s ease; }
+.footer-links a:hover { color: #44ff90; }
 
-    gap: 10px;
-}
+.copyright { color: #527a5e; font-size: 9px; text-align: right; }
 
-.footer-logo .logo-icon {
-    width: 38px;
-    height: 38px;
-
-    font-size: 21px;
-}
-
-.footer-logo h2 {
-    font-family: "Amiri", serif;
-
-    font-size: 19px;
-}
-
-.footer-logo p {
-    color: #668cac;
-
-    font-size: 9px;
-}
-
-.footer-links {
-    display: flex;
-
-    flex-wrap: wrap;
-
-    justify-content: center;
-
-    gap: 18px;
-}
-
-.footer-links a {
-    text-decoration: none;
-
-    color: #789fbe;
-
-    font-size: 11px;
-
-    transition: 0.3s ease;
-}
-
-.footer-links a:hover {
-    color: #44c7ff;
-}
-
-.copyright {
-    color: #52718e;
-
-    font-size: 9px;
-
-    text-align: right;
-}
-
-
-/* =========================================================
-   SCROLLBAR
-========================================================= */
-
-::-webkit-scrollbar {
-    width: 8px;
-}
-
-::-webkit-scrollbar-track {
-    background: #010a1c;
-}
-
+/* SCROLLBAR */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: #041308; }
 ::-webkit-scrollbar-thumb {
-    background:
-        linear-gradient(
-            #087edb,
-            #03427e
-        );
-
+    background: linear-gradient(#1a8a42, #0a4a20);
     border-radius: 10px;
 }
+::-webkit-scrollbar-thumb:hover { background: #22cc55; }
 
-::-webkit-scrollbar-thumb:hover {
-    background: #0aa5ff;
-}
+::selection { background: rgba(34, 200, 80, 0.4); color: #ffffff; }
 
-
-/* =========================================================
-   SELECTION
-========================================================= */
-
-::selection {
-    background: rgba(0, 145, 255, 0.4);
-
-    color: #ffffff;
-}
-
-
-/* =========================================================
-   RESPONSIVE — TABLET
-========================================================= */
-
+/* RESPONSIVE */
 @media (max-width: 1100px) {
-
-    .header-container {
-        padding: 10px 18px;
-    }
-
-    .navigation {
-        gap: 2px;
-    }
-
-    .nav-link {
-        padding: 10px 9px;
-
-        font-size: 12px;
-    }
-
-    .quick-section {
-        grid-template-columns:
-            repeat(3, 1fr);
-    }
-
-    .information-section {
-        grid-template-columns:
-            1fr 1fr;
-    }
-
-    .inspiration-card {
-        grid-column:
-            1 / -1;
-    }
-
-    .hero-mosque {
-        right: 2%;
-
-        font-size: 200px;
-
-        opacity: 0.55;
-    }
+    .header-container { padding: 10px 18px; }
+    .navigation { gap: 2px; }
+    .nav-link { padding: 10px 9px; font-size: 12px; }
+    .quick-section { grid-template-columns: repeat(3, 1fr); }
+    .information-section { grid-template-columns: 1fr 1fr; }
+    .inspiration-card { grid-column: 1 / -1; }
+    .hero-mosque { right: 2%; font-size: 200px; opacity: 0.55; }
 }
-
-
-/* =========================================================
-   RESPONSIVE — MOBILE
-========================================================= */
 
 @media (max-width: 768px) {
-
-    .header {
-        padding: 10px;
-    }
-
+    .header { padding: 10px; }
     .header-container {
         flex-wrap: wrap;
-
         border-radius: 20px;
-
         gap: 15px;
-
         padding: 12px 15px;
     }
-
-    .logo-text h2 {
-        font-size: 20px;
-    }
-
+    .logo-text h2 { font-size: 20px; }
     .navigation {
         width: 100%;
-
         order: 3;
-
         overflow-x: auto;
-
         justify-content: flex-start;
-
         padding-bottom: 5px;
     }
+    .navigation::-webkit-scrollbar { height: 3px; }
+    .nav-link { white-space: nowrap; font-size: 11px; padding: 8px 11px; }
+    .header-actions { margin-left: auto; }
+    .language-button { padding: 7px 12px; }
 
-    .navigation::-webkit-scrollbar {
-        height: 3px;
-    }
+    .hero { min-height: 500px; padding: 55px 25px; border-radius: 0 0 20px 20px; }
+    .hero-content { max-width: 100%; }
+    .bismillah { font-size: 10px; }
+    .hero h1 { font-size: 43px; }
+    .hero p { font-size: 13px; line-height: 1.7; }
+    .hero-mosque { right: -20px; bottom: 20px; font-size: 150px; opacity: 0.3; }
 
-    .nav-link {
-        white-space: nowrap;
+    .quick-section { grid-template-columns: repeat(2, 1fr); gap: 10px; padding: 0 12px; }
+    .quick-card { min-height: 135px; border-radius: 16px; }
 
-        font-size: 11px;
+    .information-section { grid-template-columns: 1fr; padding: 0 12px; }
+    .inspiration-card { grid-column: auto; }
 
-        padding: 8px 11px;
-    }
+    .articles-section { padding: 0 12px 40px; }
+    .article-grid { grid-template-columns: 1fr; }
+    .section-heading h2 { font-size: 23px; }
 
-    .header-actions {
-        margin-left: auto;
-    }
+    .footer-container { flex-direction: column; text-align: center; }
+    .copyright { text-align: center; }
+    .footer-links { gap: 12px; }
 
-    .language-button {
-        padding: 7px 12px;
-    }
-
-
-    /* HERO */
-
-    .hero {
-        min-height: 500px;
-
-        padding: 55px 25px;
-
-        border-radius: 0 0 20px 20px;
-    }
-
-    .hero-content {
-        max-width: 100%;
-    }
-
-    .bismillah {
-        font-size: 10px;
-    }
-
-    .hero h1 {
-        font-size: 43px;
-    }
-
-    .hero p {
-        font-size: 13px;
-
-        line-height: 1.7;
-    }
-
-    .hero-mosque {
-        right: -20px;
-
-        bottom: 20px;
-
-        font-size: 150px;
-
-        opacity: 0.3;
-    }
-
-
-    /* QUICK CARDS */
-
-    .quick-section {
-        grid-template-columns:
-            repeat(2, 1fr);
-
-        gap: 10px;
-
-        padding: 0 12px;
-    }
-
-    .quick-card {
-        min-height: 135px;
-
-        border-radius: 16px;
-    }
-
-
-    /* INFORMATION */
-
-    .information-section {
-        grid-template-columns: 1fr;
-
-        padding: 0 12px;
-    }
-
-    .inspiration-card {
-        grid-column: auto;
-    }
-
-
-    /* ARTICLES */
-
-    .articles-section {
-        padding: 0 12px 40px;
-    }
-
-    .article-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .section-heading h2 {
-        font-size: 23px;
-    }
-
-
-    /* FOOTER */
-
-    .footer-container {
-        flex-direction: column;
-
-        text-align: center;
-    }
-
-    .copyright {
-        text-align: center;
-    }
-
-    .footer-links {
-        gap: 12px;
-    }
-
-
-    /* INNER PAGE */
-
-    .blank-page {
-        padding: 60px 15px;
-    }
-
-    .page-content {
-        min-height: 350px;
-
-        padding: 30px 20px;
-    }
-
-    .page-content h1 {
-        font-size: 35px;
-    }
+    .blank-page { padding: 60px 15px; }
+    .page-content { min-height: 350px; padding: 30px 20px; }
+    .page-content h1 { font-size: 35px; }
 }
-
-
-/* =========================================================
-   SMALL MOBILE
-========================================================= */
 
 @media (max-width: 450px) {
-
-    .header-actions {
-        gap: 5px;
-    }
-
-    .icon-button {
-        font-size: 15px;
-    }
-
-    .theme-button {
-        width: 30px;
-        height: 30px;
-    }
-
-    .language-button {
-        font-size: 11px;
-
-        padding: 6px 9px;
-    }
-
-    .hero h1 {
-        font-size: 37px;
-    }
-
-    .hero {
-        min-height: 520px;
-    }
-
-    .quick-section {
-        grid-template-columns: 1fr 1fr;
-    }
-
-    .quick-card h3 {
-        font-size: 12px;
-    }
-
-    .quick-card p {
-        font-size: 9px;
-    }
-
-    .arabic-text {
-        font-size: 28px;
-    }
-
-    .prayer-card {
-        padding: 20px 15px;
-    }
-
-    .date-box {
-        display: none;
-    }
+    .header-actions { gap: 5px; }
+    .icon-button { font-size: 15px; }
+    .theme-button { width: 30px; height: 30px; }
+    .language-button { font-size: 11px; padding: 6px 9px; }
+    .hero h1 { font-size: 37px; }
+    .hero { min-height: 520px; }
+    .quick-section { grid-template-columns: 1fr 1fr; }
+    .quick-card h3 { font-size: 12px; }
+    .quick-card p { font-size: 9px; }
+    .arabic-text { font-size: 28px; }
+    .prayer-card { padding: 20px 15px; }
+    .date-box { display: none; }
 }
-
-
-/* =========================================================
-   SIMPLE ANIMATION
-========================================================= */
 
 @keyframes fadeIn {
-
-    from {
-        opacity: 0;
-        transform: translateY(10px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
-.page.active-page {
-    animation:
-        fadeIn 0.4s ease;
+.page.active-page { animation: fadeIn 0.4s ease; }
+
+@keyframes greenGlow {
+    0% { box-shadow: 0 0 10px rgba(34, 200, 80, 0.15); }
+    50% { box-shadow: 0 0 25px rgba(34, 200, 80, 0.3); }
+    100% { box-shadow: 0 0 10px rgba(34, 200, 80, 0.15); }
 }
 
+.logo-icon { animation: greenGlow 3s infinite; }
 
 /* =========================================================
-   GLOW ANIMATION
-========================================================= */
-
-@keyframes blueGlow {
-
-    0% {
-        box-shadow:
-            0 0 10px rgba(0, 155, 255, 0.15);
-    }
-
-    50% {
-        box-shadow:
-            0 0 25px rgba(0, 155, 255, 0.3);
-    }
-
-    100% {
-        box-shadow:
-            0 0 10px rgba(0, 155, 255, 0.15);
-    }
-
-}
-
-.logo-icon {
-    animation:
-        blueGlow 3s infinite;
-}
-```
-```css
-/* =========================================================
-   DYNAMIC ISLAMIC CALENDAR
+   CALENDAR (GREEN THEME)
 ========================================================= */
 
 .calendar-page {
     min-height: 100vh;
-
     padding: 50px 20px 80px;
-
-    background:
-        radial-gradient(
-            circle at 50% 0%,
-            rgba(0, 140, 255, 0.18),
-            transparent 40%
-        );
+    background: radial-gradient(circle at 50% 0%, rgba(34, 200, 80, 0.18), transparent 40%);
 }
 
-
-/* =========================================================
-   CALENDAR WRAPPER
-========================================================= */
-
-.calendar-wrapper {
-    width: min(1150px, 100%);
-
-    margin: auto;
-}
-
-
-/* =========================================================
-   TOP
-========================================================= */
+.calendar-wrapper { width: min(1150px, 100%); margin: auto; }
 
 .calendar-top {
     display: flex;
-
     align-items: center;
-
     justify-content: space-between;
-
     gap: 20px;
-
     margin-bottom: 30px;
 }
 
-.calendar-title {
-    display: flex;
-
-    align-items: center;
-
-    gap: 18px;
-}
+.calendar-title { display: flex; align-items: center; gap: 18px; }
 
 .calendar-icon {
     width: 70px;
     height: 70px;
-
     display: flex;
-
     align-items: center;
     justify-content: center;
-
     border-radius: 22px;
-
     font-size: 35px;
-
-    background:
-        linear-gradient(
-            145deg,
-            #063d7c,
-            #021a3d
-        );
-
-    border: 1px solid
-        rgba(0, 170, 255, 0.45);
-
-    box-shadow:
-        0 0 30px
-        rgba(0, 145, 255, 0.2);
+    background: linear-gradient(145deg, #0a5c22, #062e10);
+    border: 1px solid rgba(34, 200, 80, 0.45);
+    box-shadow: 0 0 30px rgba(34, 200, 80, 0.2);
 }
 
-.calendar-title h1 {
-    font-family: "Amiri", serif;
-
-    font-size: 40px;
-
-    line-height: 1;
-
-    margin-bottom: 8px;
-}
-
-.calendar-title p {
-    color: #7faed0;
-
-    font-size: 13px;
-}
+.calendar-title h1 { font-family: "Amiri", serif; font-size: 40px; line-height: 1; margin-bottom: 8px; }
+.calendar-title p { color: #7fd89a; font-size: 13px; }
 
 .calendar-location {
     padding: 12px 18px;
-
     border-radius: 25px;
-
-    color: #75d5ff;
-
+    color: #75ffb0;
     font-size: 12px;
-
-    border: 1px solid
-        rgba(0, 160, 255, 0.3);
-
-    background:
-        rgba(0, 100, 210, 0.1);
+    border: 1px solid rgba(34, 200, 80, 0.3);
+    background: rgba(34, 140, 60, 0.1);
 }
-
-
-/* =========================================================
-   CALENDAR CONTROLS
-========================================================= */
 
 .calendar-controls {
     display: flex;
-
     align-items: center;
-
     justify-content: center;
-
     gap: 30px;
-
     margin-bottom: 15px;
 }
 
 .calendar-control-button {
     width: 48px;
     height: 48px;
-
-    border: 1px solid
-        rgba(0, 160, 255, 0.4);
-
+    border: 1px solid rgba(34, 200, 80, 0.4);
     border-radius: 50%;
-
     cursor: pointer;
-
     color: #ffffff;
-
     font-size: 20px;
-
-    background:
-        rgba(0, 100, 200, 0.2);
-
+    background: rgba(34, 140, 60, 0.2);
     transition: 0.3s ease;
 }
 
 .calendar-control-button:hover {
-    background:
-        #087fdc;
-
-    box-shadow:
-        0 0 20px
-        rgba(0, 145, 255, 0.35);
-
+    background: #1a8a42;
+    box-shadow: 0 0 20px rgba(34, 200, 80, 0.35);
     transform: scale(1.08);
 }
 
-.current-month {
-    min-width: 260px;
+.current-month { min-width: 260px; text-align: center; }
+.current-month h2 { font-family: "Amiri", serif; font-size: 32px; color: #ffffff; }
+.current-month span { color: #45ff90; font-size: 13px; }
 
-    text-align: center;
-}
-
-.current-month h2 {
-    font-family: "Amiri", serif;
-
-    font-size: 32px;
-
-    color: #ffffff;
-}
-
-.current-month span {
-    color: #45c7ff;
-
-    font-size: 13px;
-}
-
-
-/* =========================================================
-   TODAY
-========================================================= */
-
-.today-container {
-    text-align: center;
-
-    margin-bottom: 25px;
-}
+.today-container { text-align: center; margin-bottom: 25px; }
 
 .today-button {
     padding: 10px 20px;
-
-    border: 1px solid
-        rgba(0, 170, 255, 0.4);
-
+    border: 1px solid rgba(34, 200, 80, 0.4);
     border-radius: 25px;
-
-    background:
-        rgba(0, 120, 240, 0.12);
-
-    color: #7bd7ff;
-
+    background: rgba(34, 140, 60, 0.12);
+    color: #7bffb0;
     cursor: pointer;
-
     font-size: 12px;
-
     transition: 0.3s ease;
 }
 
-.today-button:hover {
-    background:
-        rgba(0, 140, 255, 0.25);
-
-    color: #ffffff;
-}
-
-
-/* =========================================================
-   CALENDAR BOX
-========================================================= */
+.today-button:hover { background: rgba(34, 200, 80, 0.25); color: #ffffff; }
 
 .islamic-calendar {
     width: 100%;
-
     overflow: hidden;
-
     border-radius: 25px;
-
-    border: 1px solid
-        rgba(0, 145, 255, 0.35);
-
-    background:
-        linear-gradient(
-            145deg,
-            rgba(4, 40, 88, 0.95),
-            rgba(2, 18, 45, 0.98)
-        );
-
-    box-shadow:
-        0 20px 60px
-        rgba(0, 0, 0, 0.25);
+    border: 1px solid rgba(34, 200, 80, 0.35);
+    background: linear-gradient(145deg, rgba(12, 55, 25, 0.95), rgba(6, 28, 12, 0.98));
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
 }
-
-
-/* =========================================================
-   WEEKDAYS
-========================================================= */
 
 .calendar-weekdays {
     display: grid;
-
-    grid-template-columns:
-        repeat(7, 1fr);
-
-    border-bottom: 1px solid
-        rgba(0, 150, 255, 0.15);
+    grid-template-columns: repeat(7, 1fr);
+    border-bottom: 1px solid rgba(34, 200, 80, 0.15);
 }
 
 .calendar-weekdays div {
     padding: 17px 5px;
-
     text-align: center;
-
-    color: #49c8ff;
-
+    color: #49ff88;
     font-size: 12px;
-
     font-weight: 600;
-
     text-transform: uppercase;
 }
 
-
-/* =========================================================
-   DAYS
-========================================================= */
-
-.calendar-days {
-    display: grid;
-
-    grid-template-columns:
-        repeat(7, 1fr);
-}
+.calendar-days { display: grid; grid-template-columns: repeat(7, 1fr); }
 
 .calendar-day {
     min-height: 115px;
-
     padding: 12px;
-
     position: relative;
-
     cursor: pointer;
-
-    border-right: 1px solid
-        rgba(110, 180, 230, 0.07);
-
-    border-bottom: 1px solid
-        rgba(110, 180, 230, 0.07);
-
+    border-right: 1px solid rgba(130, 230, 170, 0.07);
+    border-bottom: 1px solid rgba(130, 230, 170, 0.07);
     transition: 0.25s ease;
 }
 
 .calendar-day:hover {
-    background:
-        rgba(0, 145, 255, 0.1);
-
-    box-shadow:
-        inset 0 0 25px
-        rgba(0, 145, 255, 0.05);
+    background: rgba(34, 200, 80, 0.1);
+    box-shadow: inset 0 0 25px rgba(34, 200, 80, 0.05);
 }
-
-
-/* Gregorian */
 
 .gregorian-number {
     display: block;
-
     color: #ffffff;
-
     font-size: 20px;
-
     font-weight: 600;
-
     margin-bottom: 7px;
 }
 
-
-/* Hijri */
-
 .hijri-number {
     display: block;
-
-    color: #65cbf8;
-
+    color: #65ffa8;
     font-family: "Amiri", serif;
-
     font-size: 18px;
-
     margin-bottom: 4px;
 }
 
-
-/* Hijri month */
-
-.hijri-month {
-    display: block;
-
-    color: #668eae;
-
-    font-size: 9px;
-}
-
-
-/* =========================================================
-   OUTSIDE MONTH
-========================================================= */
-
-.calendar-day.other-month {
-    opacity: 0.25;
-}
-
-
-/* =========================================================
-   TODAY
-========================================================= */
+.hijri-month { display: block; color: #66ae7c; font-size: 9px; }
+.calendar-day.other-month { opacity: 0.25; }
 
 .calendar-day.today {
-    background:
-        linear-gradient(
-            145deg,
-            rgba(0, 145, 255, 0.25),
-            rgba(0, 90, 180, 0.1)
-        );
-
-    box-shadow:
-        inset 0 0 30px
-        rgba(0, 150, 255, 0.1);
+    background: linear-gradient(145deg, rgba(34, 200, 80, 0.25), rgba(20, 120, 50, 0.1));
+    box-shadow: inset 0 0 30px rgba(34, 200, 80, 0.1);
 }
 
-.calendar-day.today
-.gregorian-number {
-    color: #50d0ff;
-}
+.calendar-day.today .gregorian-number { color: #50ff90; }
 
 .calendar-day.today::after {
     content: "TODAY";
-
     position: absolute;
-
     right: 8px;
     top: 8px;
-
     font-size: 7px;
-
-    color: #4bcaff;
-
+    color: #4bff90;
     letter-spacing: 0.5px;
 }
 
-
-/* =========================================================
-   FRIDAY
-========================================================= */
-
-.calendar-day.friday {
-    background:
-        rgba(0, 120, 220, 0.045);
-}
-
-.calendar-day.friday
-.gregorian-number {
-    color: #80d9ff;
-}
-
-
-/* =========================================================
-   SELECTED DATE
-========================================================= */
+.calendar-day.friday { background: rgba(34, 180, 80, 0.045); }
+.calendar-day.friday .gregorian-number { color: #80ffb0; }
 
 .calendar-day.selected {
-    outline: 2px solid
-        rgba(0, 180, 255, 0.7);
-
+    outline: 2px solid rgba(34, 200, 80, 0.7);
     outline-offset: -2px;
-
-    background:
-        rgba(0, 145, 255, 0.16);
+    background: rgba(34, 200, 80, 0.16);
 }
 
-
-/* =========================================================
-   LOADING
-========================================================= */
-
-.calendar-loading {
-    display: none;
-
-    padding: 60px 20px;
-
-    text-align: center;
-}
+.calendar-loading { display: none; padding: 60px 20px; text-align: center; }
 
 .loading-spinner {
     width: 45px;
     height: 45px;
-
     margin: 0 auto 15px;
-
     border-radius: 50%;
-
-    border: 3px solid
-        rgba(0, 150, 255, 0.15);
-
-    border-top-color:
-        #24baff;
-
-    animation:
-        calendarSpin 1s linear infinite;
+    border: 3px solid rgba(34, 200, 80, 0.15);
+    border-top-color: #24ff70;
+    animation: calendarSpin 1s linear infinite;
 }
 
-@keyframes calendarSpin {
+@keyframes calendarSpin { to { transform: rotate(360deg); } }
 
-    to {
-        transform: rotate(360deg);
-    }
-
-}
-
-.calendar-loading p {
-    color: #75a9ca;
-
-    font-size: 12px;
-}
-
-
-/* =========================================================
-   ERROR
-========================================================= */
+.calendar-loading p { color: #75d89a; font-size: 12px; }
 
 .calendar-error {
     display: none;
-
     padding: 40px;
-
     text-align: center;
-
     border-radius: 20px;
-
-    border: 1px solid
-        rgba(255, 100, 100, 0.25);
-
-    background:
-        rgba(120, 20, 30, 0.1);
+    border: 1px solid rgba(255, 100, 100, 0.25);
+    background: rgba(120, 20, 30, 0.1);
 }
 
-.calendar-error span {
-    font-size: 30px;
-}
-
-.calendar-error p {
-    color: #b8cde0;
-
-    margin: 10px 0 15px;
-
-    font-size: 13px;
-}
+.calendar-error span { font-size: 30px; }
+.calendar-error p { color: #b8e0c8; margin: 10px 0 15px; font-size: 13px; }
 
 .calendar-error button {
     padding: 9px 18px;
-
     border: none;
-
     border-radius: 20px;
-
-    background: #087fdc;
-
+    background: #1a8a42;
     color: #ffffff;
-
     cursor: pointer;
 }
 
-
-/* =========================================================
-   SELECTED DATE BOX
-========================================================= */
-
 .selected-date-box {
     margin-top: 25px;
-
     padding: 22px 25px;
-
     display: flex;
-
     align-items: center;
-
     gap: 18px;
-
     border-radius: 20px;
-
-    border: 1px solid
-        rgba(0, 145, 255, 0.3);
-
-    background:
-        linear-gradient(
-            145deg,
-            rgba(4, 40, 85, 0.8),
-            rgba(2, 20, 47, 0.9)
-        );
+    border: 1px solid rgba(34, 200, 80, 0.3);
+    background: linear-gradient(145deg, rgba(12, 55, 25, 0.8), rgba(6, 30, 15, 0.9));
 }
 
 .selected-date-icon {
     width: 55px;
     height: 55px;
-
     display: flex;
-
     align-items: center;
     justify-content: center;
-
     border-radius: 17px;
-
     font-size: 25px;
-
-    background:
-        rgba(0, 130, 255, 0.13);
+    background: rgba(34, 180, 80, 0.13);
 }
 
 .selected-date-box span {
-    color: #5ecbff;
-
+    color: #5effa0;
     font-size: 10px;
-
     text-transform: uppercase;
-
     letter-spacing: 1px;
 }
 
-.selected-date-box h3 {
-    margin: 4px 0;
-
-    font-size: 18px;
-}
-
-.selected-date-box p {
-    color: #7da8c6;
-
-    font-family: "Amiri", serif;
-
-    font-size: 16px;
-}
-
-
-/* =========================================================
-   INFO CARDS
-========================================================= */
+.selected-date-box h3 { margin: 4px 0; font-size: 18px; }
+.selected-date-box p { color: #7dd0a0; font-family: "Amiri", serif; font-size: 16px; }
 
 .calendar-info-grid {
     margin-top: 25px;
-
     display: grid;
-
-    grid-template-columns:
-        repeat(3, 1fr);
-
+    grid-template-columns: repeat(3, 1fr);
     gap: 15px;
 }
 
 .calendar-info-card {
     display: flex;
-
     gap: 15px;
-
     padding: 22px;
-
     border-radius: 18px;
-
-    border: 1px solid
-        rgba(0, 145, 255, 0.2);
-
-    background:
-        rgba(3, 30, 65, 0.7);
+    border: 1px solid rgba(34, 200, 80, 0.2);
+    background: rgba(8, 40, 20, 0.7);
 }
 
-.info-icon {
-    font-size: 25px;
-}
-
-.calendar-info-card h3 {
-    font-size: 14px;
-
-    margin-bottom: 7px;
-}
-
-.calendar-info-card p {
-    color: #789fbd;
-
-    font-size: 10px;
-
-    line-height: 1.6;
-}
-
-
-/* =========================================================
-   MOBILE
-========================================================= */
+.info-icon { font-size: 25px; }
+.calendar-info-card h3 { font-size: 14px; margin-bottom: 7px; }
+.calendar-info-card p { color: #78be90; font-size: 10px; line-height: 1.6; }
 
 @media (max-width: 768px) {
-
-    .calendar-page {
-        padding:
-            35px 12px 60px;
-    }
-
-    .calendar-top {
-        flex-direction: column;
-
-        align-items: flex-start;
-    }
-
-    .calendar-title h1 {
-        font-size: 32px;
-    }
-
-    .calendar-location {
-        width: 100%;
-
-        text-align: center;
-    }
-
-    .calendar-day {
-        min-height: 80px;
-
-        padding: 8px 6px;
-    }
-
-    .gregorian-number {
-        font-size: 16px;
-    }
-
-    .hijri-number {
-        font-size: 15px;
-    }
-
-    .hijri-month {
-        font-size: 7px;
-    }
-
-    .calendar-weekdays div {
-        font-size: 9px;
-
-        padding: 12px 2px;
-    }
-
-    .calendar-day.today::after {
-        display: none;
-    }
-
-    .calendar-info-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .selected-date-box {
-        padding: 18px;
-    }
+    .calendar-page { padding: 35px 12px 60px; }
+    .calendar-top { flex-direction: column; align-items: flex-start; }
+    .calendar-title h1 { font-size: 32px; }
+    .calendar-location { width: 100%; text-align: center; }
+    .calendar-day { min-height: 80px; padding: 8px 6px; }
+    .gregorian-number { font-size: 16px; }
+    .hijri-number { font-size: 15px; }
+    .hijri-month { font-size: 7px; }
+    .calendar-weekdays div { font-size: 9px; padding: 12px 2px; }
+    .calendar-day.today::after { display: none; }
+    .calendar-info-grid { grid-template-columns: 1fr; }
+    .selected-date-box { padding: 18px; }
 }
-
-
-/* =========================================================
-   SMALL MOBILE
-========================================================= */
 
 @media (max-width: 450px) {
-
-    .calendar-icon {
-        width: 55px;
-        height: 55px;
-
-        font-size: 27px;
-    }
-
-    .calendar-title {
-        gap: 12px;
-    }
-
-    .calendar-title h1 {
-        font-size: 27px;
-    }
-
-    .calendar-controls {
-        gap: 12px;
-    }
-
-    .current-month {
-        min-width: 180px;
-    }
-
-    .current-month h2 {
-        font-size: 24px;
-    }
-
-    .calendar-control-button {
-        width: 40px;
-        height: 40px;
-    }
-
-    .calendar-day {
-        min-height: 68px;
-
-        padding: 6px 4px;
-    }
-
-    .gregorian-number {
-        font-size: 14px;
-    }
-
-    .hijri-number {
-        font-size: 13px;
-    }
-
-    .hijri-month {
-        display: none;
-    }
+    .calendar-icon { width: 55px; height: 55px; font-size: 27px; }
+    .calendar-title { gap: 12px; }
+    .calendar-title h1 { font-size: 27px; }
+    .calendar-controls { gap: 12px; }
+    .current-month { min-width: 180px; }
+    .current-month h2 { font-size: 24px; }
+    .calendar-control-button { width: 40px; height: 40px; }
+    .calendar-day { min-height: 68px; padding: 6px 4px; }
+    .gregorian-number { font-size: 14px; }
+    .hijri-number { font-size: 13px; }
+    .hijri-month { display: none; }
 }
-```
-/* =========================================================
-   DYNAMIC QURAN PAGE
-   ========================================================= */
-
-.quran-page {
-    padding: 40px 20px 70px;
-    min-height: 100vh;
-}
-
-.quran-container {
-    max-width: 1200px;
-    margin: auto;
-}
-
 
 /* =========================================================
-   QURAN HERO
-   ========================================================= */
+   QURAN PAGE (GREEN)
+========================================================= */
+
+.quran-page { padding: 40px 20px 70px; min-height: 100vh; }
+.quran-container { max-width: 1200px; margin: auto; }
 
 .quran-hero {
-    background:
-        linear-gradient(
-            135deg,
-            rgba(0, 100, 180, 0.35),
-            rgba(0, 40, 90, 0.8)
-        );
-
+    background: linear-gradient(135deg, rgba(20, 130, 50, 0.35), rgba(6, 45, 15, 0.8));
     border: 1px solid rgba(255,255,255,0.12);
-
     border-radius: 24px;
-
     padding: 35px;
-
     display: flex;
-
     align-items: center;
-
     gap: 25px;
-
     margin-bottom: 30px;
-
-    box-shadow:
-        0 20px 50px rgba(0,0,0,0.25);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.25);
 }
-
 
 .quran-icon {
     width: 75px;
     height: 75px;
-
     display: flex;
-
     align-items: center;
-
     justify-content: center;
-
     border-radius: 20px;
-
     font-size: 38px;
-
-    background:
-        rgba(255,255,255,0.1);
-
-    border:
-        1px solid rgba(255,255,255,0.15);
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.15);
 }
 
+.quran-hero h1 { margin: 0 0 8px; font-size: 34px; color: #ffffff; }
+.quran-hero p { margin: 0; color: #c7f0d5; font-size: 16px; }
 
-.quran-hero h1 {
-    margin: 0 0 8px;
-
-    font-size: 34px;
-
-    color: #ffffff;
-}
-
-
-.quran-hero p {
-    margin: 0;
-
-    color: #c7d9ed;
-
-    font-size: 16px;
-}
-
-
-/* =========================================================
-   CONTROLS
-   ========================================================= */
-
-.quran-controls {
-
-    display: flex;
-
-    gap: 15px;
-
-    margin-bottom: 30px;
-
-    flex-wrap: wrap;
-}
-
-
-.quran-search {
-
-    flex: 1;
-
-    min-width: 250px;
-
-    position: relative;
-}
-
+.quran-controls { display: flex; gap: 15px; margin-bottom: 30px; flex-wrap: wrap; }
+.quran-search { flex: 1; min-width: 250px; position: relative; }
 
 .quran-search input {
-
     width: 100%;
-
     padding: 16px 50px 16px 18px;
-
     border-radius: 14px;
-
-    border: 1px solid
-        rgba(255,255,255,0.12);
-
-    background:
-        rgba(255,255,255,0.07);
-
+    border: 1px solid rgba(255,255,255,0.12);
+    background: rgba(255,255,255,0.07);
     color: white;
-
     font-size: 16px;
-
     outline: none;
-
     box-sizing: border-box;
 }
 
-
 .quran-search input:focus {
-
-    border-color:
-        rgba(90,180,255,0.8);
-
-    box-shadow:
-        0 0 0 3px
-        rgba(50,150,255,0.1);
+    border-color: rgba(90,255,150,0.8);
+    box-shadow: 0 0 0 3px rgba(34, 200, 80, 0.1);
 }
 
-
-.quran-search input::placeholder {
-    color: #9fb5c9;
-}
-
+.quran-search input::placeholder { color: #9fc9b0; }
 
 .quran-search span {
-
     position: absolute;
-
     right: 18px;
-
     top: 50%;
-
     transform: translateY(-50%);
-
     font-size: 20px;
 }
 
-
 .quran-control-btn {
-
     border: none;
-
     padding: 0 25px;
-
     min-height: 52px;
-
     border-radius: 14px;
-
-    background:
-        linear-gradient(
-            135deg,
-            #0879c9,
-            #064a91
-        );
-
+    background: linear-gradient(135deg, #1a9a45, #0a5520);
     color: white;
-
     font-weight: 600;
-
     cursor: pointer;
-
     transition: 0.3s;
 }
 
-
 .quran-control-btn:hover {
-
     transform: translateY(-2px);
-
-    box-shadow:
-        0 10px 25px
-        rgba(0,120,220,0.25);
+    box-shadow: 0 10px 25px rgba(34, 200, 80, 0.25);
 }
 
-
-/* =========================================================
-   SURAH GRID
-   ========================================================= */
-
-.surah-grid {
-
-    display: grid;
-
-    grid-template-columns:
-        repeat(3, 1fr);
-
-    gap: 18px;
-}
-
+.surah-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
 
 .surah-card {
-
     position: relative;
-
     padding: 22px;
-
     min-height: 150px;
-
     border-radius: 20px;
-
     cursor: pointer;
-
     overflow: hidden;
-
-    background:
-        linear-gradient(
-            145deg,
-            rgba(255,255,255,0.08),
-            rgba(255,255,255,0.025)
-        );
-
-    border:
-        1px solid
-        rgba(255,255,255,0.10);
-
-    transition:
-        transform 0.3s,
-        border 0.3s,
-        box-shadow 0.3s;
+    background: linear-gradient(145deg, rgba(255,255,255,0.08), rgba(255,255,255,0.025));
+    border: 1px solid rgba(255,255,255,0.10);
+    transition: transform 0.3s, border 0.3s, box-shadow 0.3s;
 }
-
 
 .surah-card:hover {
-
-    transform:
-        translateY(-6px);
-
-    border-color:
-        rgba(80,180,255,0.55);
-
-    box-shadow:
-        0 18px 40px
-        rgba(0,0,0,0.25);
+    transform: translateY(-6px);
+    border-color: rgba(80, 255, 130, 0.55);
+    box-shadow: 0 18px 40px rgba(0,0,0,0.25);
 }
 
-
 .surah-number {
-
     width: 42px;
-
     height: 42px;
-
     border-radius: 50%;
-
     display: flex;
-
     align-items: center;
-
     justify-content: center;
-
-    background:
-        rgba(30,140,220,0.18);
-
-    border:
-        1px solid
-        rgba(70,180,255,0.25);
-
-    color: #8fd3ff;
-
+    background: rgba(34, 200, 80, 0.18);
+    border: 1px solid rgba(80, 255, 130, 0.25);
+    color: #8fffb0;
     font-weight: bold;
-
     margin-bottom: 15px;
 }
 
-
 .surah-arabic {
-
     color: white;
-
     font-size: 25px;
-
-    font-family:
-        "Amiri",
-        "Traditional Arabic",
-        serif;
-
+    font-family: "Amiri", "Traditional Arabic", serif;
     direction: rtl;
-
     margin-bottom: 8px;
 }
 
-
-.surah-english {
-
-    color: #d7e8f5;
-
-    font-size: 17px;
-
-    font-weight: 600;
-}
-
-
-.surah-meta {
-
-    margin-top: 8px;
-
-    color: #8ea8bd;
-
-    font-size: 13px;
-}
-
+.surah-english { color: #d7f5e0; font-size: 17px; font-weight: 600; }
+.surah-meta { margin-top: 8px; color: #8ec9a3; font-size: 13px; }
 
 .revelation-badge {
-
     position: absolute;
-
     top: 18px;
-
     right: 18px;
-
     padding: 5px 9px;
-
     border-radius: 20px;
-
-    background:
-        rgba(0,120,200,0.15);
-
-    color: #91cef3;
-
+    background: rgba(34, 180, 80, 0.15);
+    color: #91ffb0;
     font-size: 11px;
 }
 
-
-/* =========================================================
-   READER
-   ========================================================= */
-
-.quran-reader {
-
-    margin-top: 25px;
-}
-
+.quran-reader { margin-top: 25px; }
 
 .reader-header {
-
     display: grid;
-
-    grid-template-columns:
-        auto 1fr auto;
-
+    grid-template-columns: auto 1fr auto;
     gap: 25px;
-
     align-items: center;
-
     padding: 25px;
-
     border-radius: 22px;
-
-    background:
-        linear-gradient(
-            135deg,
-            rgba(0,110,190,0.25),
-            rgba(0,40,90,0.55)
-        );
-
-    border:
-        1px solid
-        rgba(255,255,255,0.1);
-
+    background: linear-gradient(135deg, rgba(20, 140, 55, 0.25), rgba(6, 45, 15, 0.55));
+    border: 1px solid rgba(255,255,255,0.1);
     margin-bottom: 20px;
 }
-
 
 .reader-back {
-
     padding: 12px 18px;
-
     border-radius: 12px;
-
-    border: 1px solid
-        rgba(255,255,255,0.12);
-
-    background:
-        rgba(255,255,255,0.06);
-
+    border: 1px solid rgba(255,255,255,0.12);
+    background: rgba(255,255,255,0.06);
     color: white;
-
     cursor: pointer;
-
     transition: 0.3s;
 }
 
+.reader-back:hover { background: rgba(255,255,255,0.12); }
 
-.reader-back:hover {
-
-    background:
-        rgba(255,255,255,0.12);
-}
-
-
-.reader-title {
-
-    text-align: center;
-}
-
+.reader-title { text-align: center; }
 
 .reader-title h2 {
-
     margin: 0;
-
     color: white;
-
     font-size: 34px;
-
-    font-family:
-        "Amiri",
-        "Traditional Arabic",
-        serif;
-
+    font-family: "Amiri", "Traditional Arabic", serif;
     direction: rtl;
 }
 
-
-.reader-title h3 {
-
-    margin: 5px 0;
-
-    color: #ffffff;
-
-    font-size: 21px;
-}
-
-
-.reader-title p {
-
-    margin: 0;
-
-    color: #9db8cc;
-}
-
+.reader-title h3 { margin: 5px 0; color: #ffffff; font-size: 21px; }
+.reader-title p { margin: 0; color: #9fd8b2; }
 
 .reader-info {
-
     display: flex;
-
     flex-direction: column;
-
     gap: 8px;
-
-    color: #b8d3e7;
-
+    color: #b8e8c7;
     font-size: 13px;
-
     text-align: right;
 }
-
-
-/* =========================================================
-   AUDIO
-   ========================================================= */
 
 .quran-audio-box {
-
     padding: 20px;
-
     border-radius: 18px;
-
-    background:
-        rgba(255,255,255,0.05);
-
-    border:
-        1px solid
-        rgba(255,255,255,0.08);
-
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.08);
     margin-bottom: 20px;
 }
 
-
-.audio-title {
-
-    color: #bde3ff;
-
-    font-weight: 600;
-
-    margin-bottom: 12px;
-}
-
-
-.quran-audio-box audio {
-
-    width: 100%;
-}
-
-
-/* =========================================================
-   BISMILLAH
-   ========================================================= */
+.audio-title { color: #bdffd0; font-weight: 600; margin-bottom: 12px; }
+.quran-audio-box audio { width: 100%; }
 
 .bismillah {
-
     text-align: center;
-
     color: white;
-
     font-size: 30px;
-
-    font-family:
-        "Amiri",
-        "Traditional Arabic",
-        serif;
-
+    font-family: "Amiri", "Traditional Arabic", serif;
     direction: rtl;
-
     padding: 25px;
-
     margin-bottom: 20px;
 }
 
-
-/* =========================================================
-   AYAH
-   ========================================================= */
-
-.ayah-container {
-
-    display: flex;
-
-    flex-direction: column;
-
-    gap: 18px;
-}
-
+.ayah-container { display: flex; flex-direction: column; gap: 18px; }
 
 .ayah-card {
-
     padding: 25px;
-
     border-radius: 20px;
-
-    background:
-        linear-gradient(
-            145deg,
-            rgba(255,255,255,0.07),
-            rgba(255,255,255,0.025)
-        );
-
-    border:
-        1px solid
-        rgba(255,255,255,0.09);
-
+    background: linear-gradient(145deg, rgba(255,255,255,0.07), rgba(255,255,255,0.025));
+    border: 1px solid rgba(255,255,255,0.09);
     transition: 0.3s;
 }
 
+.ayah-card:hover { border-color: rgba(80, 255, 130, 0.35); }
 
-.ayah-card:hover {
-
-    border-color:
-        rgba(80,180,255,0.35);
-}
-
-
-.ayah-top {
-
-    display: flex;
-
-    justify-content: space-between;
-
-    align-items: center;
-
-    margin-bottom: 15px;
-}
-
+.ayah-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
 
 .ayah-number {
-
     width: 35px;
-
     height: 35px;
-
     border-radius: 50%;
-
     display: flex;
-
     align-items: center;
-
     justify-content: center;
-
-    background:
-        rgba(0,130,210,0.18);
-
-    color: #8ed5ff;
-
+    background: rgba(34, 200, 80, 0.18);
+    color: #8effb0;
     font-size: 13px;
 }
 
-
 .ayah-arabic {
-
     font-size: 30px;
-
     line-height: 2;
-
     text-align: right;
-
     direction: rtl;
-
     color: #ffffff;
-
-    font-family:
-        "Amiri",
-        "Traditional Arabic",
-        serif;
+    font-family: "Amiri", "Traditional Arabic", serif;
 }
 
-
-/* =========================================================
-   NAVIGATION
-   ========================================================= */
-
-.surah-navigation {
-
-    display: flex;
-
-    justify-content: space-between;
-
-    gap: 15px;
-
-    margin-top: 30px;
-}
-
+.surah-navigation { display: flex; justify-content: space-between; gap: 15px; margin-top: 30px; }
 
 .surah-nav-btn {
-
     padding: 15px 25px;
-
     border: none;
-
     border-radius: 14px;
-
-    background:
-        linear-gradient(
-            135deg,
-            #0879c9,
-            #064a91
-        );
-
+    background: linear-gradient(135deg, #1a9a45, #0a5520);
     color: white;
-
     font-weight: 600;
-
     cursor: pointer;
-
     transition: 0.3s;
 }
 
-
 .surah-nav-btn:hover {
-
-    transform:
-        translateY(-2px);
-
-    box-shadow:
-        0 10px 25px
-        rgba(0,120,220,0.25);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(34, 200, 80, 0.25);
 }
-
-
-/* =========================================================
-   LOADING
-   ========================================================= */
 
 .quran-loading {
-
     min-height: 250px;
-
     display: flex;
-
     flex-direction: column;
-
     align-items: center;
-
     justify-content: center;
-
-    color: #aac4d8;
+    color: #aad8b8;
 }
-
 
 .quran-spinner {
-
     width: 45px;
-
     height: 45px;
-
     border-radius: 50%;
-
-    border: 4px solid
-        rgba(255,255,255,0.1);
-
-    border-top-color:
-        #36a9f5;
-
-    animation:
-        quranSpin 1s linear infinite;
-
+    border: 4px solid rgba(255,255,255,0.1);
+    border-top-color: #36f57a;
+    animation: quranSpin 1s linear infinite;
     margin-bottom: 15px;
 }
 
+@keyframes quranSpin { to { transform: rotate(360deg); } }
 
-@keyframes quranSpin {
-
-    to {
-        transform: rotate(360deg);
-    }
-
-}
-
-
-/* =========================================================
-   ERROR
-   ========================================================= */
-
-.quran-error {
-
-    text-align: center;
-
-    padding: 50px 20px;
-
-    color: white;
-}
-
-
-.quran-error p {
-
-    color: #9fb5c8;
-}
-
+.quran-error { text-align: center; padding: 50px 20px; color: white; }
+.quran-error p { color: #9fc8b0; }
 
 .quran-retry {
-
     padding: 12px 25px;
-
     border: none;
-
     border-radius: 12px;
-
-    background:
-        #0879c9;
-
+    background: #1a9a45;
     color: white;
-
     cursor: pointer;
 }
 
-
-/* =========================================================
-   EMPTY SEARCH
-   ========================================================= */
-
-.no-surah {
-
-    grid-column: 1 / -1;
-
-    text-align: center;
-
-    padding: 50px;
-
-    color: #9db6c9;
-}
-
-
-/* =========================================================
-   MOBILE
-   ========================================================= */
+.no-surah { grid-column: 1 / -1; text-align: center; padding: 50px; color: #9dc9b0; }
 
 @media (max-width: 900px) {
-
-    .surah-grid {
-
-        grid-template-columns:
-            repeat(2, 1fr);
-
-    }
-
-    .reader-header {
-
-        grid-template-columns: 1fr;
-
-        text-align: center;
-
-    }
-
-    .reader-info {
-
-        text-align: center;
-
-        flex-direction: row;
-
-        justify-content: center;
-
-    }
-
+    .surah-grid { grid-template-columns: repeat(2, 1fr); }
+    .reader-header { grid-template-columns: 1fr; text-align: center; }
+    .reader-info { text-align: center; flex-direction: row; justify-content: center; }
 }
-
 
 @media (max-width: 600px) {
+    .quran-page { padding: 25px 12px 50px; }
+    .quran-hero { padding: 25px; flex-direction: column; text-align: center; }
+    .quran-hero h1 { font-size: 28px; }
+    .surah-grid { grid-template-columns: 1fr; }
+    .surah-card { min-height: auto; }
+    .ayah-card { padding: 18px; }
+    .ayah-arabic { font-size: 24px; line-height: 2.1; }
+    .bismillah { font-size: 23px; }
+    .surah-navigation { flex-direction: column; }
+    .surah-nav-btn { width: 100%; }
+}
 
-    .quran-page {
-
-        padding: 25px 12px 50px;
-
-    }
-
-    .quran-hero {
-
-        padding: 25px;
-
-        flex-direction: column;
-
-        text-align: center;
-
-    }
-
-    .quran-hero h1 {
-
-        font-size: 28px;
-
-    }
-
-    .surah-grid {
-
-        grid-template-columns:
-            1fr;
-
-    }
-
-    .surah-card {
-
-        min-height: auto;
-
-    }
-
-    .ayah-card {
-
-        padding: 18px;
-
-    }
-
-    .ayah-arabic {
-
-        font-size: 24px;
-
-        line-height: 2.1;
-
-    }
-
-    .bismillah {
-
-        font-size: 23px;
-
-    }
-
-    .surah-navigation {
-
-        flex-direction: column;
-
-    }
-
-    .surah-nav-btn {
-
-        width: 100%;
-
-    }
-
-}/* =========================================================
-   QURAN FULL AUDIO + URDU TRANSLATION
-   ========================================================= */
-
+/* Full audio + Urdu */
 .full-audio-box {
-
     margin: 20px 0;
-
     padding: 22px;
-
     border-radius: 20px;
-
-    background:
-        linear-gradient(
-            135deg,
-            rgba(0,120,200,0.18),
-            rgba(255,255,255,0.04)
-        );
-
-    border:
-        1px solid
-        rgba(255,255,255,0.12);
-
-    box-shadow:
-        0 15px 40px rgba(0,0,0,0.18);
-
+    background: linear-gradient(135deg, rgba(20, 140, 55, 0.18), rgba(255,255,255,0.04));
+    border: 1px solid rgba(255,255,255,0.12);
+    box-shadow: 0 15px 40px rgba(0,0,0,0.18);
 }
 
-
-.audio-heading {
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 10px;
-
-    color: #d9efff;
-
-    font-size: 18px;
-
-    margin-bottom: 15px;
-
-}
-
-
-.full-audio-box audio {
-
-    width: 100%;
-
-    height: 45px;
-
-}
-
-
-.audio-buttons {
-
-    display: flex;
-
-    gap: 10px;
-
-    margin-top: 15px;
-
-    flex-wrap: wrap;
-
-}
-
+.audio-heading { display: flex; align-items: center; gap: 10px; color: #d9ffe5; font-size: 18px; margin-bottom: 15px; }
+.full-audio-box audio { width: 100%; height: 45px; }
+.audio-buttons { display: flex; gap: 10px; margin-top: 15px; flex-wrap: wrap; }
 
 .audio-buttons button {
-
     border: none;
-
     padding: 11px 20px;
-
     border-radius: 12px;
-
-    background:
-        linear-gradient(
-            135deg,
-            #0879c9,
-            #064a91
-        );
-
+    background: linear-gradient(135deg, #1a9a45, #0a5520);
     color: white;
-
     cursor: pointer;
-
     font-weight: 600;
-
     transition: 0.25s;
-
 }
-
 
 .audio-buttons button:hover {
-
-    transform:
-        translateY(-2px);
-
-    box-shadow:
-        0 8px 20px
-        rgba(0,120,220,0.3);
-
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(34, 200, 80, 0.3);
 }
-
-
-/* =========================================================
-   AYAH TRANSLATION
-   ========================================================= */
 
 .ayah-translation {
-
     margin-top: 20px;
-
     padding-top: 18px;
-
-    border-top:
-        1px solid
-        rgba(255,255,255,0.08);
-
+    border-top: 1px solid rgba(255,255,255,0.08);
     direction: rtl;
-
     text-align: right;
-
-    color: #c9d9e7;
-
+    color: #c9f0d5;
     font-size: 19px;
-
     line-height: 2;
-
-    font-family:
-        "Noto Nastaliq Urdu",
-        "Jameel Noori Nastaleeq",
-        "Noto Sans Arabic",
-        Arial,
-        sans-serif;
-
+    font-family: "Noto Nastaliq Urdu", "Jameel Noori Nastaleeq", "Noto Sans Arabic", Arial, sans-serif;
 }
-
 
 .translation-label {
-
     display: inline-block;
-
     margin-bottom: 8px;
-
     padding: 5px 10px;
-
     border-radius: 8px;
-
-    background:
-        rgba(0,130,210,0.12);
-
-    color: #8ed5ff;
-
+    background: rgba(34, 200, 80, 0.12);
+    color: #8effb0;
     font-size: 12px;
-
     direction: ltr;
-
 }
-
-
-/* =========================================================
-   AYAH ARABIC
-   ========================================================= */
-
-.ayah-arabic {
-
-    font-size: 31px;
-
-    line-height: 2.2;
-
-    text-align: right;
-
-    direction: rtl;
-
-    color: #ffffff;
-
-    font-family:
-        "Amiri",
-        "Traditional Arabic",
-        serif;
-
-}
-
-
-/* =========================================================
-   ACTIVE AYAH
-   ========================================================= */
 
 .ayah-card.playing {
-
-    border-color:
-        rgba(70,190,255,0.8);
-
-    box-shadow:
-        0 0 25px
-        rgba(30,150,230,0.18);
-
-    transform:
-        translateY(-2px);
-
+    border-color: rgba(70, 255, 130, 0.8);
+    box-shadow: 0 0 25px rgba(34, 200, 80, 0.18);
+    transform: translateY(-2px);
 }
 
-
-/* =========================================================
-   MOBILE
-   ========================================================= */
-
 @media (max-width:600px) {
+    .full-audio-box { padding: 16px; }
+    .audio-buttons { display: grid; grid-template-columns: 1fr 1fr 1fr; }
+    .audio-buttons button { padding: 10px 8px; font-size: 12px; }
+    .ayah-arabic { font-size: 25px; }
+    .ayah-translation { font-size: 17px; line-height: 2.1; }
+}
 
-    .full-audio-box {
-
-        padding: 16px;
-
-    }
-
-    .audio-buttons {
-
-        display: grid;
-
-        grid-template-columns:
-            1fr 1fr 1fr;
-
-    }
-
-    .audio-buttons button {
-
-        padding:
-            10px 8px;
-
-        font-size: 12px;
-
-    }
-
-    .ayah-arabic {
-
-        font-size: 25px;
-
-    }
-
-    .ayah-translation {
-
-        font-size: 17px;
-
-        line-height: 2.1;
-
-    }
-
-}.islamic-logo {
+/* Islamic logo */
+.islamic-logo {
     display: flex;
     align-items: center;
     gap: 10px;
@@ -3533,3862 +1379,1463 @@ body {
     height: 55px;
     object-fit: contain;
     border-radius: 50%;
-}/* =====================================================
-   HADITH PAGE
-===================================================== */
-
-.hadith-page {
-    min-height: 100vh;
-    padding: 40px 20px;
 }
 
+/* =========================================================
+   HADITH (GREEN)
+========================================================= */
 
-.hadith-container {
-    max-width: 1200px;
-    margin: auto;
-}
-
-
-/* ================= HERO ================= */
+.hadith-page { min-height: 100vh; padding: 40px 20px; }
+.hadith-container { max-width: 1200px; margin: auto; }
 
 .hadith-hero {
     display: flex;
     align-items: center;
     gap: 20px;
-
     padding: 25px;
-
     margin-bottom: 35px;
-
-    border: 1px solid #168cff;
-
+    border: 1px solid #22c850;
     border-radius: 30px;
-
-    background:
-        linear-gradient(
-            135deg,
-            rgba(15, 45, 100, 0.9),
-            rgba(8, 25, 60, 0.95)
-        );
-
-    box-shadow:
-        0 0 25px rgba(0, 140, 255, 0.18);
+    background: linear-gradient(135deg, rgba(10, 55, 25, 0.9), rgba(6, 28, 12, 0.95));
+    box-shadow: 0 0 25px rgba(34, 200, 80, 0.18);
 }
-
 
 .hadith-icon {
     width: 70px;
     height: 70px;
-
     display: flex;
     align-items: center;
     justify-content: center;
-
     border-radius: 50%;
-
-    background: rgba(0, 140, 255, 0.15);
-
-    border: 1px solid #168cff;
-
+    background: rgba(34, 200, 80, 0.15);
+    border: 1px solid #22c850;
     font-size: 35px;
 }
 
+.hadith-hero h1 { margin: 0; color: white; font-size: 32px; }
+.hadith-hero p { margin-top: 7px; color: #9fffc0; }
 
-.hadith-hero h1 {
-    margin: 0;
+.hadith-section-title { text-align: center; margin-bottom: 30px; }
+.hadith-section-title h2 { color: white; font-size: 30px; margin-bottom: 8px; }
+.hadith-section-title p { color: #a9ffc8; }
 
-    color: white;
-
-    font-size: 32px;
-}
-
-
-.hadith-hero p {
-    margin-top: 7px;
-
-    color: #9fdcff;
-}
-
-
-/* ================= SECTION TITLE ================= */
-
-.hadith-section-title {
-    text-align: center;
-
-    margin-bottom: 30px;
-}
-
-
-.hadith-section-title h2 {
-    color: white;
-
-    font-size: 30px;
-
-    margin-bottom: 8px;
-}
-
-
-.hadith-section-title p {
-    color: #a9d9ff;
-}
-
-
-/* ================= BOOK GRID ================= */
-
-.hadith-books-grid {
-
-    display: grid;
-
-    grid-template-columns:
-        repeat(3, 1fr);
-
-    gap: 25px;
-}
-
+.hadith-books-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; }
 
 .hadith-book-card {
-
     padding: 30px 25px;
-
     text-align: center;
-
     border-radius: 25px;
-
-    border: 1px solid
-        rgba(22, 140, 255, 0.6);
-
-    background:
-        linear-gradient(
-            145deg,
-            rgba(15, 45, 100, 0.95),
-            rgba(5, 20, 50, 0.98)
-        );
-
-    box-shadow:
-        0 10px 30px
-        rgba(0, 0, 0, 0.25);
-
-    transition:
-        transform 0.3s,
-        box-shadow 0.3s,
-        border-color 0.3s;
-
+    border: 1px solid rgba(34, 200, 80, 0.6);
+    background: linear-gradient(145deg, rgba(10, 55, 25, 0.95), rgba(5, 25, 10, 0.98));
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+    transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
     cursor: pointer;
 }
-
 
 .hadith-book-card:hover {
-
     transform: translateY(-8px);
-
-    border-color: #35b5ff;
-
-    box-shadow:
-        0 15px 40px
-        rgba(0, 140, 255, 0.25);
+    border-color: #35ff70;
+    box-shadow: 0 15px 40px rgba(34, 200, 80, 0.25);
 }
 
-
-.book-icon {
-
-    font-size: 55px;
-
-    margin-bottom: 15px;
-}
-
-
-.hadith-book-card h3 {
-
-    color: white;
-
-    font-size: 24px;
-
-    margin: 10px 0;
-}
-
-
-.hadith-book-card p {
-
-    color: #55c7ff;
-
-    font-size: 20px;
-
-    direction: rtl;
-
-    margin: 8px 0;
-}
-
-
-.hadith-book-card span {
-
-    display: block;
-
-    color: #a9c8df;
-
-    margin: 15px 0 20px;
-
-    font-size: 14px;
-}
-
+.book-icon { font-size: 55px; margin-bottom: 15px; }
+.hadith-book-card h3 { color: white; font-size: 24px; margin: 10px 0; }
+.hadith-book-card p { color: #55ff90; font-size: 20px; direction: rtl; margin: 8px 0; }
+.hadith-book-card span { display: block; color: #a9d8b8; margin: 15px 0 20px; font-size: 14px; }
 
 .hadith-book-card button {
-
     border: none;
-
     padding: 12px 22px;
-
     border-radius: 25px;
-
-    background:
-        linear-gradient(
-            135deg,
-            #168cff,
-            #0064c8
-        );
-
+    background: linear-gradient(135deg, #22c850, #0d7a2e);
     color: white;
-
     font-weight: bold;
-
     cursor: pointer;
-
     transition: 0.3s;
 }
-
 
 .hadith-book-card button:hover {
-
     transform: scale(1.05);
-
-    box-shadow:
-        0 5px 20px
-        rgba(0, 140, 255, 0.4);
+    box-shadow: 0 5px 20px rgba(34, 200, 80, 0.4);
 }
-
-
-/* =====================================================
-   READER
-===================================================== */
 
 .hadith-reader-header {
-
     display: flex;
-
     align-items: center;
-
     gap: 25px;
-
     margin-bottom: 25px;
-
     padding: 20px;
-
     border-radius: 25px;
-
-    border: 1px solid #168cff;
-
-    background:
-        rgba(5, 25, 60, 0.9);
+    border: 1px solid #22c850;
+    background: rgba(6, 30, 12, 0.9);
 }
 
-
-.hadith-reader-header h2 {
-
-    color: white;
-
-    margin: 0;
-
-    font-size: 28px;
-}
-
-
-.hadith-reader-header p {
-
-    color: #55c7ff;
-
-    font-size: 20px;
-
-    direction: rtl;
-}
-
-
-/* ================= BACK BUTTON ================= */
+.hadith-reader-header h2 { color: white; margin: 0; font-size: 28px; }
+.hadith-reader-header p { color: #55ff90; font-size: 20px; direction: rtl; }
 
 .hadith-back-btn {
-
     padding: 12px 20px;
-
     border-radius: 20px;
-
-    border: 1px solid #168cff;
-
-    background:
-        rgba(22, 140, 255, 0.15);
-
+    border: 1px solid #22c850;
+    background: rgba(34, 200, 80, 0.15);
     color: white;
-
     cursor: pointer;
-
     transition: 0.3s;
 }
 
+.hadith-back-btn:hover { background: #22c850; }
 
-.hadith-back-btn:hover {
-
-    background: #168cff;
-}
-
-
-/* ================= TOOLS ================= */
-
-.hadith-tools {
-
-    display: flex;
-
-    gap: 10px;
-
-    margin-bottom: 25px;
-
-    flex-wrap: wrap;
-}
-
+.hadith-tools { display: flex; gap: 10px; margin-bottom: 25px; flex-wrap: wrap; }
 
 #hadithSearch {
-
     flex: 1;
-
     min-width: 220px;
-
     padding: 14px 18px;
-
     border-radius: 25px;
-
-    border: 1px solid #168cff;
-
-    background:
-        rgba(5, 25, 60, 0.9);
-
+    border: 1px solid #22c850;
+    background: rgba(6, 30, 12, 0.9);
     color: white;
-
     outline: none;
-
     font-size: 15px;
 }
 
-
-#hadithSearch::placeholder {
-
-    color: #8bb8d5;
-}
-
+#hadithSearch::placeholder { color: #8bd5a0; }
 
 .hadith-tools button {
-
     padding: 12px 20px;
-
     border-radius: 22px;
-
-    border: 1px solid #168cff;
-
-    background:
-        rgba(22, 140, 255, 0.15);
-
+    border: 1px solid #22c850;
+    background: rgba(34, 200, 80, 0.15);
     color: white;
-
     cursor: pointer;
 }
 
-
-.hadith-tools button:hover {
-
-    background: #168cff;
-}
-
-
-/* =====================================================
-   HADITH CARD
-===================================================== */
+.hadith-tools button:hover { background: #22c850; }
 
 .hadith-card {
-
     margin-bottom: 22px;
-
     padding: 25px;
-
     border-radius: 22px;
-
-    border: 1px solid
-        rgba(22, 140, 255, 0.5);
-
-    background:
-        linear-gradient(
-            145deg,
-            rgba(8, 35, 75, 0.98),
-            rgba(4, 18, 45, 0.98)
-        );
-
-    box-shadow:
-        0 8px 25px
-        rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(34, 200, 80, 0.5);
+    background: linear-gradient(145deg, rgba(8, 45, 18, 0.98), rgba(4, 20, 8, 0.98));
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
 }
-
 
 .hadith-card-top {
-
     display: flex;
-
     justify-content: space-between;
-
     align-items: center;
-
     margin-bottom: 20px;
-
     padding-bottom: 12px;
-
-    border-bottom:
-        1px solid
-        rgba(100, 190, 255, 0.2);
+    border-bottom: 1px solid rgba(100, 255, 150, 0.2);
 }
 
-
-.hadith-number {
-
-    color: #55c7ff;
-
-    font-weight: bold;
-}
-
-
-.hadith-reference {
-
-    color: #91b8d0;
-
-    font-size: 13px;
-}
-
-
-/* ================= ARABIC ================= */
+.hadith-number { color: #55ff90; font-weight: bold; }
+.hadith-reference { color: #91d0a8; font-size: 13px; }
 
 .hadith-arabic {
-
     direction: rtl;
-
     text-align: right;
-
     color: #ffffff;
-
     font-size: 25px;
-
     line-height: 2.1;
-
     margin-bottom: 25px;
-
-    font-family:
-        "Amiri",
-        "Noto Naskh Arabic",
-        serif;
+    font-family: "Amiri", "Noto Naskh Arabic", serif;
 }
-
-
-/* ================= URDU ================= */
 
 .hadith-urdu {
-
     direction: rtl;
-
     text-align: right;
-
     padding: 18px;
-
     border-radius: 15px;
-
-    background:
-        rgba(22, 140, 255, 0.08);
-
-    border-right:
-        4px solid #168cff;
-
-    color: #d8efff;
-
+    background: rgba(34, 200, 80, 0.08);
+    border-right: 4px solid #22c850;
+    color: #d8ffe5;
     font-size: 19px;
-
     line-height: 2;
-
-    font-family:
-        "Noto Nastaliq Urdu",
-        "Jameel Noori Nastaleeq",
-        serif;
+    font-family: "Noto Nastaliq Urdu", "Jameel Noori Nastaleeq", serif;
 }
 
-
-.hadith-urdu-title {
-
-    color: #55c7ff;
-
-    font-size: 14px;
-
-    margin-bottom: 8px;
-
-    font-family: Arial, sans-serif;
-}
-
-
-/* ================= PAGINATION ================= */
+.hadith-urdu-title { color: #55ff90; font-size: 14px; margin-bottom: 8px; font-family: Arial, sans-serif; }
 
 .hadith-pagination {
-
     display: flex;
-
     align-items: center;
-
     justify-content: center;
-
     gap: 20px;
-
     margin: 35px 0;
 }
 
-
 .hadith-pagination button {
-
     padding: 12px 22px;
-
     border-radius: 22px;
-
-    border: 1px solid #168cff;
-
-    background:
-        rgba(22, 140, 255, 0.15);
-
+    border: 1px solid #22c850;
+    background: rgba(34, 200, 80, 0.15);
     color: white;
-
     cursor: pointer;
 }
 
+.hadith-pagination button:hover { background: #22c850; }
+#hadithPageNumber { color: white; font-weight: bold; }
 
-.hadith-pagination button:hover {
-
-    background: #168cff;
-}
-
-
-#hadithPageNumber {
-
-    color: white;
-
-    font-weight: bold;
-}
-
-
-/* ================= LOADING ================= */
-
-.hadith-loading {
-
-    text-align: center;
-
-    padding: 50px;
-
-    color: #9fdcff;
-}
-
+.hadith-loading { text-align: center; padding: 50px; color: #9fffc0; }
 
 .hadith-spinner {
-
     width: 45px;
-
     height: 45px;
-
     margin: auto auto 15px;
-
-    border:
-        4px solid
-        rgba(255,255,255,0.2);
-
-    border-top:
-        4px solid #168cff;
-
+    border: 4px solid rgba(255,255,255,0.2);
+    border-top: 4px solid #22c850;
     border-radius: 50%;
-
-    animation:
-        hadithSpin 1s linear infinite;
+    animation: hadithSpin 1s linear infinite;
 }
 
-
-@keyframes hadithSpin {
-
-    100% {
-        transform: rotate(360deg);
-    }
-
-}
-
-
-/* ================= ERROR ================= */
+@keyframes hadithSpin { 100% { transform: rotate(360deg); } }
 
 .hadith-error {
-
     text-align: center;
-
     padding: 40px;
-
     border-radius: 20px;
-
-    border: 1px solid #168cff;
-
-    background:
-        rgba(10, 30, 65, 0.9);
-
+    border: 1px solid #22c850;
+    background: rgba(10, 45, 20, 0.9);
     color: white;
 }
 
-
 .hadith-error button {
-
     margin-top: 15px;
-
     padding: 10px 20px;
-
     border-radius: 20px;
-
     border: none;
-
-    background: #168cff;
-
+    background: #22c850;
     color: white;
-
     cursor: pointer;
 }
 
-
-/* =====================================================
-   MOBILE
-===================================================== */
-
-@media (max-width: 850px) {
-
-    .hadith-books-grid {
-
-        grid-template-columns: 1fr;
-
-    }
-
-}
-
+@media (max-width: 850px) { .hadith-books-grid { grid-template-columns: 1fr; } }
 
 @media (max-width: 600px) {
-
-    .hadith-page {
-
-        padding: 25px 12px;
-
-    }
-
-    .hadith-hero {
-
-        padding: 18px;
-
-    }
-
-    .hadith-hero h1 {
-
-        font-size: 25px;
-
-    }
-
-    .hadith-reader-header {
-
-        flex-direction: column;
-
-        align-items: stretch;
-
-    }
-
-    .hadith-arabic {
-
-        font-size: 21px;
-
-    }
-
-    .hadith-urdu {
-
-        font-size: 17px;
-
-    }
-
-    .hadith-pagination {
-
-        gap: 8px;
-
-    }
-
-}/* =====================================================
-   ISLAMIC ARTICLES
-===================================================== */
-
-.articles-page {
-    min-height: 100vh;
-    padding: 40px 20px;
+    .hadith-page { padding: 25px 12px; }
+    .hadith-hero { padding: 18px; }
+    .hadith-hero h1 { font-size: 25px; }
+    .hadith-reader-header { flex-direction: column; align-items: stretch; }
+    .hadith-arabic { font-size: 21px; }
+    .hadith-urdu { font-size: 17px; }
+    .hadith-pagination { gap: 8px; }
 }
 
-.articles-container {
-    max-width: 1200px;
-    margin: auto;
-}
+/* =========================================================
+   ARTICLES (GREEN)
+========================================================= */
 
-
-/* ================= HERO ================= */
+.articles-page { min-height: 100vh; padding: 40px 20px; }
+.articles-container { max-width: 1200px; margin: auto; }
 
 .articles-hero {
-
     display: flex;
     align-items: center;
-
     gap: 20px;
-
     padding: 25px;
-
     margin-bottom: 30px;
-
-    border: 1px solid #168cff;
-
+    border: 1px solid #22c850;
     border-radius: 30px;
-
-    background:
-        linear-gradient(
-            135deg,
-            rgba(15, 45, 100, .95),
-            rgba(5, 20, 55, .98)
-        );
-
-    box-shadow:
-        0 0 30px
-        rgba(0, 140, 255, .15);
+    background: linear-gradient(135deg, rgba(10, 55, 25, .95), rgba(5, 22, 10, .98));
+    box-shadow: 0 0 30px rgba(34, 200, 80, .15);
 }
 
-
 .articles-icon {
-
     width: 70px;
     height: 70px;
-
     display: flex;
     align-items: center;
     justify-content: center;
-
     border-radius: 50%;
-
-    border: 1px solid #168cff;
-
-    background:
-        rgba(22, 140, 255, .15);
-
+    border: 1px solid #22c850;
+    background: rgba(34, 200, 80, .15);
     font-size: 36px;
 }
 
-
-.articles-hero h1 {
-
-    margin: 0;
-
-    color: white;
-
-    font-size: 32px;
-}
-
-
-.articles-hero p {
-
-    margin-top: 7px;
-
-    color: #9fdcff;
-}
-
-
-/* =====================================================
-   LANGUAGE
-===================================================== */
+.articles-hero h1 { margin: 0; color: white; font-size: 32px; }
+.articles-hero p { margin-top: 7px; color: #9fffc0; }
 
 .article-language-bar {
-
     display: flex;
-
     justify-content: center;
-
     align-items: center;
-
     gap: 10px;
-
     flex-wrap: wrap;
-
     margin-bottom: 25px;
-
-    color: #a9d9ff;
+    color: #a9ffc8;
 }
 
-
 .article-lang-btn {
-
     padding: 10px 20px;
-
     border-radius: 22px;
-
-    border: 1px solid #168cff;
-
-    background:
-        rgba(22, 140, 255, .12);
-
+    border: 1px solid #22c850;
+    background: rgba(34, 200, 80, .12);
     color: white;
-
     cursor: pointer;
-
     transition: .3s;
 }
 
-
-.article-lang-btn:hover {
-
-    background: #168cff;
-}
-
+.article-lang-btn:hover { background: #22c850; }
 
 .article-lang-btn.active {
-
-    background:
-        linear-gradient(
-            135deg,
-            #168cff,
-            #0064c8
-        );
-
-    box-shadow:
-        0 5px 20px
-        rgba(0, 140, 255, .3);
+    background: linear-gradient(135deg, #22c850, #0d7a2e);
+    box-shadow: 0 5px 20px rgba(34, 200, 80, .3);
 }
 
-
-/* =====================================================
-   SEARCH
-===================================================== */
-
-.articles-search {
-
-    display: flex;
-
-    gap: 10px;
-
-    margin-bottom: 30px;
-}
-
+.articles-search { display: flex; gap: 10px; margin-bottom: 30px; }
 
 #articleSearch {
-
     flex: 1;
-
     padding: 14px 20px;
-
     border-radius: 25px;
-
-    border: 1px solid #168cff;
-
+    border: 1px solid #22c850;
     outline: none;
-
-    background:
-        rgba(5, 25, 60, .9);
-
+    background: rgba(6, 30, 12, .9);
     color: white;
-
     font-size: 15px;
 }
 
-
-#articleSearch::placeholder {
-
-    color: #8bb8d5;
-}
-
+#articleSearch::placeholder { color: #8bd5a0; }
 
 #articleSearchBtn {
-
     padding: 12px 22px;
-
     border-radius: 25px;
-
-    border: 1px solid #168cff;
-
-    background:
-        #168cff;
-
+    border: 1px solid #22c850;
+    background: #22c850;
     color: white;
-
     cursor: pointer;
-
     font-weight: bold;
 }
 
-
-/* =====================================================
-   ARTICLE GRID
-===================================================== */
-
-.articles-grid {
-
-    display: grid;
-
-    grid-template-columns:
-        repeat(3, 1fr);
-
-    gap: 25px;
-}
-
+.articles-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; }
 
 .article-card {
-
     padding: 28px;
-
     border-radius: 25px;
-
-    border: 1px solid
-        rgba(22, 140, 255, .55);
-
-    background:
-        linear-gradient(
-            145deg,
-            rgba(15, 45, 100, .95),
-            rgba(5, 20, 50, .98)
-        );
-
-    transition:
-        transform .3s,
-        box-shadow .3s;
-
+    border: 1px solid rgba(34, 200, 80, .55);
+    background: linear-gradient(145deg, rgba(10, 55, 25, .95), rgba(5, 22, 10, .98));
+    transition: transform .3s, box-shadow .3s;
     cursor: pointer;
 }
 
-
 .article-card:hover {
-
-    transform:
-        translateY(-8px);
-
-    box-shadow:
-        0 15px 40px
-        rgba(0, 140, 255, .25);
+    transform: translateY(-8px);
+    box-shadow: 0 15px 40px rgba(34, 200, 80, .25);
 }
 
-
-.article-card-icon {
-
-    font-size: 45px;
-
-    margin-bottom: 15px;
-}
-
-
-.article-card h2 {
-
-    color: white;
-
-    font-size: 22px;
-
-    line-height: 1.4;
-}
-
-
-.article-card p {
-
-    color: #a9d9ff;
-
-    line-height: 1.7;
-
-    margin: 15px 0;
-}
-
+.article-card-icon { font-size: 45px; margin-bottom: 15px; }
+.article-card h2 { color: white; font-size: 22px; line-height: 1.4; }
+.article-card p { color: #a9ffc8; line-height: 1.7; margin: 15px 0; }
 
 .article-read-more {
-
     display: inline-block;
-
     padding: 10px 18px;
-
     border-radius: 20px;
-
-    background:
-        rgba(22, 140, 255, .15);
-
-    border: 1px solid #168cff;
-
-    color: #55c7ff;
-
+    background: rgba(34, 200, 80, .15);
+    border: 1px solid #22c850;
+    color: #55ff90;
     font-weight: bold;
 }
 
-
-/* =====================================================
-   ARTICLE READER
-===================================================== */
-
 .article-reader {
-
     padding: 25px;
-
     border-radius: 28px;
-
-    border: 1px solid #168cff;
-
-    background:
-        linear-gradient(
-            145deg,
-            rgba(8, 35, 75, .98),
-            rgba(4, 18, 45, .98)
-        );
-
-    box-shadow:
-        0 10px 35px
-        rgba(0, 0, 0, .25);
+    border: 1px solid #22c850;
+    background: linear-gradient(145deg, rgba(8, 45, 20, .98), rgba(4, 20, 8, .98));
+    box-shadow: 0 10px 35px rgba(0, 0, 0, .25);
 }
 
-
 .article-back-btn {
-
     padding: 12px 20px;
-
     border-radius: 22px;
-
-    border: 1px solid #168cff;
-
-    background:
-        rgba(22, 140, 255, .15);
-
+    border: 1px solid #22c850;
+    background: rgba(34, 200, 80, .15);
     color: white;
-
     cursor: pointer;
-
     margin-bottom: 25px;
 }
 
+.article-back-btn:hover { background: #22c850; }
 
-.article-back-btn:hover {
-
-    background: #168cff;
-}
-
-
-/* =====================================================
-   CONTENT
-===================================================== */
-
-.article-content {
-
-    max-width: 950px;
-
-    margin: auto;
-
-    line-height: 2;
-}
-
-
-.article-content h1 {
-
-    color: white;
-
-    font-size: 36px;
-
-    margin-bottom: 10px;
-}
-
-
-.article-content h2 {
-
-    color: #55c7ff;
-
-    font-size: 25px;
-
-    margin-top: 30px;
-}
-
-
-.article-content p {
-
-    color: #d8efff;
-
-    font-size: 18px;
-
-    margin: 15px 0;
-}
-
+.article-content { max-width: 950px; margin: auto; line-height: 2; }
+.article-content h1 { color: white; font-size: 36px; margin-bottom: 10px; }
+.article-content h2 { color: #55ff90; font-size: 25px; margin-top: 30px; }
+.article-content p { color: #d8ffe5; font-size: 18px; margin: 15px 0; }
 
 .article-content .article-arabic {
-
     direction: rtl;
-
     text-align: right;
-
     font-size: 25px;
-
     line-height: 2.2;
-
     color: white;
-
-    font-family:
-        "Amiri",
-        "Noto Naskh Arabic",
-        serif;
-
+    font-family: "Amiri", "Noto Naskh Arabic", serif;
     padding: 20px;
-
     border-radius: 18px;
-
-    background:
-        rgba(22, 140, 255, .08);
-
-    border-right:
-        4px solid #168cff;
+    background: rgba(34, 200, 80, .08);
+    border-right: 4px solid #22c850;
 }
-
 
 .article-content .article-urdu {
-
     direction: rtl;
-
     text-align: right;
-
     font-size: 20px;
-
     line-height: 2.2;
-
-    color: #e1f3ff;
-
-    font-family:
-        "Noto Nastaliq Urdu",
-        "Jameel Noori Nastaleeq",
-        serif;
-
+    color: #e1ffe8;
+    font-family: "Noto Nastaliq Urdu", "Jameel Noori Nastaleeq", serif;
     padding: 20px;
-
     border-radius: 18px;
-
-    background:
-        rgba(22, 140, 255, .08);
-
-    border-right:
-        4px solid #168cff;
+    background: rgba(34, 200, 80, .08);
+    border-right: 4px solid #22c850;
 }
 
-
 .article-source {
-
     margin-top: 25px;
-
     padding: 15px;
-
     border-radius: 15px;
-
-    background:
-        rgba(22, 140, 255, .08);
-
-    color: #9fdcff;
-
+    background: rgba(34, 200, 80, .08);
+    color: #9fffc0;
     font-size: 14px;
 }
 
-
-/* =====================================================
-   NAVIGATION
-===================================================== */
-
-.article-navigation {
-
-    display: flex;
-
-    justify-content: space-between;
-
-    gap: 15px;
-
-    margin-top: 40px;
-}
-
+.article-navigation { display: flex; justify-content: space-between; gap: 15px; margin-top: 40px; }
 
 .article-navigation button {
-
     padding: 13px 22px;
-
     border-radius: 23px;
-
-    border: 1px solid #168cff;
-
-    background:
-        rgba(22, 140, 255, .15);
-
+    border: 1px solid #22c850;
+    background: rgba(34, 200, 80, .15);
     color: white;
-
     cursor: pointer;
 }
 
+.article-navigation button:hover { background: #22c850; }
 
-.article-navigation button:hover {
+.article-content.rtl { direction: rtl; text-align: right; }
+.article-content.rtl h1, .article-content.rtl h2 { text-align: right; }
 
-    background: #168cff;
-}
-
-
-/* =====================================================
-   RTL
-===================================================== */
-
-.article-content.rtl {
-
-    direction: rtl;
-
-    text-align: right;
-}
-
-
-.article-content.rtl h1,
-.article-content.rtl h2 {
-
-    text-align: right;
-}
-
-
-/* =====================================================
-   MOBILE
-===================================================== */
-
-@media (max-width: 850px) {
-
-    .articles-grid {
-
-        grid-template-columns: 1fr;
-
-    }
-
-}
-
+@media (max-width: 850px) { .articles-grid { grid-template-columns: 1fr; } }
 
 @media (max-width: 600px) {
-
-    .articles-page {
-
-        padding: 25px 12px;
-
-    }
-
-    .articles-hero {
-
-        padding: 18px;
-
-    }
-
-    .articles-hero h1 {
-
-        font-size: 25px;
-
-    }
-
-    .articles-search {
-
-        flex-direction: column;
-
-    }
-
-    #articleSearchBtn {
-
-        width: 100%;
-
-    }
-
-    .article-reader {
-
-        padding: 18px;
-
-    }
-
-    .article-content h1 {
-
-        font-size: 28px;
-
-    }
-
-    .article-content p {
-
-        font-size: 17px;
-
-    }
-
-    .article-navigation {
-
-        flex-direction: column;
-
-    }
-
-}/* =====================================================
-   ISLAMICWAY - DUAS PAGE
-   PART 2 : CSS DESIGN
-===================================================== */
-
-
-/* ---------- Main Page ---------- */
-
-.duas-page {
-    padding: 35px 20px 60px;
-    max-width: 1250px;
-    margin: 0 auto;
+    .articles-page { padding: 25px 12px; }
+    .articles-hero { padding: 18px; }
+    .articles-hero h1 { font-size: 25px; }
+    .articles-search { flex-direction: column; }
+    #articleSearchBtn { width: 100%; }
+    .article-reader { padding: 18px; }
+    .article-content h1 { font-size: 28px; }
+    .article-content p { font-size: 17px; }
+    .article-navigation { flex-direction: column; }
 }
 
+/* =========================================================
+   DUAS (GREEN)
+========================================================= */
 
-/* ---------- Header ---------- */
+.duas-page { padding: 35px 20px 60px; max-width: 1250px; margin: 0 auto; }
 
 .duas-header {
     position: relative;
     overflow: hidden;
-
     display: flex;
     align-items: center;
     gap: 22px;
-
     padding: 35px 30px;
-
     margin-bottom: 28px;
-
     border-radius: 25px;
-
-    background:
-        linear-gradient(
-            135deg,
-            #061b3a,
-            #0b3d91,
-            #1261c9
-        );
-
+    background: linear-gradient(135deg, #062e10, #0a5c22, #1a8a42);
     color: white;
-
-    box-shadow:
-        0 15px 35px rgba(0, 40, 100, 0.25);
+    box-shadow: 0 15px 35px rgba(0, 40, 10, 0.25);
 }
-
-
-/* Decorative circles */
 
 .duas-header::before {
     content: "";
-
     position: absolute;
-
     width: 180px;
     height: 180px;
-
     border-radius: 50%;
-
     background: rgba(255,255,255,0.07);
-
     right: 50px;
     top: -70px;
 }
 
-
 .duas-header::after {
     content: "";
-
     position: absolute;
-
     width: 120px;
     height: 120px;
-
     border-radius: 50%;
-
     background: rgba(255,255,255,0.05);
-
     right: 180px;
     bottom: -60px;
 }
 
-
-/* Header Icon */
-
 .duas-header-icon {
     position: relative;
     z-index: 2;
-
     min-width: 75px;
     height: 75px;
-
     display: flex;
     align-items: center;
     justify-content: center;
-
     border-radius: 22px;
-
     font-size: 38px;
-
     background: rgba(255,255,255,0.15);
-
     border: 1px solid rgba(255,255,255,0.25);
-
     backdrop-filter: blur(8px);
 }
 
-
-.duas-header h1 {
-    position: relative;
-    z-index: 2;
-
-    margin: 0 0 7px;
-
-    font-size: 34px;
-
-    font-weight: 800;
-}
-
-
-.duas-header p {
-    position: relative;
-    z-index: 2;
-
-    margin: 0 0 8px;
-
-    font-size: 18px;
-
-    opacity: 0.95;
-}
-
-
-.duas-header span {
-    position: relative;
-    z-index: 2;
-
-    font-size: 14px;
-
-    opacity: 0.75;
-}
-
-
-/* =====================================================
-   SEARCH & FILTERS
-===================================================== */
+.duas-header h1 { position: relative; z-index: 2; margin: 0 0 7px; font-size: 34px; font-weight: 800; }
+.duas-header p { position: relative; z-index: 2; margin: 0 0 8px; font-size: 18px; opacity: 0.95; }
+.duas-header span { position: relative; z-index: 2; font-size: 14px; opacity: 0.75; }
 
 .duas-controls {
     display: grid;
-
-    grid-template-columns:
-        minmax(250px, 1fr)
-        220px
-        200px;
-
+    grid-template-columns: minmax(250px, 1fr) 220px 200px;
     gap: 15px;
-
     margin-bottom: 22px;
 }
-
-
-/* Search Box */
 
 .dua-search-box {
     display: flex;
-
     height: 52px;
-
     overflow: hidden;
-
     background: white;
-
-    border: 1px solid #d9e4f2;
-
+    border: 1px solid #d9f2e0;
     border-radius: 14px;
-
-    box-shadow:
-        0 5px 18px rgba(0, 50, 100, 0.06);
+    box-shadow: 0 5px 18px rgba(0, 50, 20, 0.06);
 }
-
 
 .dua-search-box input {
     flex: 1;
-
     border: none;
     outline: none;
-
     padding: 0 18px;
-
     font-size: 15px;
-
-    color: #18324f;
-
+    color: #183f26;
     background: transparent;
 }
 
-
-.dua-search-box input::placeholder {
-    color: #8a9bb0;
-}
-
+.dua-search-box input::placeholder { color: #8ab09a; }
 
 .dua-search-box button {
     width: 58px;
-
     border: none;
-
-    background: #0b5ed7;
-
+    background: #1a8a42;
     color: white;
-
     font-size: 19px;
-
     cursor: pointer;
-
     transition: 0.25s;
 }
 
-
-.dua-search-box button:hover {
-    background: #084aa8;
-}
-
-
-/* Select */
+.dua-search-box button:hover { background: #0d6a28; }
 
 .duas-controls select {
     height: 52px;
-
     padding: 0 15px;
-
     border-radius: 14px;
-
-    border: 1px solid #d9e4f2;
-
+    border: 1px solid #d9f2e0;
     background: white;
-
-    color: #18324f;
-
+    color: #183f26;
     font-size: 14px;
-
     outline: none;
-
     cursor: pointer;
-
-    box-shadow:
-        0 5px 18px rgba(0, 50, 100, 0.06);
+    box-shadow: 0 5px 18px rgba(0, 50, 20, 0.06);
 }
-
 
 .duas-controls select:focus {
-    border-color: #0b5ed7;
-
-    box-shadow:
-        0 0 0 3px rgba(11,94,215,0.12);
+    border-color: #1a8a42;
+    box-shadow: 0 0 0 3px rgba(34, 200, 80, 0.12);
 }
-
-
-/* =====================================================
-   INFORMATION BAR
-===================================================== */
 
 .duas-info {
     display: flex;
-
     align-items: center;
-
     justify-content: space-between;
-
     padding: 15px 18px;
-
     margin-bottom: 22px;
-
     border-radius: 15px;
-
-    background: #f4f8fd;
-
-    border: 1px solid #dce8f5;
+    background: #f4fdf7;
+    border: 1px solid #dcefe2;
 }
 
-
-.duas-info > div {
-    display: flex;
-
-    align-items: center;
-
-    gap: 8px;
-}
-
-
-.duas-info strong {
-    font-size: 22px;
-
-    color: #0b5ed7;
-}
-
-
-.duas-info span {
-    font-size: 14px;
-
-    color: #60758c;
-}
-
+.duas-info > div { display: flex; align-items: center; gap: 8px; }
+.duas-info strong { font-size: 22px; color: #1a8a42; }
+.duas-info span { font-size: 14px; color: #607a6c; }
 
 #randomDuaBtn {
     border: none;
-
     padding: 11px 18px;
-
     border-radius: 10px;
-
-    background: #0b5ed7;
-
+    background: #1a8a42;
     color: white;
-
     font-size: 14px;
-
     cursor: pointer;
-
     transition: 0.25s;
 }
 
+#randomDuaBtn:hover { background: #0d6a28; transform: translateY(-2px); }
 
-#randomDuaBtn:hover {
-    background: #084aa8;
-
-    transform: translateY(-2px);
-}
-
-
-/* =====================================================
-   DUA CARDS
-===================================================== */
-
-.duas-container {
-    display: grid;
-
-    grid-template-columns:
-        repeat(2, minmax(0, 1fr));
-
-    gap: 22px;
-}
-
-
-/* Individual Card */
+.duas-container { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px; }
 
 .dua-card {
     position: relative;
-
     padding: 25px;
-
     border-radius: 20px;
-
     background: white;
-
-    border: 1px solid #e0eaf5;
-
-    box-shadow:
-        0 8px 25px rgba(0, 50, 100, 0.07);
-
-    transition:
-        transform 0.25s,
-        box-shadow 0.25s,
-        border-color 0.25s;
+    border: 1px solid #e0f2e6;
+    box-shadow: 0 8px 25px rgba(0, 50, 20, 0.07);
+    transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s;
 }
-
 
 .dua-card:hover {
     transform: translateY(-5px);
-
-    border-color: #9ec5f4;
-
-    box-shadow:
-        0 15px 35px rgba(0, 65, 130, 0.13);
+    border-color: #9ee0b3;
+    box-shadow: 0 15px 35px rgba(20, 100, 45, 0.13);
 }
 
-
-/* Card Top */
-
-.dua-card-top {
-    display: flex;
-
-    justify-content: space-between;
-
-    align-items: center;
-
-    margin-bottom: 18px;
-}
-
+.dua-card-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; }
 
 .dua-number {
     display: inline-flex;
-
     align-items: center;
-
     justify-content: center;
-
     min-width: 38px;
     height: 38px;
-
     padding: 0 10px;
-
     border-radius: 50%;
-
-    background: #eaf3ff;
-
-    color: #0b5ed7;
-
+    background: #eaffef;
+    color: #1a8a42;
     font-size: 13px;
-
     font-weight: 700;
 }
 
-
 .dua-category {
     padding: 6px 11px;
-
     border-radius: 20px;
-
-    background: #f0f6ff;
-
-    color: #2868a8;
-
+    background: #f0fff4;
+    color: #286e40;
     font-size: 11px;
-
     font-weight: 600;
 }
 
-
-/* Dua Title */
-
-.dua-card h3 {
-    margin: 0 0 18px;
-
-    color: #173b63;
-
-    font-size: 20px;
-
-    font-weight: 750;
-}
-
-
-/* Arabic */
+.dua-card h3 { margin: 0 0 18px; color: #173f28; font-size: 20px; font-weight: 750; }
 
 .dua-arabic {
     padding: 20px;
-
     margin-bottom: 15px;
-
     border-radius: 14px;
-
-    background:
-        linear-gradient(
-            135deg,
-            #f3f8ff,
-            #eef5fc
-        );
-
-    border-right: 4px solid #0b5ed7;
-
-    color: #142f4d;
-
-    font-family:
-        "Noto Naskh Arabic",
-        "Amiri",
-        serif;
-
+    background: linear-gradient(135deg, #f3fff7, #eefcf2);
+    border-right: 4px solid #1a8a42;
+    color: #142f1e;
+    font-family: "Noto Naskh Arabic", "Amiri", serif;
     font-size: 25px;
-
     line-height: 2;
-
     text-align: right;
-
     direction: rtl;
 }
-
-
-/* Urdu */
 
 .dua-urdu {
     padding: 15px 17px;
-
     margin-bottom: 13px;
-
     border-radius: 12px;
-
-    background: #fafcff;
-
-    border: 1px solid #e8eff7;
-
-    color: #304d69;
-
+    background: #fafffb;
+    border: 1px solid #e8f4ec;
+    color: #304d3a;
     font-size: 17px;
-
     line-height: 1.9;
-
     text-align: right;
-
     direction: rtl;
 }
 
-
-/* English */
-
 .dua-english {
     padding: 15px 17px;
-
     margin-bottom: 15px;
-
     border-radius: 12px;
-
-    background: #fafcff;
-
-    border: 1px solid #e8eff7;
-
-    color: #40566d;
-
+    background: #fafffb;
+    border: 1px solid #e8f4ec;
+    color: #40564a;
     font-size: 15px;
-
     line-height: 1.7;
 }
 
-
-/* Language labels */
-
 .dua-label {
     display: block;
-
     margin-bottom: 6px;
-
-    color: #0b5ed7;
-
+    color: #1a8a42;
     font-size: 11px;
-
     font-weight: 800;
-
     text-transform: uppercase;
-
     letter-spacing: 0.7px;
 }
 
-
-/* Reference */
-
 .dua-reference {
     padding-top: 13px;
-
-    border-top: 1px solid #e7edf4;
-
-    color: #718397;
-
+    border-top: 1px solid #e7f1ea;
+    color: #718f7c;
     font-size: 12px;
-
     line-height: 1.5;
 }
 
-
-/* Card Buttons */
-
-.dua-card-actions {
-    display: flex;
-
-    gap: 8px;
-
-    margin-top: 18px;
-}
-
+.dua-card-actions { display: flex; gap: 8px; margin-top: 18px; }
 
 .dua-card-actions button {
     flex: 1;
-
     min-height: 40px;
-
-    border: 1px solid #d8e5f3;
-
+    border: 1px solid #d8f3e0;
     border-radius: 9px;
-
     background: white;
-
-    color: #24537d;
-
+    color: #245a3a;
     font-size: 12px;
-
     cursor: pointer;
-
     transition: 0.2s;
 }
 
-
-.dua-card-actions button:hover {
-    background: #edf5ff;
-
-    border-color: #9fc5ed;
-}
-
+.dua-card-actions button:hover { background: #edfff2; border-color: #9ee0b3; }
 
 .dua-card-actions .open-dua {
-    background: #0b5ed7;
-
+    background: #1a8a42;
     color: white;
-
-    border-color: #0b5ed7;
+    border-color: #1a8a42;
 }
 
+.dua-card-actions .open-dua:hover { background: #0d6a28; }
 
-.dua-card-actions .open-dua:hover {
-    background: #084aa8;
-}
-
-
-/* =====================================================
-   LOADING
-===================================================== */
-
-.duas-loading {
-    text-align: center;
-
-    padding: 60px 20px;
-
-    color: #60758c;
-}
-
+.duas-loading { text-align: center; padding: 60px 20px; color: #607a6c; }
 
 .dua-spinner {
     width: 45px;
     height: 45px;
-
     margin: 0 auto 15px;
-
     border-radius: 50%;
-
-    border: 4px solid #dbe9f8;
-
-    border-top-color: #0b5ed7;
-
-    animation:
-        duaSpin 0.8s linear infinite;
+    border: 4px solid #dbf8e5;
+    border-top-color: #1a8a42;
+    animation: duaSpin 0.8s linear infinite;
 }
 
-
-@keyframes duaSpin {
-
-    to {
-        transform: rotate(360deg);
-    }
-
-}
-
-
-/* =====================================================
-   ERROR
-===================================================== */
+@keyframes duaSpin { to { transform: rotate(360deg); } }
 
 .duas-error {
     padding: 35px 20px;
-
     margin: 20px 0;
-
     text-align: center;
-
     border-radius: 18px;
-
     background: #fff7f7;
-
     border: 1px solid #f2d3d3;
 }
 
-
-.duas-error h3 {
-    margin: 0 0 8px;
-
-    color: #b42318;
-}
-
-
-.duas-error p {
-    color: #7a5555;
-
-    margin-bottom: 18px;
-}
-
+.duas-error h3 { margin: 0 0 8px; color: #b42318; }
+.duas-error p { color: #7a5555; margin-bottom: 18px; }
 
 .duas-error button {
     border: none;
-
     padding: 10px 18px;
-
     border-radius: 9px;
-
     background: #b42318;
-
     color: white;
-
     cursor: pointer;
 }
 
-
-/* =====================================================
-   NO RESULTS
-===================================================== */
-
-.no-duas {
-    padding: 60px 20px;
-
-    text-align: center;
-
-    color: #718397;
-}
-
-
-.no-duas > div {
-    font-size: 45px;
-
-    margin-bottom: 10px;
-}
-
-
-.no-duas h3 {
-    color: #264867;
-
-    margin-bottom: 5px;
-}
-
-
-/* =====================================================
-   PAGINATION
-===================================================== */
+.no-duas { padding: 60px 20px; text-align: center; color: #718f7c; }
+.no-duas > div { font-size: 45px; margin-bottom: 10px; }
+.no-duas h3 { color: #264a35; margin-bottom: 5px; }
 
 .duas-pagination {
     display: flex;
-
     align-items: center;
-
     justify-content: center;
-
     gap: 8px;
-
     margin-top: 30px;
 }
-
 
 .duas-pagination button {
     min-width: 42px;
     height: 40px;
-
     padding: 0 13px;
-
     border-radius: 9px;
-
-    border: 1px solid #d8e5f3;
-
+    border: 1px solid #d8f3e0;
     background: white;
-
-    color: #315879;
-
+    color: #315a42;
     cursor: pointer;
-
     transition: 0.2s;
 }
 
-
-.duas-pagination button:hover:not(:disabled) {
-    background: #edf5ff;
-
-    border-color: #9fc5ed;
-}
-
+.duas-pagination button:hover:not(:disabled) { background: #edfff2; border-color: #9ee0b3; }
 
 .duas-pagination button.active {
-    background: #0b5ed7;
-
+    background: #1a8a42;
     color: white;
-
-    border-color: #0b5ed7;
+    border-color: #1a8a42;
 }
 
+.duas-pagination button:disabled { opacity: 0.45; cursor: not-allowed; }
 
-.duas-pagination button:disabled {
-    opacity: 0.45;
-
-    cursor: not-allowed;
-}
-
-
-#duaPageNumbers {
-    display: flex;
-
-    gap: 6px;
-}
-
-
-/* =====================================================
-   SINGLE DUA READER
-===================================================== */
+#duaPageNumbers { display: flex; gap: 6px; }
 
 .dua-reader {
     padding: 30px;
-
     border-radius: 22px;
-
     background: white;
-
-    border: 1px solid #dce8f5;
-
-    box-shadow:
-        0 12px 35px rgba(0, 50, 100, 0.1);
+    border: 1px solid #dcefe2;
+    box-shadow: 0 12px 35px rgba(0, 50, 20, 0.1);
 }
-
 
 .dua-back-btn {
     border: none;
-
     padding: 10px 15px;
-
     margin-bottom: 25px;
-
     border-radius: 9px;
-
-    background: #edf5ff;
-
-    color: #0b5ed7;
-
+    background: #edfff2;
+    color: #1a8a42;
     cursor: pointer;
-
     font-weight: 600;
 }
 
-
-.dua-back-btn:hover {
-    background: #dcecff;
-}
-
+.dua-back-btn:hover { background: #dcecff; }
 
 .dua-reader-number {
     display: inline-block;
-
     padding: 7px 13px;
-
     margin-bottom: 12px;
-
     border-radius: 20px;
-
-    background: #eaf3ff;
-
-    color: #0b5ed7;
-
+    background: #eaffef;
+    color: #1a8a42;
     font-size: 12px;
-
     font-weight: 700;
 }
 
-
-.dua-reader h2 {
-    margin: 0 0 25px;
-
-    color: #173b63;
-
-    font-size: 30px;
-}
-
-
-/* Language Box */
+.dua-reader h2 { margin: 0 0 25px; color: #173f28; font-size: 30px; }
 
 .dua-language-box {
     margin-bottom: 18px;
-
     padding: 22px;
-
     border-radius: 16px;
-
-    border: 1px solid #e2ebf4;
-
-    background: #fbfdff;
+    border: 1px solid #e2f0e7;
+    background: #fbfefc;
 }
 
-
-.language-title {
-    margin-bottom: 12px;
-
-    color: #0b5ed7;
-
-    font-size: 12px;
-
-    font-weight: 800;
-}
-
-
-.dua-language-box p {
-    margin: 0;
-
-    color: #263f58;
-
-    line-height: 1.9;
-}
-
+.language-title { margin-bottom: 12px; color: #1a8a42; font-size: 12px; font-weight: 800; }
+.dua-language-box p { margin: 0; color: #263f31; line-height: 1.9; }
 
 .arabic-box p {
-    font-family:
-        "Noto Naskh Arabic",
-        "Amiri",
-        serif;
-
+    font-family: "Noto Naskh Arabic", "Amiri", serif;
     font-size: 30px;
-
     line-height: 2.1;
-
     text-align: right;
-
     direction: rtl;
 }
 
-
-.urdu-box p {
-    font-size: 20px;
-
-    text-align: right;
-
-    direction: rtl;
-}
-
-
-.english-box p {
-    font-size: 17px;
-}
-
-
-/* Reference */
+.urdu-box p { font-size: 20px; text-align: right; direction: rtl; }
+.english-box p { font-size: 17px; }
 
 .dua-reader .dua-reference {
     margin-top: 20px;
-
     padding: 15px;
-
     border-radius: 12px;
-
-    background: #f5f9fe;
-
+    background: #f5fdf8;
     border: none;
-
-    color: #60758c;
+    color: #607a6c;
 }
 
+.dua-reader .dua-reference strong { color: #1a8a42; }
 
-.dua-reader .dua-reference strong {
-    color: #0b5ed7;
-}
-
-
-/* Reader Actions */
-
-.dua-reader-actions {
-    display: flex;
-
-    gap: 10px;
-
-    margin-top: 22px;
-}
-
+.dua-reader-actions { display: flex; gap: 10px; margin-top: 22px; }
 
 .dua-reader-actions button {
     padding: 12px 18px;
-
     border-radius: 10px;
-
-    border: 1px solid #d8e5f3;
-
+    border: 1px solid #d8f3e0;
     background: white;
-
-    color: #24537d;
-
+    color: #245a3a;
     cursor: pointer;
-
     transition: 0.2s;
 }
 
-
-.dua-reader-actions button:hover {
-    background: #edf5ff;
-
-    border-color: #9fc5ed;
-}
-
+.dua-reader-actions button:hover { background: #edfff2; border-color: #9ee0b3; }
 
 .dua-reader-navigation {
     display: flex;
-
     justify-content: space-between;
-
     gap: 15px;
-
     margin-top: 25px;
-
     padding-top: 20px;
-
-    border-top: 1px solid #e4ebf3;
+    border-top: 1px solid #e4f1e8;
 }
-
 
 .dua-reader-navigation button {
     padding: 12px 20px;
-
     border: none;
-
     border-radius: 10px;
-
-    background: #0b5ed7;
-
+    background: #1a8a42;
     color: white;
-
     cursor: pointer;
-
     transition: 0.2s;
 }
 
-
-.dua-reader-navigation button:hover {
-    background: #084aa8;
-}
-
-
-/* =====================================================
-   MOBILE RESPONSIVE
-===================================================== */
+.dua-reader-navigation button:hover { background: #0d6a28; }
 
 @media (max-width: 900px) {
-
-    .duas-controls {
-        grid-template-columns: 1fr 1fr;
-    }
-
-    .dua-search-box {
-        grid-column: 1 / -1;
-    }
-
-    .duas-container {
-        grid-template-columns: 1fr;
-    }
-
+    .duas-controls { grid-template-columns: 1fr 1fr; }
+    .dua-search-box { grid-column: 1 / -1; }
+    .duas-container { grid-template-columns: 1fr; }
 }
-
 
 @media (max-width: 600px) {
-
-    .duas-page {
-        padding: 20px 12px 45px;
-    }
-
-
-    .duas-header {
-        padding: 25px 20px;
-
-        gap: 15px;
-
-        border-radius: 20px;
-    }
-
-
-    .duas-header-icon {
-        min-width: 58px;
-        height: 58px;
-
-        font-size: 28px;
-
-        border-radius: 16px;
-    }
-
-
-    .duas-header h1 {
-        font-size: 25px;
-    }
-
-
-    .duas-header p {
-        font-size: 15px;
-    }
-
-
-    .duas-header span {
-        font-size: 12px;
-    }
-
-
-    .duas-controls {
-        grid-template-columns: 1fr;
-
-        gap: 10px;
-    }
-
-
-    .dua-search-box {
-        grid-column: auto;
-    }
-
-
-    .duas-info {
-        align-items: stretch;
-
-        flex-direction: column;
-
-        gap: 12px;
-    }
-
-
-    #randomDuaBtn {
-        width: 100%;
-    }
-
-
-    .duas-container {
-        grid-template-columns: 1fr;
-
-        gap: 15px;
-    }
-
-
-    .dua-card {
-        padding: 18px;
-    }
-
-
-    .dua-card h3 {
-        font-size: 18px;
-    }
-
-
-    .dua-arabic {
-        font-size: 22px;
-
-        padding: 16px;
-    }
-
-
-    .dua-urdu {
-        font-size: 16px;
-    }
-
-
-    .dua-english {
-        font-size: 14px;
-    }
-
-
-    .dua-card-actions {
-        flex-wrap: wrap;
-    }
-
-
-    .dua-card-actions button {
-        min-width: calc(50% - 4px);
-    }
-
-
-    .dua-reader {
-        padding: 20px 15px;
-    }
-
-
-    .dua-reader h2 {
-        font-size: 24px;
-    }
-
-
-    .arabic-box p {
-        font-size: 25px;
-    }
-
-
-    .urdu-box p {
-        font-size: 18px;
-    }
-
-
-    .english-box p {
-        font-size: 15px;
-    }
-
-
-    .dua-reader-actions {
-        flex-wrap: wrap;
-    }
-
-
-    .dua-reader-actions button {
-        flex: 1;
-    }
-
-
-    .dua-reader-navigation {
-        flex-direction: column;
-    }
-
-
-    .dua-reader-navigation button {
-        width: 100%;
-    }
-
-
-    #duaPageNumbers button:nth-child(n+4) {
-        display: none;
-    }
-
-}/* =====================================================
-   ISLAMICWAY - ISLAMIC GUIDANCE
-   PART 2 : CSS
-===================================================== */
-
-
-/* =========================
-   MAIN PAGE
-========================= */
-
-.guidance-page {
-    max-width: 1250px;
-    margin: 0 auto;
-    padding: 35px 20px 60px;
+    .duas-page { padding: 20px 12px 45px; }
+    .duas-header { padding: 25px 20px; gap: 15px; border-radius: 20px; }
+    .duas-header-icon { min-width: 58px; height: 58px; font-size: 28px; border-radius: 16px; }
+    .duas-header h1 { font-size: 25px; }
+    .duas-header p { font-size: 15px; }
+    .duas-header span { font-size: 12px; }
+    .duas-controls { grid-template-columns: 1fr; gap: 10px; }
+    .dua-search-box { grid-column: auto; }
+    .duas-info { align-items: stretch; flex-direction: column; gap: 12px; }
+    #randomDuaBtn { width: 100%; }
+    .duas-container { grid-template-columns: 1fr; gap: 15px; }
+    .dua-card { padding: 18px; }
+    .dua-card h3 { font-size: 18px; }
+    .dua-arabic { font-size: 22px; padding: 16px; }
+    .dua-urdu { font-size: 16px; }
+    .dua-english { font-size: 14px; }
+    .dua-card-actions { flex-wrap: wrap; }
+    .dua-card-actions button { min-width: calc(50% - 4px); }
+    .dua-reader { padding: 20px 15px; }
+    .dua-reader h2 { font-size: 24px; }
+    .arabic-box p { font-size: 25px; }
+    .urdu-box p { font-size: 18px; }
+    .english-box p { font-size: 15px; }
+    .dua-reader-actions { flex-wrap: wrap; }
+    .dua-reader-actions button { flex: 1; }
+    .dua-reader-navigation { flex-direction: column; }
+    .dua-reader-navigation button { width: 100%; }
+    #duaPageNumbers button:nth-child(n+4) { display: none; }
 }
 
+/* =========================================================
+   GUIDANCE (GREEN)
+========================================================= */
 
-/* =========================
-   HERO
-========================= */
+.guidance-page { max-width: 1250px; margin: 0 auto; padding: 35px 20px 60px; }
 
 .guidance-hero {
     position: relative;
     overflow: hidden;
-
     display: flex;
     align-items: center;
     gap: 22px;
-
     padding: 38px 30px;
     margin-bottom: 28px;
-
     border-radius: 25px;
-
-    background:
-        linear-gradient(
-            135deg,
-            #061b3a,
-            #0b3d91,
-            #1261c9
-        );
-
+    background: linear-gradient(135deg, #062e10, #0a5c22, #1a8a42);
     color: white;
-
-    box-shadow:
-        0 15px 35px rgba(0, 40, 100, 0.25);
+    box-shadow: 0 15px 35px rgba(0, 40, 10, 0.25);
 }
-
 
 .guidance-hero::before {
     content: "";
-
     position: absolute;
-
     width: 220px;
     height: 220px;
-
     right: 30px;
     top: -100px;
-
     border-radius: 50%;
-
-    background:
-        rgba(255,255,255,0.07);
+    background: rgba(255,255,255,0.07);
 }
-
 
 .guidance-hero::after {
     content: "";
-
     position: absolute;
-
     width: 130px;
     height: 130px;
-
     right: 190px;
     bottom: -80px;
-
     border-radius: 50%;
-
-    background:
-        rgba(255,255,255,0.05);
+    background: rgba(255,255,255,0.05);
 }
-
-
-/* Hero Icon */
 
 .guidance-hero-icon {
     position: relative;
     z-index: 2;
-
     width: 78px;
     height: 78px;
-
     min-width: 78px;
-
     display: flex;
     align-items: center;
     justify-content: center;
-
     border-radius: 22px;
-
     font-size: 38px;
-
-    background:
-        rgba(255,255,255,0.14);
-
-    border:
-        1px solid rgba(255,255,255,0.25);
-
+    background: rgba(255,255,255,0.14);
+    border: 1px solid rgba(255,255,255,0.25);
     backdrop-filter: blur(8px);
 }
 
-
-.guidance-hero-content {
-    position: relative;
-    z-index: 2;
-}
-
-
-.guidance-hero h1 {
-    margin: 0 0 8px;
-
-    font-size: 35px;
-
-    font-weight: 800;
-}
-
-
-.guidance-hero p {
-    margin: 0 0 8px;
-
-    font-size: 17px;
-
-    line-height: 1.7;
-
-    opacity: 0.95;
-}
-
-
-.guidance-hero span {
-    font-size: 13px;
-
-    opacity: 0.75;
-}
-
-
-/* =========================
-   SEARCH + FILTER
-========================= */
+.guidance-hero-content { position: relative; z-index: 2; }
+.guidance-hero h1 { margin: 0 0 8px; font-size: 35px; font-weight: 800; }
+.guidance-hero p { margin: 0 0 8px; font-size: 17px; line-height: 1.7; opacity: 0.95; }
+.guidance-hero span { font-size: 13px; opacity: 0.75; }
 
 .guidance-controls {
     display: grid;
-
-    grid-template-columns:
-        minmax(250px, 1fr)
-        230px
-        200px;
-
+    grid-template-columns: minmax(250px, 1fr) 230px 200px;
     gap: 15px;
-
     margin-bottom: 22px;
 }
-
-
-/* Search */
 
 .guidance-search-box {
     display: flex;
-
     height: 52px;
-
     overflow: hidden;
-
     border-radius: 14px;
-
     background: white;
-
-    border:
-        1px solid #d9e4f2;
-
-    box-shadow:
-        0 5px 18px rgba(0,50,100,0.06);
+    border: 1px solid #d9f2e0;
+    box-shadow: 0 5px 18px rgba(0, 50, 20, 0.06);
 }
-
 
 .guidance-search-box input {
     flex: 1;
-
     min-width: 0;
-
     border: none;
     outline: none;
-
     padding: 0 18px;
-
     background: transparent;
-
-    color: #18324f;
-
+    color: #183f26;
     font-size: 15px;
 }
 
-
-.guidance-search-box input::placeholder {
-    color: #8a9bb0;
-}
-
+.guidance-search-box input::placeholder { color: #8ab09a; }
 
 .guidance-search-box button {
     width: 58px;
-
     border: none;
-
-    background: #0b5ed7;
-
+    background: #1a8a42;
     color: white;
-
     font-size: 19px;
-
     cursor: pointer;
-
     transition: 0.25s;
 }
 
-
-.guidance-search-box button:hover {
-    background: #084aa8;
-}
-
-
-/* Selects */
+.guidance-search-box button:hover { background: #0d6a28; }
 
 .guidance-controls select {
     height: 52px;
-
     padding: 0 15px;
-
     border-radius: 14px;
-
-    border:
-        1px solid #d9e4f2;
-
+    border: 1px solid #d9f2e0;
     background: white;
-
-    color: #18324f;
-
+    color: #183f26;
     font-size: 14px;
-
     outline: none;
-
     cursor: pointer;
-
-    box-shadow:
-        0 5px 18px rgba(0,50,100,0.06);
+    box-shadow: 0 5px 18px rgba(0, 50, 20, 0.06);
 }
-
 
 .guidance-controls select:focus {
-    border-color: #0b5ed7;
-
-    box-shadow:
-        0 0 0 3px rgba(11,94,215,0.12);
+    border-color: #1a8a42;
+    box-shadow: 0 0 0 3px rgba(34, 200, 80, 0.12);
 }
-
-
-/* =========================
-   INFORMATION BAR
-========================= */
 
 .guidance-info {
     display: flex;
-
     align-items: center;
-
     justify-content: space-between;
-
     padding: 15px 18px;
-
     margin-bottom: 22px;
-
     border-radius: 15px;
-
-    background: #f4f8fd;
-
-    border:
-        1px solid #dce8f5;
+    background: #f4fdf7;
+    border: 1px solid #dcefe2;
 }
 
-
-.guidance-count-box {
-    display: flex;
-
-    align-items: center;
-
-    gap: 9px;
-}
-
-
-.guidance-count-box strong {
-    color: #0b5ed7;
-
-    font-size: 23px;
-}
-
-
-.guidance-count-box span {
-    color: #60758c;
-
-    font-size: 14px;
-}
-
+.guidance-count-box { display: flex; align-items: center; gap: 9px; }
+.guidance-count-box strong { color: #1a8a42; font-size: 23px; }
+.guidance-count-box span { color: #607a6c; font-size: 14px; }
 
 .random-guidance-btn {
     border: none;
-
     padding: 11px 18px;
-
     border-radius: 10px;
-
-    background: #0b5ed7;
-
+    background: #1a8a42;
     color: white;
-
     font-size: 14px;
-
     cursor: pointer;
-
     transition: 0.25s;
 }
 
+.random-guidance-btn:hover { background: #0d6a28; transform: translateY(-2px); }
 
-.random-guidance-btn:hover {
-    background: #084aa8;
-
-    transform: translateY(-2px);
-}
-
-
-/* =========================
-   GUIDANCE CARDS
-========================= */
-
-.guidance-container {
-    display: grid;
-
-    grid-template-columns:
-        repeat(2, minmax(0, 1fr));
-
-    gap: 22px;
-}
-
+.guidance-container { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px; }
 
 .guidance-card {
     position: relative;
-
     padding: 25px;
-
     border-radius: 20px;
-
     background: white;
-
-    border:
-        1px solid #e0eaf5;
-
-    box-shadow:
-        0 8px 25px rgba(0,50,100,0.07);
-
-    transition:
-        transform 0.25s,
-        box-shadow 0.25s,
-        border-color 0.25s;
+    border: 1px solid #e0f2e6;
+    box-shadow: 0 8px 25px rgba(0, 50, 20, 0.07);
+    transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s;
 }
-
 
 .guidance-card:hover {
     transform: translateY(-5px);
-
-    border-color: #9ec5f4;
-
-    box-shadow:
-        0 15px 35px rgba(0,65,130,0.13);
+    border-color: #9ee0b3;
+    box-shadow: 0 15px 35px rgba(20, 100, 45, 0.13);
 }
 
-
-/* Card top */
-
-.guidance-card-top {
-    display: flex;
-
-    align-items: center;
-
-    justify-content: space-between;
-
-    margin-bottom: 18px;
-}
-
+.guidance-card-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
 
 .guidance-number {
     display: inline-flex;
-
     align-items: center;
-
     justify-content: center;
-
     min-width: 38px;
     height: 38px;
-
     padding: 0 10px;
-
     border-radius: 50%;
-
-    background: #eaf3ff;
-
-    color: #0b5ed7;
-
+    background: #eaffef;
+    color: #1a8a42;
     font-size: 13px;
-
     font-weight: 700;
 }
-
 
 .guidance-category {
     padding: 6px 11px;
-
     border-radius: 20px;
-
-    background: #f0f6ff;
-
-    color: #2868a8;
-
+    background: #f0fff4;
+    color: #286e40;
     font-size: 11px;
-
     font-weight: 700;
 }
 
-
-/* Title */
-
-.guidance-card h3 {
-    margin: 0 0 15px;
-
-    color: #173b63;
-
-    font-size: 20px;
-
-    line-height: 1.4;
-}
-
-
-/* Short text */
-
-.guidance-card-description {
-    color: #536b82;
-
-    font-size: 15px;
-
-    line-height: 1.8;
-
-    margin-bottom: 18px;
-}
-
-
-/* Arabic */
+.guidance-card h3 { margin: 0 0 15px; color: #173f28; font-size: 20px; line-height: 1.4; }
+.guidance-card-description { color: #536b5c; font-size: 15px; line-height: 1.8; margin-bottom: 18px; }
 
 .guidance-card-arabic {
     padding: 18px;
-
     margin-bottom: 14px;
-
     border-radius: 14px;
-
-    background:
-        linear-gradient(
-            135deg,
-            #f3f8ff,
-            #eef5fc
-        );
-
-    border-right:
-        4px solid #0b5ed7;
-
-    color: #142f4d;
-
-    font-family:
-        "Noto Naskh Arabic",
-        "Amiri",
-        serif;
-
+    background: linear-gradient(135deg, #f3fff7, #eefcf2);
+    border-right: 4px solid #1a8a42;
+    color: #142f1e;
+    font-family: "Noto Naskh Arabic", "Amiri", serif;
     font-size: 23px;
-
     line-height: 2;
-
     text-align: right;
-
     direction: rtl;
 }
-
-
-/* Urdu */
 
 .guidance-card-urdu {
     padding: 14px 16px;
-
     margin-bottom: 12px;
-
     border-radius: 12px;
-
-    background: #fafcff;
-
-    border:
-        1px solid #e8eff7;
-
-    color: #304d69;
-
+    background: #fafffb;
+    border: 1px solid #e8f4ec;
+    color: #304d3a;
     font-size: 17px;
-
     line-height: 1.9;
-
     text-align: right;
-
     direction: rtl;
 }
 
-
-/* English */
-
 .guidance-card-english {
     padding: 14px 16px;
-
     margin-bottom: 15px;
-
     border-radius: 12px;
-
-    background: #fafcff;
-
-    border:
-        1px solid #e8eff7;
-
-    color: #40566d;
-
+    background: #fafffb;
+    border: 1px solid #e8f4ec;
+    color: #40564a;
     font-size: 15px;
-
     line-height: 1.7;
 }
 
-
-/* Labels */
-
 .guidance-label {
     display: block;
-
     margin-bottom: 6px;
-
-    color: #0b5ed7;
-
+    color: #1a8a42;
     font-size: 10px;
-
     font-weight: 800;
-
     letter-spacing: 0.7px;
-
     text-transform: uppercase;
 }
 
-
-/* Reference */
-
 .guidance-card-reference {
     padding-top: 13px;
-
-    border-top:
-        1px solid #e7edf4;
-
-    color: #718397;
-
+    border-top: 1px solid #e7f1ea;
+    color: #718f7c;
     font-size: 12px;
-
     line-height: 1.5;
 }
 
-
-/* Card Buttons */
-
-.guidance-card-actions {
-    display: flex;
-
-    gap: 8px;
-
-    margin-top: 18px;
-}
-
+.guidance-card-actions { display: flex; gap: 8px; margin-top: 18px; }
 
 .guidance-card-actions button {
     flex: 1;
-
     min-height: 40px;
-
-    border:
-        1px solid #d8e5f3;
-
+    border: 1px solid #d8f3e0;
     border-radius: 9px;
-
     background: white;
-
-    color: #24537d;
-
+    color: #245a3a;
     font-size: 12px;
-
     cursor: pointer;
-
     transition: 0.2s;
 }
 
-
-.guidance-card-actions button:hover {
-    background: #edf5ff;
-
-    border-color: #9fc5ed;
-}
-
+.guidance-card-actions button:hover { background: #edfff2; border-color: #9ee0b3; }
 
 .guidance-card-actions .open-guidance {
-    background: #0b5ed7;
-
-    border-color: #0b5ed7;
-
+    background: #1a8a42;
+    border-color: #1a8a42;
     color: white;
 }
 
+.guidance-card-actions .open-guidance:hover { background: #0d6a28; }
 
-.guidance-card-actions .open-guidance:hover {
-    background: #084aa8;
-}
-
-
-/* =========================
-   LOADING
-========================= */
-
-.guidance-loading {
-    text-align: center;
-
-    padding: 60px 20px;
-
-    color: #60758c;
-}
-
+.guidance-loading { text-align: center; padding: 60px 20px; color: #607a6c; }
 
 .guidance-spinner {
     width: 45px;
     height: 45px;
-
     margin: 0 auto 15px;
-
     border-radius: 50%;
-
-    border:
-        4px solid #dbe9f8;
-
-    border-top-color:
-        #0b5ed7;
-
-    animation:
-        guidanceSpin 0.8s linear infinite;
+    border: 4px solid #dbf8e5;
+    border-top-color: #1a8a42;
+    animation: guidanceSpin 0.8s linear infinite;
 }
 
-
-@keyframes guidanceSpin {
-
-    to {
-        transform: rotate(360deg);
-    }
-
-}
-
-
-/* =========================
-   ERROR
-========================= */
+@keyframes guidanceSpin { to { transform: rotate(360deg); } }
 
 .guidance-error {
     padding: 35px 20px;
-
     margin: 20px 0;
-
     text-align: center;
-
     border-radius: 18px;
-
     background: #fff7f7;
-
-    border:
-        1px solid #f2d3d3;
+    border: 1px solid #f2d3d3;
 }
 
-
-.guidance-error-icon {
-    font-size: 38px;
-
-    margin-bottom: 8px;
-}
-
-
-.guidance-error h3 {
-    margin: 0 0 8px;
-
-    color: #b42318;
-}
-
-
-.guidance-error p {
-    color: #7a5555;
-
-    margin-bottom: 18px;
-}
-
+.guidance-error-icon { font-size: 38px; margin-bottom: 8px; }
+.guidance-error h3 { margin: 0 0 8px; color: #b42318; }
+.guidance-error p { color: #7a5555; margin-bottom: 18px; }
 
 .guidance-error button {
     border: none;
-
     padding: 10px 18px;
-
     border-radius: 9px;
-
     background: #b42318;
-
     color: white;
-
     cursor: pointer;
 }
 
-
-/* =========================
-   NO RESULTS
-========================= */
-
-.no-guidance {
-    padding: 60px 20px;
-
-    text-align: center;
-
-    color: #718397;
-}
-
-
-.no-guidance-icon {
-    font-size: 45px;
-
-    margin-bottom: 10px;
-}
-
-
-.no-guidance h3 {
-    margin-bottom: 5px;
-
-    color: #264867;
-}
-
-
-/* =========================
-   PAGINATION
-========================= */
+.no-guidance { padding: 60px 20px; text-align: center; color: #718f7c; }
+.no-guidance-icon { font-size: 45px; margin-bottom: 10px; }
+.no-guidance h3 { margin-bottom: 5px; color: #264a35; }
 
 .guidance-pagination {
     display: flex;
-
     align-items: center;
-
     justify-content: center;
-
     gap: 8px;
-
     margin-top: 30px;
 }
-
 
 .guidance-pagination button {
     min-width: 42px;
     height: 40px;
-
     padding: 0 13px;
-
-    border:
-        1px solid #d8e5f3;
-
+    border: 1px solid #d8f3e0;
     border-radius: 9px;
-
     background: white;
-
-    color: #315879;
-
+    color: #315a42;
     cursor: pointer;
-
     transition: 0.2s;
 }
 
-
-.guidance-pagination button:hover:not(:disabled) {
-    background: #edf5ff;
-
-    border-color: #9fc5ed;
-}
-
+.guidance-pagination button:hover:not(:disabled) { background: #edfff2; border-color: #9ee0b3; }
 
 .guidance-pagination button.active {
-    background: #0b5ed7;
-
-    border-color: #0b5ed7;
-
+    background: #1a8a42;
+    border-color: #1a8a42;
     color: white;
 }
 
+.guidance-pagination button:disabled { opacity: 0.45; cursor: not-allowed; }
 
-.guidance-pagination button:disabled {
-    opacity: 0.45;
-
-    cursor: not-allowed;
-}
-
-
-#guidancePageNumbers {
-    display: flex;
-
-    gap: 6px;
-}
-
-
-/* =========================
-   READER
-========================= */
+#guidancePageNumbers { display: flex; gap: 6px; }
 
 .guidance-reader {
     padding: 30px;
-
     border-radius: 22px;
-
     background: white;
-
-    border:
-        1px solid #dce8f5;
-
-    box-shadow:
-        0 12px 35px rgba(0,50,100,0.10);
+    border: 1px solid #dcefe2;
+    box-shadow: 0 12px 35px rgba(0, 50, 20, 0.10);
 }
-
-
-/* Back */
 
 .guidance-back-btn {
     border: none;
-
     padding: 10px 15px;
-
     margin-bottom: 25px;
-
     border-radius: 9px;
-
-    background: #edf5ff;
-
-    color: #0b5ed7;
-
+    background: #edfff2;
+    color: #1a8a42;
     cursor: pointer;
-
     font-weight: 600;
 }
 
-
-.guidance-back-btn:hover {
-    background: #dcecff;
-}
-
-
-/* Reader number */
+.guidance-back-btn:hover { background: #dcefff; }
 
 .guidance-reader-number {
     display: inline-block;
-
     padding: 7px 13px;
-
     margin-bottom: 12px;
-
     border-radius: 20px;
-
-    background: #eaf3ff;
-
-    color: #0b5ed7;
-
+    background: #eaffef;
+    color: #1a8a42;
     font-size: 12px;
-
     font-weight: 700;
 }
 
-
-/* Reader title */
-
-.guidance-reader h2 {
-    margin: 0 0 25px;
-
-    color: #173b63;
-
-    font-size: 30px;
-
-    line-height: 1.4;
-}
-
-
-/* Language Boxes */
+.guidance-reader h2 { margin: 0 0 25px; color: #173f28; font-size: 30px; line-height: 1.4; }
 
 .guidance-language-box {
     margin-bottom: 18px;
-
     padding: 22px;
-
     border-radius: 16px;
-
-    border:
-        1px solid #e2ebf4;
-
-    background: #fbfdff;
+    border: 1px solid #e2f0e7;
+    background: #fbfefc;
 }
 
-
-.guidance-language-title {
-    margin-bottom: 12px;
-
-    color: #0b5ed7;
-
-    font-size: 12px;
-
-    font-weight: 800;
-}
-
-
-.guidance-language-box p {
-    margin: 0;
-
-    color: #263f58;
-
-    line-height: 1.9;
-}
-
-
-/* Arabic */
+.guidance-language-title { margin-bottom: 12px; color: #1a8a42; font-size: 12px; font-weight: 800; }
+.guidance-language-box p { margin: 0; color: #263f31; line-height: 1.9; }
 
 .guidance-arabic-box p {
-    font-family:
-        "Noto Naskh Arabic",
-        "Amiri",
-        serif;
-
+    font-family: "Noto Naskh Arabic", "Amiri", serif;
     font-size: 30px;
-
     line-height: 2.1;
-
     text-align: right;
-
     direction: rtl;
 }
 
-
-/* Urdu */
-
-.guidance-urdu-box p {
-    font-size: 20px;
-
-    line-height: 2;
-
-    text-align: right;
-
-    direction: rtl;
-}
-
-
-/* English */
-
-.guidance-english-box p {
-    font-size: 17px;
-
-    line-height: 1.9;
-}
-
-
-/* Main Guidance */
+.guidance-urdu-box p { font-size: 20px; line-height: 2; text-align: right; direction: rtl; }
+.guidance-english-box p { font-size: 17px; line-height: 1.9; }
 
 .guidance-detail-box {
     margin-top: 20px;
-
     padding: 22px;
-
     border-radius: 16px;
-
-    background: #f5f9fe;
-
-    border:
-        1px solid #e0ebf6;
+    background: #f5fdf8;
+    border: 1px solid #e0f0e6;
 }
 
-
-.guidance-detail-box p {
-    margin: 0;
-
-    color: #40566d;
-
-    font-size: 16px;
-
-    line-height: 1.9;
-}
-
-
-/* Reference */
+.guidance-detail-box p { margin: 0; color: #40564a; font-size: 16px; line-height: 1.9; }
 
 .guidance-reference {
     margin-top: 20px;
-
     padding: 15px;
-
     border-radius: 12px;
-
-    background: #f5f9fe;
-
-    color: #60758c;
-
+    background: #f5fdf8;
+    color: #607a6c;
     font-size: 13px;
 }
 
+.guidance-reference strong { color: #1a8a42; }
 
-.guidance-reference strong {
-    color: #0b5ed7;
-}
-
-
-/* =========================
-   READER ACTIONS
-========================= */
-
-.guidance-reader-actions {
-    display: flex;
-
-    gap: 10px;
-
-    margin-top: 22px;
-}
-
+.guidance-reader-actions { display: flex; gap: 10px; margin-top: 22px; }
 
 .guidance-reader-actions button {
     padding: 12px 18px;
-
-    border:
-        1px solid #d8e5f3;
-
+    border: 1px solid #d8f3e0;
     border-radius: 10px;
-
     background: white;
-
-    color: #24537d;
-
+    color: #245a3a;
     cursor: pointer;
-
     transition: 0.2s;
 }
 
-
-.guidance-reader-actions button:hover {
-    background: #edf5ff;
-
-    border-color: #9fc5ed;
-}
-
-
-/* =========================
-   READER NAVIGATION
-========================= */
+.guidance-reader-actions button:hover { background: #edfff2; border-color: #9ee0b3; }
 
 .guidance-reader-navigation {
     display: flex;
-
     justify-content: space-between;
-
     gap: 15px;
-
     margin-top: 25px;
-
     padding-top: 20px;
-
-    border-top:
-        1px solid #e4ebf3;
+    border-top: 1px solid #e4f1e8;
 }
-
 
 .guidance-reader-navigation button {
     padding: 12px 20px;
-
     border: none;
-
     border-radius: 10px;
-
-    background: #0b5ed7;
-
+    background: #1a8a42;
     color: white;
-
     cursor: pointer;
-
     transition: 0.2s;
 }
 
-
-.guidance-reader-navigation button:hover {
-    background: #084aa8;
-}
-
-
-.guidance-reader-navigation button:disabled {
-    opacity: 0.45;
-
-    cursor: not-allowed;
-}
-
-
-/* =========================
-   TOAST MESSAGE
-========================= */
+.guidance-reader-navigation button:hover { background: #0d6a28; }
+.guidance-reader-navigation button:disabled { opacity: 0.45; cursor: not-allowed; }
 
 .guidance-toast {
     position: fixed;
-
     left: 50%;
     bottom: 25px;
-
     z-index: 99999;
-
-    transform:
-        translateX(-50%);
-
+    transform: translateX(-50%);
     padding: 13px 22px;
-
     border-radius: 12px;
-
-    background: #0b5ed7;
-
+    background: #1a8a42;
     color: white;
-
     font-size: 14px;
-
-    box-shadow:
-        0 8px 25px rgba(0,50,120,0.25);
-
-    animation:
-        guidanceToastIn 0.25s ease;
+    box-shadow: 0 8px 25px rgba(0, 50, 20, 0.25);
+    animation: guidanceToastIn 0.25s ease;
 }
-
 
 @keyframes guidanceToastIn {
-
-    from {
-        opacity: 0;
-
-        transform:
-            translate(-50%, 15px);
-    }
-
-    to {
-        opacity: 1;
-
-        transform:
-            translate(-50%, 0);
-    }
-
+    from { opacity: 0; transform: translate(-50%, 15px); }
+    to { opacity: 1; transform: translate(-50%, 0); }
 }
-
-
-/* =========================
-   MOBILE
-========================= */
 
 @media (max-width: 900px) {
-
-    .guidance-controls {
-        grid-template-columns: 1fr 1fr;
-    }
-
-
-    .guidance-search-box {
-        grid-column: 1 / -1;
-    }
-
-
-    .guidance-container {
-        grid-template-columns: 1fr;
-    }
-
+    .guidance-controls { grid-template-columns: 1fr 1fr; }
+    .guidance-search-box { grid-column: 1 / -1; }
+    .guidance-container { grid-template-columns: 1fr; }
 }
-
 
 @media (max-width: 600px) {
-
-    .guidance-page {
-        padding: 20px 12px 45px;
-    }
-
-
-    .guidance-hero {
-        padding: 25px 20px;
-
-        gap: 15px;
-
-        border-radius: 20px;
-    }
-
-
-    .guidance-hero-icon {
-        width: 58px;
-        height: 58px;
-
-        min-width: 58px;
-
-        font-size: 28px;
-
-        border-radius: 16px;
-    }
-
-
-    .guidance-hero h1 {
-        font-size: 25px;
-    }
-
-
-    .guidance-hero p {
-        font-size: 14px;
-    }
-
-
-    .guidance-hero span {
-        font-size: 11px;
-    }
-
-
-    .guidance-controls {
-        grid-template-columns: 1fr;
-
-        gap: 10px;
-    }
-
-
-    .guidance-search-box {
-        grid-column: auto;
-    }
-
-
-    .guidance-info {
-        flex-direction: column;
-
-        align-items: stretch;
-
-        gap: 12px;
-    }
-
-
-    .random-guidance-btn {
-        width: 100%;
-    }
-
-
-    .guidance-container {
-        grid-template-columns: 1fr;
-
-        gap: 15px;
-    }
-
-
-    .guidance-card {
-        padding: 18px;
-    }
-
-
-    .guidance-card h3 {
-        font-size: 18px;
-    }
-
-
-    .guidance-card-arabic {
-        font-size: 21px;
-
-        padding: 16px;
-    }
-
-
-    .guidance-card-urdu {
-        font-size: 16px;
-    }
-
-
-    .guidance-card-english {
-        font-size: 14px;
-    }
-
-
-    .guidance-card-actions {
-        flex-wrap: wrap;
-    }
-
-
-    .guidance-card-actions button {
-        min-width:
-            calc(50% - 4px);
-    }
-
-
-    .guidance-reader {
-        padding: 20px 15px;
-    }
-
-
-    .guidance-reader h2 {
-        font-size: 24px;
-    }
-
-
-    .guidance-arabic-box p {
-        font-size: 25px;
-    }
-
-
-    .guidance-urdu-box p {
-        font-size: 18px;
-    }
-
-
-    .guidance-english-box p {
-        font-size: 15px;
-    }
-
-
-    .guidance-reader-actions {
-        flex-wrap: wrap;
-    }
-
-
-    .guidance-reader-actions button {
-        flex: 1;
-    }
-
-
-    .guidance-reader-navigation {
-        flex-direction: column;
-    }
-
-
-    .guidance-reader-navigation button {
-        width: 100%;
-    }
-
-
-    #guidancePageNumbers button:nth-child(n+4) {
-        display: none;
-    }
-
-}/* =====================================================
-   ISLAMICWAY - ABOUT US
-   PART 2 : CSS
-===================================================== */
-
-.about-page {
-    padding: 30px 20px 60px;
-    max-width: 1200px;
-    margin: auto;
+    .guidance-page { padding: 20px 12px 45px; }
+    .guidance-hero { padding: 25px 20px; gap: 15px; border-radius: 20px; }
+    .guidance-hero-icon { width: 58px; height: 58px; min-width: 58px; font-size: 28px; border-radius: 16px; }
+    .guidance-hero h1 { font-size: 25px; }
+    .guidance-hero p { font-size: 14px; }
+    .guidance-hero span { font-size: 11px; }
+    .guidance-controls { grid-template-columns: 1fr; gap: 10px; }
+    .guidance-search-box { grid-column: auto; }
+    .guidance-info { flex-direction: column; align-items: stretch; gap: 12px; }
+    .random-guidance-btn { width: 100%; }
+    .guidance-container { grid-template-columns: 1fr; gap: 15px; }
+    .guidance-card { padding: 18px; }
+    .guidance-card h3 { font-size: 18px; }
+    .guidance-card-arabic { font-size: 21px; padding: 16px; }
+    .guidance-card-urdu { font-size: 16px; }
+    .guidance-card-english { font-size: 14px; }
+    .guidance-card-actions { flex-wrap: wrap; }
+    .guidance-card-actions button { min-width: calc(50% - 4px); }
+    .guidance-reader { padding: 20px 15px; }
+    .guidance-reader h2 { font-size: 24px; }
+    .guidance-arabic-box p { font-size: 25px; }
+    .guidance-urdu-box p { font-size: 18px; }
+    .guidance-english-box p { font-size: 15px; }
+    .guidance-reader-actions { flex-wrap: wrap; }
+    .guidance-reader-actions button { flex: 1; }
+    .guidance-reader-navigation { flex-direction: column; }
+    .guidance-reader-navigation button { width: 100%; }
+    #guidancePageNumbers button:nth-child(n+4) { display: none; }
 }
 
+/* =========================================================
+   ABOUT PAGE (GREEN)
+========================================================= */
 
-/* ================= HERO ================= */
+.about-page { padding: 30px 20px 60px; max-width: 1200px; margin: auto; }
 
 .about-hero {
     display: flex;
@@ -7396,758 +2843,1004 @@ body {
     gap: 30px;
     padding: 45px;
     margin-bottom: 35px;
-
-    background:
-        linear-gradient(
-            135deg,
-            #061f3d,
-            #0b4f8a,
-            #087f8c
-        );
-
+    background: linear-gradient(135deg, #062e10, #0a5c22, #1a8a42);
     border-radius: 28px;
-
     color: white;
-
-    box-shadow:
-        0 15px 40px rgba(0, 50, 100, 0.18);
+    box-shadow: 0 15px 40px rgba(0, 50, 20, 0.18);
 }
-
 
 .about-hero-icon {
     width: 110px;
     height: 110px;
-
     display: flex;
     align-items: center;
     justify-content: center;
-
     font-size: 55px;
-
     background: rgba(255,255,255,0.12);
-
     border: 1px solid rgba(255,255,255,0.25);
-
     border-radius: 50%;
-
     flex-shrink: 0;
 }
 
-
 .about-small-title {
     display: inline-block;
-
     margin-bottom: 8px;
-
     font-size: 14px;
     font-weight: 600;
-
     letter-spacing: 1px;
-
     opacity: 0.85;
 }
 
+.about-hero h1 { margin: 0 0 12px; font-size: 42px; font-weight: 800; }
+.about-hero p { margin: 0; font-size: 17px; line-height: 1.7; opacity: 0.9; }
 
-.about-hero h1 {
-    margin: 0 0 12px;
-
-    font-size: 42px;
-    font-weight: 800;
-}
-
-
-.about-hero p {
-    margin: 0;
-
-    font-size: 17px;
-    line-height: 1.7;
-
-    opacity: 0.9;
-}
-
-
-/* ================= MAIN CARDS ================= */
-
-.about-main {
-    display: grid;
-
-    grid-template-columns:
-        repeat(3, 1fr);
-
-    gap: 22px;
-
-    margin-bottom: 45px;
-}
-
+.about-main { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; margin-bottom: 45px; }
 
 .about-card {
     padding: 30px;
-
     background: #ffffff;
-
-    border: 1px solid #e5eef7;
-
+    border: 1px solid #e5f2ea;
     border-radius: 22px;
-
-    box-shadow:
-        0 8px 25px rgba(0, 50, 100, 0.07);
-
-    transition:
-        transform 0.3s ease,
-        box-shadow 0.3s ease;
+    box-shadow: 0 8px 25px rgba(0, 50, 20, 0.07);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-
-.about-card:hover {
-    transform: translateY(-7px);
-
-    box-shadow:
-        0 15px 35px rgba(0, 50, 100, 0.13);
-}
-
+.about-card:hover { transform: translateY(-7px); box-shadow: 0 15px 35px rgba(0, 50, 20, 0.13); }
 
 .about-card-icon {
     width: 55px;
     height: 55px;
-
     display: flex;
     align-items: center;
     justify-content: center;
-
     margin-bottom: 18px;
-
     font-size: 27px;
-
-    background: #eaf5ff;
-
+    background: #eaffef;
     border-radius: 16px;
 }
 
+.about-card h2 { margin: 0 0 13px; color: #073f1e; font-size: 23px; }
+.about-card p { margin: 0 0 12px; color: #526b5c; line-height: 1.8; font-size: 15px; }
 
-.about-card h2 {
-    margin: 0 0 13px;
+.about-features { margin-bottom: 50px; }
+.about-features > h2 { text-align: center; margin-bottom: 25px; color: #073f1e; font-size: 30px; }
 
-    color: #073b6f;
-
-    font-size: 23px;
-}
-
-
-.about-card p {
-    margin: 0 0 12px;
-
-    color: #526579;
-
-    line-height: 1.8;
-
-    font-size: 15px;
-}
-
-
-/* ================= FEATURES ================= */
-
-.about-features {
-    margin-bottom: 50px;
-}
-
-
-.about-features > h2 {
-    text-align: center;
-
-    margin-bottom: 25px;
-
-    color: #073b6f;
-
-    font-size: 30px;
-}
-
-
-.about-feature-grid {
-    display: grid;
-
-    grid-template-columns:
-        repeat(3, 1fr);
-
-    gap: 20px;
-}
-
+.about-feature-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
 
 .about-feature {
     padding: 25px;
-
     text-align: center;
-
-    background: #f7fbff;
-
-    border: 1px solid #e1edf7;
-
+    background: #f7fff9;
+    border: 1px solid #e1f2e7;
     border-radius: 20px;
-
     transition: 0.3s ease;
 }
 
-
 .about-feature:hover {
     transform: translateY(-5px);
-
     background: #ffffff;
-
-    box-shadow:
-        0 12px 30px rgba(0, 70, 130, 0.10);
+    box-shadow: 0 12px 30px rgba(0, 70, 30, 0.10);
 }
 
-
-.about-feature span {
-    display: block;
-
-    font-size: 35px;
-
-    margin-bottom: 12px;
-}
-
-
-.about-feature h3 {
-    margin: 0 0 8px;
-
-    color: #07558f;
-
-    font-size: 19px;
-}
-
-
-.about-feature p {
-    margin: 0;
-
-    color: #65778a;
-
-    font-size: 14px;
-
-    line-height: 1.6;
-}
-
-
-/* ================= STATISTICS ================= */
+.about-feature span { display: block; font-size: 35px; margin-bottom: 12px; }
+.about-feature h3 { margin: 0 0 8px; color: #07552e; font-size: 19px; }
+.about-feature p { margin: 0; color: #657a6c; font-size: 14px; line-height: 1.6; }
 
 .about-stats {
     display: grid;
-
-    grid-template-columns:
-        repeat(4, 1fr);
-
+    grid-template-columns: repeat(4, 1fr);
     gap: 18px;
-
     margin-bottom: 55px;
-
     padding: 30px;
-
-    background:
-        linear-gradient(
-            135deg,
-            #062b50,
-            #075b91
-        );
-
+    background: linear-gradient(135deg, #062e10, #0a5c22);
     border-radius: 25px;
 }
 
-
 .about-stat {
     text-align: center;
-
     color: white;
-
     padding: 15px;
-
-    border-right:
-        1px solid rgba(255,255,255,0.18);
+    border-right: 1px solid rgba(255,255,255,0.18);
 }
 
+.about-stat:last-child { border-right: none; }
+.about-stat strong { display: block; font-size: 34px; font-weight: 800; margin-bottom: 6px; }
+.about-stat span { font-size: 14px; opacity: 0.85; }
 
-.about-stat:last-child {
-    border-right: none;
-}
+.about-faq { max-width: 900px; margin: 0 auto 55px; }
+.about-section-heading { text-align: center; margin-bottom: 25px; }
+.about-section-heading span { color: #0a8a3e; font-size: 14px; font-weight: 700; letter-spacing: 0.5px; }
+.about-section-heading h2 { margin: 8px 0 0; color: #073f1e; font-size: 30px; }
 
-
-.about-stat strong {
-    display: block;
-
-    font-size: 34px;
-
-    font-weight: 800;
-
-    margin-bottom: 6px;
-}
-
-
-.about-stat span {
-    font-size: 14px;
-
-    opacity: 0.85;
-}
-
-
-/* ================= FAQ ================= */
-
-.about-faq {
-    max-width: 900px;
-
-    margin: 0 auto 55px;
-}
-
-
-.about-section-heading {
-    text-align: center;
-
-    margin-bottom: 25px;
-}
-
-
-.about-section-heading span {
-    color: #0878ae;
-
-    font-size: 14px;
-
-    font-weight: 700;
-
-    letter-spacing: 0.5px;
-}
-
-
-.about-section-heading h2 {
-    margin: 8px 0 0;
-
-    color: #073b6f;
-
-    font-size: 30px;
-}
-
-
-.faq-list {
-    display: flex;
-
-    flex-direction: column;
-
-    gap: 12px;
-}
-
+.faq-list { display: flex; flex-direction: column; gap: 12px; }
 
 .faq-item {
     overflow: hidden;
-
     background: white;
-
-    border:
-        1px solid #e2ebf3;
-
+    border: 1px solid #e2f0e7;
     border-radius: 15px;
-
-    box-shadow:
-        0 5px 18px rgba(0, 40, 80, 0.05);
+    box-shadow: 0 5px 18px rgba(0, 40, 15, 0.05);
 }
-
 
 .faq-question {
     width: 100%;
-
     border: none;
-
     background: transparent;
-
     padding: 19px 22px;
-
     display: flex;
-
     align-items: center;
-
     justify-content: space-between;
-
     text-align: left;
-
     cursor: pointer;
-
-    color: #073b6f;
-
+    color: #073f1e;
     font-size: 16px;
-
     font-weight: 700;
 }
-
 
 .faq-question span {
     width: 28px;
     height: 28px;
-
     display: flex;
-
     align-items: center;
     justify-content: center;
-
-    background: #eaf5ff;
-
-    color: #0878ae;
-
+    background: #eaffef;
+    color: #0a8a3e;
     border-radius: 50%;
-
     font-size: 20px;
-
     transition: 0.3s ease;
 }
 
-
-.faq-item.active
-.faq-question span {
+.faq-item.active .faq-question span {
     transform: rotate(45deg);
-
-    background: #0878ae;
-
+    background: #0a8a3e;
     color: white;
 }
 
-
 .faq-answer {
     max-height: 0;
-
     overflow: hidden;
-
     padding: 0 22px;
-
-    color: #617286;
-
+    color: #617a6c;
     line-height: 1.8;
-
     font-size: 14px;
-
-    transition:
-        max-height 0.35s ease,
-        padding 0.35s ease;
+    transition: max-height 0.35s ease, padding 0.35s ease;
 }
 
-
-.faq-item.active
-.faq-answer {
-    max-height: 300px;
-
-    padding:
-        0 22px 20px;
-}
-
-
-/* ================= CONTACT ================= */
+.faq-item.active .faq-answer { max-height: 300px; padding: 0 22px 20px; }
 
 .about-contact {
     text-align: center;
-
     padding: 45px 25px;
-
     margin-bottom: 35px;
-
-    background:
-        linear-gradient(
-            135deg,
-            #edf8ff,
-            #f5fcff
-        );
-
-    border:
-        1px solid #d8ecf8;
-
+    background: linear-gradient(135deg, #edfff2, #f5fff8);
+    border: 1px solid #d8f2e2;
     border-radius: 25px;
 }
-
 
 .about-contact-icon {
     width: 65px;
     height: 65px;
-
     display: flex;
-
     align-items: center;
     justify-content: center;
-
     margin: 0 auto 15px;
-
     font-size: 30px;
-
     background: white;
-
     border-radius: 50%;
-
-    box-shadow:
-        0 5px 20px rgba(0,70,120,0.10);
+    box-shadow: 0 5px 20px rgba(0, 70, 30, 0.10);
 }
 
-
-.about-contact h2 {
-    margin: 0 0 10px;
-
-    color: #073b6f;
-
-    font-size: 28px;
-}
-
-
-.about-contact p {
-    margin: 0 auto 22px;
-
-    max-width: 600px;
-
-    color: #647689;
-
-    line-height: 1.7;
-}
-
+.about-contact h2 { margin: 0 0 10px; color: #073f1e; font-size: 28px; }
+.about-contact p { margin: 0 auto 22px; max-width: 600px; color: #647a6c; line-height: 1.7; }
 
 .about-contact-btn {
     border: none;
-
     padding: 13px 27px;
-
     border-radius: 30px;
-
-    background:
-        linear-gradient(
-            135deg,
-            #0878ae,
-            #07558f
-        );
-
+    background: linear-gradient(135deg, #0a8a3e, #07552e);
     color: white;
-
     font-size: 15px;
-
     font-weight: 700;
-
     cursor: pointer;
-
-    box-shadow:
-        0 8px 20px rgba(0,80,140,0.18);
-
+    box-shadow: 0 8px 20px rgba(0, 80, 30, 0.18);
     transition: 0.3s ease;
 }
 
-
 .about-contact-btn:hover {
     transform: translateY(-3px);
-
-    box-shadow:
-        0 12px 25px rgba(0,80,140,0.25);
+    box-shadow: 0 12px 25px rgba(0, 80, 30, 0.25);
 }
 
-
-/* ================= FOOTER MESSAGE ================= */
-
-.about-footer-message {
-    text-align: center;
-
-    padding: 30px 20px;
-
-    color: #587086;
-}
-
-
-.about-footer-message div {
-    color: #07558f;
-
-    font-size: 22px;
-
-    font-weight: 700;
-
-    margin-bottom: 12px;
-}
-
-
-.about-footer-message p {
-    margin: 0 0 8px;
-
-    font-size: 14px;
-}
-
-
-.about-footer-message strong {
-    color: #0878ae;
-
-    font-size: 16px;
-}
-
-
-/* ================= DARK MODE ================= */
-
-body.dark-mode .about-card,
-body.dark-mode .about-feature,
-body.dark-mode .faq-item {
-    background: #10263b;
-
-    border-color: #24445d;
-}
-
-
-body.dark-mode .about-card h2,
-body.dark-mode .about-feature h3,
-body.dark-mode .about-section-heading h2,
-body.dark-mode .about-contact h2,
-body.dark-mode .faq-question {
-    color: #d9f2ff;
-}
-
-
-body.dark-mode .about-card p,
-body.dark-mode .about-feature p,
-body.dark-mode .faq-answer,
-body.dark-mode .about-contact p {
-    color: #b6c8d7;
-}
-
-
-body.dark-mode .about-feature {
-    background: #0d2235;
-}
-
-
-body.dark-mode .about-contact {
-    background: #102a40;
-
-    border-color: #244a65;
-}
-
-
-body.dark-mode .about-contact-icon {
-    background: #18364e;
-}
-
-
-/* ================= MOBILE ================= */
+.about-footer-message { text-align: center; padding: 30px 20px; color: #587a66; }
+.about-footer-message div { color: #07552e; font-size: 22px; font-weight: 700; margin-bottom: 12px; }
+.about-footer-message p { margin: 0 0 8px; font-size: 14px; }
+.about-footer-message strong { color: #0a8a3e; font-size: 16px; }
 
 @media (max-width: 900px) {
-
-    .about-main {
-        grid-template-columns:
-            repeat(2, 1fr);
-    }
-
-
-    .about-feature-grid {
-        grid-template-columns:
-            repeat(2, 1fr);
-    }
-
-
-    .about-stats {
-        grid-template-columns:
-            repeat(2, 1fr);
-    }
-
-
-    .about-stat:nth-child(2) {
-        border-right: none;
-    }
-
+    .about-main { grid-template-columns: repeat(2, 1fr); }
+    .about-feature-grid { grid-template-columns: repeat(2, 1fr); }
+    .about-stats { grid-template-columns: repeat(2, 1fr); }
+    .about-stat:nth-child(2) { border-right: none; }
 }
 
-
 @media (max-width: 650px) {
+    .about-page { padding: 20px 12px 40px; }
+    .about-hero { flex-direction: column; text-align: center; padding: 32px 20px; border-radius: 22px; }
+    .about-hero-icon { width: 85px; height: 85px; font-size: 42px; }
+    .about-hero h1 { font-size: 30px; }
+    .about-hero p { font-size: 14px; }
+    .about-main { grid-template-columns: 1fr; gap: 15px; }
+    .about-card { padding: 24px; }
+    .about-feature-grid { grid-template-columns: 1fr; }
+    .about-features > h2, .about-section-heading h2 { font-size: 25px; }
+    .about-stats { grid-template-columns: 1fr 1fr; padding: 20px 10px; }
+    .about-stat { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.15); }
+    .about-stat:nth-last-child(-n+2) { border-bottom: none; }
+    .about-stat strong { font-size: 27px; }
+    .about-stat span { font-size: 12px; }
+    .faq-question { padding: 16px; font-size: 14px; }
+    .faq-answer { font-size: 13px; }
+    .about-contact { padding: 35px 18px; }
+}/* =========================================================
+   ADVANCED ARTICLE STYLES
+========================================================= */
 
-    .about-page {
-        padding:
-            20px 12px 40px;
+.article-hero-badge {
+    display: inline-block;
+    padding: 8px 20px;
+    margin-bottom: 20px;
+    border-radius: 25px;
+    background: linear-gradient(135deg, #1a8a42, #0d6a28);
+    color: #ffffff;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    box-shadow: 0 5px 20px rgba(34, 200, 80, 0.3);
+}
+
+.article-intro {
+    font-size: 19px;
+    line-height: 2;
+    color: #d8ffe5;
+    padding: 22px;
+    margin: 25px 0;
+    border-radius: 18px;
+    background: linear-gradient(135deg, rgba(34, 200, 80, 0.12), rgba(34, 200, 80, 0.04));
+    border-left: 5px solid #22c850;
+    font-style: italic;
+}
+
+.article-intro strong {
+    color: #55ff90;
+    font-weight: 700;
+}
+
+.article-list {
+    list-style: none;
+    padding: 0;
+    margin: 25px 0;
+}
+
+.article-list li {
+    padding: 14px 20px;
+    margin-bottom: 12px;
+    background: rgba(34, 200, 80, 0.08);
+    border-radius: 12px;
+    border-left: 4px solid #22c850;
+    color: #d8ffe5;
+    font-size: 17px;
+    line-height: 1.8;
+    transition: transform 0.3s ease;
+}
+
+.article-list li:hover {
+    transform: translateX(8px);
+    background: rgba(34, 200, 80, 0.15);
+}
+
+.article-list li strong {
+    color: #55ff90;
+    margin-right: 8px;
+}
+
+/* =========================================================
+   STEPS SECTION
+========================================================= */
+
+.article-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    margin: 30px 0;
+}
+
+.article-step {
+    display: flex;
+    gap: 18px;
+    padding: 22px;
+    border-radius: 18px;
+    background: linear-gradient(145deg, rgba(10, 55, 25, 0.7), rgba(5, 25, 10, 0.7));
+    border: 1px solid rgba(34, 200, 80, 0.35);
+    transition: all 0.3s ease;
+}
+
+.article-step:hover {
+    transform: translateY(-4px);
+    border-color: #35ff70;
+    box-shadow: 0 15px 35px rgba(34, 200, 80, 0.2);
+}
+
+.step-number {
+    min-width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #22c850, #0d6a28);
+    color: #ffffff;
+    font-size: 22px;
+    font-weight: 800;
+    box-shadow: 0 5px 18px rgba(34, 200, 80, 0.4);
+    flex-shrink: 0;
+}
+
+.article-step h3 {
+    margin: 0 0 8px;
+    color: #55ff90;
+    font-size: 20px;
+    font-family: "Amiri", serif;
+}
+
+.article-step p {
+    margin: 0;
+    color: #d8ffe5;
+    font-size: 16px;
+    line-height: 1.8;
+}
+
+.article-step em {
+    color: #8effb0;
+    font-style: italic;
+    font-weight: 600;
+}
+
+/* =========================================================
+   HADITH BOX
+========================================================= */
+
+.article-hadith {
+    padding: 28px;
+    margin: 30px 0;
+    border-radius: 20px;
+    background: linear-gradient(135deg, rgba(34, 200, 80, 0.15), rgba(34, 200, 80, 0.05));
+    border: 2px solid rgba(34, 200, 80, 0.5);
+    box-shadow: 0 10px 35px rgba(34, 200, 80, 0.15);
+    position: relative;
+    overflow: hidden;
+}
+
+.article-hadith::before {
+    content: "❝";
+    position: absolute;
+    top: 10px;
+    left: 20px;
+    font-size: 80px;
+    color: rgba(34, 200, 80, 0.15);
+    font-family: serif;
+    line-height: 1;
+}
+
+.article-hadith-arabic {
+    direction: rtl;
+    text-align: right;
+    font-size: 28px;
+    line-height: 2;
+    color: #ffffff;
+    font-family: "Amiri", "Noto Naskh Arabic", serif;
+    margin-bottom: 18px;
+    position: relative;
+    z-index: 2;
+}
+
+.article-hadith-english,
+.article-hadith-urdu {
+    font-size: 18px;
+    line-height: 1.9;
+    color: #d8ffe5;
+    font-style: italic;
+    margin: 0 0 12px;
+    position: relative;
+    z-index: 2;
+}
+
+.article-hadith-source {
+    display: block;
+    text-align: right;
+    color: #55ff90;
+    font-size: 14px;
+    font-weight: 700;
+    margin-top: 15px;
+    position: relative;
+    z-index: 2;
+}
+
+/* =========================================================
+   QUOTE BOX
+========================================================= */
+
+.article-quote {
+    padding: 28px 30px;
+    margin: 30px 0;
+    border-radius: 20px;
+    background: linear-gradient(135deg, rgba(34, 200, 80, 0.1), rgba(34, 200, 80, 0.02));
+    border-left: 6px solid #22c850;
+    position: relative;
+}
+
+.article-quote::before {
+    content: "✦";
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 30px;
+    color: #22c850;
+    opacity: 0.4;
+}
+
+.article-quote p {
+    margin: 0;
+    color: #e1ffe8;
+    font-size: 20px;
+    line-height: 1.9;
+    font-style: italic;
+    font-family: "Amiri", serif;
+}
+
+/* =========================================================
+   DUA BOX
+========================================================= */
+
+.article-dua {
+    padding: 28px;
+    margin: 30px 0;
+    border-radius: 20px;
+    background: linear-gradient(145deg, rgba(10, 55, 25, 0.9), rgba(5, 25, 10, 0.95));
+    border: 2px solid rgba(34, 200, 80, 0.6);
+    box-shadow: 0 15px 40px rgba(34, 200, 80, 0.2);
+    text-align: center;
+}
+
+.article-dua-arabic {
+    direction: rtl;
+    font-size: 26px;
+    line-height: 2;
+    color: #ffffff;
+    font-family: "Amiri", "Noto Naskh Arabic", serif;
+    margin-bottom: 18px;
+    padding: 15px;
+    border-radius: 15px;
+    background: rgba(34, 200, 80, 0.1);
+}
+
+.article-dua-english,
+.article-dua-urdu {
+    font-size: 17px;
+    line-height: 1.9;
+    color: #d8ffe5;
+    margin: 0 0 12px;
+}
+
+.article-dua-source {
+    display: inline-block;
+    padding: 6px 14px;
+    border-radius: 15px;
+    background: rgba(34, 200, 80, 0.2);
+    color: #55ff90;
+    font-size: 13px;
+    font-weight: 600;
+    margin-top: 8px;
+}
+
+/* =========================================================
+   ARTICLE TRANSLATION
+========================================================= */
+
+.article-translation {
+    text-align: center;
+    font-style: italic;
+    color: #8effb0;
+    font-size: 17px;
+    line-height: 1.9;
+    margin: 15px 0 30px;
+    padding: 15px 20px;
+    border-radius: 12px;
+    background: rgba(34, 200, 80, 0.06);
+}
+
+.article-translation span {
+    display: block;
+    margin-top: 8px;
+    color: #55ff90;
+    font-style: normal;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+/* =========================================================
+   RTL SUPPORT
+========================================================= */
+
+.article-content.rtl .article-step {
+    flex-direction: row-reverse;
+    text-align: right;
+}
+
+.article-content.rtl .article-list li {
+    border-left: none;
+    border-right: 4px solid #22c850;
+    text-align: right;
+}
+
+.article-content.rtl .article-list li:hover {
+    transform: translateX(-8px);
+}
+
+.article-content.rtl .article-intro {
+    border-left: none;
+    border-right: 5px solid #22c850;
+    text-align: right;
+}
+
+.article-content.rtl .article-hadith-source {
+    text-align: left;
+}
+
+.article-content.rtl .article-quote {
+    border-left: none;
+    border-right: 6px solid #22c850;
+    text-align: right;
+}
+
+.article-content.rtl .article-quote::before {
+    right: auto;
+    left: 20px;
+}
+
+/* =========================================================
+   MOBILE RESPONSIVE
+========================================================= */
+
+@media (max-width: 600px) {
+
+    .article-intro {
+        font-size: 17px;
+        padding: 18px;
     }
 
-
-    .about-hero {
+    .article-step {
         flex-direction: column;
-
-        text-align: center;
-
-        padding: 32px 20px;
-
-        border-radius: 22px;
+        gap: 12px;
+        padding: 18px;
     }
 
-
-    .about-hero-icon {
-        width: 85px;
-        height: 85px;
-
-        font-size: 42px;
+    .step-number {
+        min-width: 42px;
+        height: 42px;
+        font-size: 19px;
     }
 
-
-    .about-hero h1 {
-        font-size: 30px;
+    .article-step h3 {
+        font-size: 18px;
     }
 
-
-    .about-hero p {
-        font-size: 14px;
+    .article-step p {
+        font-size: 15px;
     }
 
-
-    .about-main {
-        grid-template-columns: 1fr;
-
-        gap: 15px;
+    .article-hadith-arabic,
+    .article-dua-arabic {
+        font-size: 22px;
     }
 
-
-    .about-card {
-        padding: 24px;
+    .article-hadith-english,
+    .article-hadith-urdu,
+    .article-dua-english,
+    .article-dua-urdu {
+        font-size: 16px;
     }
 
-
-    .about-feature-grid {
-        grid-template-columns: 1fr;
+    .article-quote p {
+        font-size: 17px;
     }
 
-
-    .about-features > h2,
-    .about-section-heading h2 {
-        font-size: 25px;
+    .article-content.rtl .article-step {
+        flex-direction: column;
     }
 
+    .article-list li {
+        font-size: 15px;
+        padding: 12px 16px;
+    }
+}/* =========================================================
+   ADVANCED ARTICLE STYLES
+========================================================= */
 
-    .about-stats {
-        grid-template-columns: 1fr 1fr;
+.article-hero-badge {
+    display: inline-block;
+    padding: 8px 20px;
+    margin-bottom: 20px;
+    border-radius: 25px;
+    background: linear-gradient(135deg, #1a8a42, #0d6a28);
+    color: #ffffff;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    box-shadow: 0 5px 20px rgba(34, 200, 80, 0.3);
+}
 
-        padding: 20px 10px;
+.article-intro {
+    font-size: 19px;
+    line-height: 2;
+    color: #d8ffe5;
+    padding: 22px;
+    margin: 25px 0;
+    border-radius: 18px;
+    background: linear-gradient(135deg, rgba(34, 200, 80, 0.12), rgba(34, 200, 80, 0.04));
+    border-left: 5px solid #22c850;
+    font-style: italic;
+}
+
+.article-intro strong {
+    color: #55ff90;
+    font-weight: 700;
+}
+
+.article-list {
+    list-style: none;
+    padding: 0;
+    margin: 25px 0;
+}
+
+.article-list li {
+    padding: 14px 20px;
+    margin-bottom: 12px;
+    background: rgba(34, 200, 80, 0.08);
+    border-radius: 12px;
+    border-left: 4px solid #22c850;
+    color: #d8ffe5;
+    font-size: 17px;
+    line-height: 1.8;
+    transition: transform 0.3s ease;
+}
+
+.article-list li:hover {
+    transform: translateX(8px);
+    background: rgba(34, 200, 80, 0.15);
+}
+
+.article-list li strong {
+    color: #55ff90;
+    margin-right: 8px;
+}
+
+/* =========================================================
+   STEPS SECTION
+========================================================= */
+
+.article-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    margin: 30px 0;
+}
+
+.article-step {
+    display: flex;
+    gap: 18px;
+    padding: 22px;
+    border-radius: 18px;
+    background: linear-gradient(145deg, rgba(10, 55, 25, 0.7), rgba(5, 25, 10, 0.7));
+    border: 1px solid rgba(34, 200, 80, 0.35);
+    transition: all 0.3s ease;
+}
+
+.article-step:hover {
+    transform: translateY(-4px);
+    border-color: #35ff70;
+    box-shadow: 0 15px 35px rgba(34, 200, 80, 0.2);
+}
+
+.step-number {
+    min-width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #22c850, #0d6a28);
+    color: #ffffff;
+    font-size: 22px;
+    font-weight: 800;
+    box-shadow: 0 5px 18px rgba(34, 200, 80, 0.4);
+    flex-shrink: 0;
+}
+
+.article-step h3 {
+    margin: 0 0 8px;
+    color: #55ff90;
+    font-size: 20px;
+    font-family: "Amiri", serif;
+}
+
+.article-step p {
+    margin: 0;
+    color: #d8ffe5;
+    font-size: 16px;
+    line-height: 1.8;
+}
+
+.article-step em {
+    color: #8effb0;
+    font-style: italic;
+    font-weight: 600;
+}
+
+/* =========================================================
+   HADITH BOX
+========================================================= */
+
+.article-hadith {
+    padding: 28px;
+    margin: 30px 0;
+    border-radius: 20px;
+    background: linear-gradient(135deg, rgba(34, 200, 80, 0.15), rgba(34, 200, 80, 0.05));
+    border: 2px solid rgba(34, 200, 80, 0.5);
+    box-shadow: 0 10px 35px rgba(34, 200, 80, 0.15);
+    position: relative;
+    overflow: hidden;
+}
+
+.article-hadith::before {
+    content: "❝";
+    position: absolute;
+    top: 10px;
+    left: 20px;
+    font-size: 80px;
+    color: rgba(34, 200, 80, 0.15);
+    font-family: serif;
+    line-height: 1;
+}
+
+.article-hadith-arabic {
+    direction: rtl;
+    text-align: right;
+    font-size: 28px;
+    line-height: 2;
+    color: #ffffff;
+    font-family: "Amiri", "Noto Naskh Arabic", serif;
+    margin-bottom: 18px;
+    position: relative;
+    z-index: 2;
+}
+
+.article-hadith-english,
+.article-hadith-urdu {
+    font-size: 18px;
+    line-height: 1.9;
+    color: #d8ffe5;
+    font-style: italic;
+    margin: 0 0 12px;
+    position: relative;
+    z-index: 2;
+}
+
+.article-hadith-source {
+    display: block;
+    text-align: right;
+    color: #55ff90;
+    font-size: 14px;
+    font-weight: 700;
+    margin-top: 15px;
+    position: relative;
+    z-index: 2;
+}
+
+/* =========================================================
+   QUOTE BOX
+========================================================= */
+
+.article-quote {
+    padding: 28px 30px;
+    margin: 30px 0;
+    border-radius: 20px;
+    background: linear-gradient(135deg, rgba(34, 200, 80, 0.1), rgba(34, 200, 80, 0.02));
+    border-left: 6px solid #22c850;
+    position: relative;
+}
+
+.article-quote::before {
+    content: "✦";
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 30px;
+    color: #22c850;
+    opacity: 0.4;
+}
+
+.article-quote p {
+    margin: 0;
+    color: #e1ffe8;
+    font-size: 20px;
+    line-height: 1.9;
+    font-style: italic;
+    font-family: "Amiri", serif;
+}
+
+/* =========================================================
+   DUA BOX
+========================================================= */
+
+.article-dua {
+    padding: 28px;
+    margin: 30px 0;
+    border-radius: 20px;
+    background: linear-gradient(145deg, rgba(10, 55, 25, 0.9), rgba(5, 25, 10, 0.95));
+    border: 2px solid rgba(34, 200, 80, 0.6);
+    box-shadow: 0 15px 40px rgba(34, 200, 80, 0.2);
+    text-align: center;
+}
+
+.article-dua-arabic {
+    direction: rtl;
+    font-size: 26px;
+    line-height: 2;
+    color: #ffffff;
+    font-family: "Amiri", "Noto Naskh Arabic", serif;
+    margin-bottom: 18px;
+    padding: 15px;
+    border-radius: 15px;
+    background: rgba(34, 200, 80, 0.1);
+}
+
+.article-dua-english,
+.article-dua-urdu {
+    font-size: 17px;
+    line-height: 1.9;
+    color: #d8ffe5;
+    margin: 0 0 12px;
+}
+
+.article-dua-source {
+    display: inline-block;
+    padding: 6px 14px;
+    border-radius: 15px;
+    background: rgba(34, 200, 80, 0.2);
+    color: #55ff90;
+    font-size: 13px;
+    font-weight: 600;
+    margin-top: 8px;
+}
+
+/* =========================================================
+   ARTICLE TRANSLATION
+========================================================= */
+
+.article-translation {
+    text-align: center;
+    font-style: italic;
+    color: #8effb0;
+    font-size: 17px;
+    line-height: 1.9;
+    margin: 15px 0 30px;
+    padding: 15px 20px;
+    border-radius: 12px;
+    background: rgba(34, 200, 80, 0.06);
+}
+
+.article-translation span {
+    display: block;
+    margin-top: 8px;
+    color: #55ff90;
+    font-style: normal;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+/* =========================================================
+   RTL SUPPORT
+========================================================= */
+
+.article-content.rtl .article-step {
+    flex-direction: row-reverse;
+    text-align: right;
+}
+
+.article-content.rtl .article-list li {
+    border-left: none;
+    border-right: 4px solid #22c850;
+    text-align: right;
+}
+
+.article-content.rtl .article-list li:hover {
+    transform: translateX(-8px);
+}
+
+.article-content.rtl .article-intro {
+    border-left: none;
+    border-right: 5px solid #22c850;
+    text-align: right;
+}
+
+.article-content.rtl .article-hadith-source {
+    text-align: left;
+}
+
+.article-content.rtl .article-quote {
+    border-left: none;
+    border-right: 6px solid #22c850;
+    text-align: right;
+}
+
+.article-content.rtl .article-quote::before {
+    right: auto;
+    left: 20px;
+}
+
+/* =========================================================
+   MOBILE RESPONSIVE
+========================================================= */
+
+@media (max-width: 600px) {
+
+    .article-intro {
+        font-size: 17px;
+        padding: 18px;
     }
 
-
-    .about-stat {
-        border-right: none;
-
-        border-bottom:
-            1px solid rgba(255,255,255,0.15);
+    .article-step {
+        flex-direction: column;
+        gap: 12px;
+        padding: 18px;
     }
 
-
-    .about-stat:nth-last-child(-n+2) {
-        border-bottom: none;
+    .step-number {
+        min-width: 42px;
+        height: 42px;
+        font-size: 19px;
     }
 
-
-    .about-stat strong {
-        font-size: 27px;
+    .article-step h3 {
+        font-size: 18px;
     }
 
-
-    .about-stat span {
-        font-size: 12px;
+    .article-step p {
+        font-size: 15px;
     }
 
-
-    .faq-question {
-        padding: 16px;
-
-        font-size: 14px;
+    .article-hadith-arabic,
+    .article-dua-arabic {
+        font-size: 22px;
     }
 
-
-    .faq-answer {
-        font-size: 13px;
+    .article-hadith-english,
+    .article-hadith-urdu,
+    .article-dua-english,
+    .article-dua-urdu {
+        font-size: 16px;
     }
 
-
-    .about-contact {
-        padding: 35px 18px;
+    .article-quote p {
+        font-size: 17px;
     }
 
+    .article-content.rtl .article-step {
+        flex-direction: column;
+    }
+
+    .article-list li {
+        font-size: 15px;
+        padding: 12px 16px;
+    }
 }

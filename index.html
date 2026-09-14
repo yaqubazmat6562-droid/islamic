@@ -84,7 +84,7 @@
     <!-- ==================================================
          STYLESHEET
     =================================================== -->
-
+    <link rel="stylesheet" href="search.css">
     <link rel="stylesheet" href="style.css">
 
     <!-- ==================================================
@@ -234,7 +234,8 @@
                     <p>Discover the beauty of Islam, read the Quran, learn authentic Hadith, and find peace in your daily life.</p>
                     <button class="primary-button" data-page="quran">📖 Explore Quran <span>→</span></button>
                 </div>
-                <div class="hero-mosque">🕌</div>
+                
+                
             </section>
 
             <section class="quick-section">
@@ -942,14 +943,62 @@
             </div>
         </section>
 
-        <!-- SEARCH PAGE -->
-        <section class="page blank-page" id="page-search">
-            <div class="page-content">
-                <div class="page-icon">🔍</div>
-                <h1>Search</h1>
-                <p>Search page</p>
+       <!-- SEARCH PAGE -->
+<section class="page search-page" id="page-search">
+    <div class="search-container">
+
+        <!-- SEARCH HERO -->
+        <div class="search-hero">
+            <div class="search-hero-icon">🔍</div>
+            <div>
+                <h1>Search IslamicWay</h1>
+                <p>Find Quran, Hadith, Duas, Articles & Guidance</p>
             </div>
-        </section>
+        </div>
+
+        <!-- SEARCH INPUT -->
+        <div class="search-input-wrapper">
+            <div class="search-input-box">
+                <span class="search-input-icon">🔎</span>
+                <input
+                    type="text"
+                    id="globalSearchInput"
+                    placeholder="Search Quran, Hadith, Duas, Articles..."
+                    autocomplete="off"
+                >
+                <button id="globalSearchBtn" type="button">Search</button>
+            </div>
+            <div id="searchSuggestions" class="search-suggestions"></div>
+        </div>
+
+        <!-- FILTER TABS -->
+        <div class="search-filters">
+            <button class="search-filter-tab active" data-filter="all">All</button>
+            <button class="search-filter-tab" data-filter="quran">📖 Quran</button>
+            <button class="search-filter-tab" data-filter="hadith">📚 Hadith</button>
+            <button class="search-filter-tab" data-filter="dua">🤲 Duas</button>
+            <button class="search-filter-tab" data-filter="article">📝 Articles</button>
+            <button class="search-filter-tab" data-filter="guidance">🧭 Guidance</button>
+        </div>
+
+        <!-- POPULAR SEARCHES -->
+        <div class="popular-searches">
+            <span class="popular-label">Popular:</span>
+            <div id="popularSearches" style="display: flex; flex-wrap: wrap; gap: 8px;"></div>
+        </div>
+
+        <!-- EMPTY STATE -->
+        <div id="searchEmptyState" class="search-empty-state" style="display: none;">
+            <div class="search-empty-icon">🔍</div>
+            <h3>Start typing to search...</h3>
+            <p>Find anything from Quran, Hadith, Duas, Articles and Guidance.</p>
+        </div>
+
+        <!-- RESULTS -->
+        <div id="searchResults" class="search-results"></div>
+
+    </div>
+</section>
 
         <!-- ARABIC PAGE -->
         <section class="page blank-page" id="page-arabic">
@@ -1017,5 +1066,6 @@
 </div>
 
 <script src="script.js"></script>
+<script src="search.js"></script>
 </body>
 </html>

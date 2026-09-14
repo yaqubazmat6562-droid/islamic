@@ -2,8 +2,10 @@
     "name": "IslamicWay — Quran, Hadith, Duas & Islamic Knowledge",
     "short_name": "IslamicWay",
     "description": "Complete Islamic platform — Quran, Hadith, Duas, Prayer Times, Islamic Calendar and Guidance.",
-    "start_url": "/",
+    "start_url": "./index.html",
+    "scope": "./",
     "display": "standalone",
+    "display_override": ["standalone", "minimal-ui"],
     "background_color": "#061a0a",
     "theme_color": "#0a5c22",
     "orientation": "portrait-primary",
@@ -14,13 +16,25 @@
             "src": "IMG 1.png",
             "sizes": "192x192",
             "type": "image/png",
-            "purpose": "any maskable"
+            "purpose": "any"
         },
         {
             "src": "IMG 1.png",
             "sizes": "512x512",
             "type": "image/png",
-            "purpose": "any maskable"
+            "purpose": "any"
+        },
+        {
+            "src": "IMG 1.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "maskable"
+        },
+        {
+            "src": "IMG 1.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "maskable"
         }
     ],
     "categories": ["education", "lifestyle", "books"],
@@ -28,17 +42,20 @@
         {
             "name": "Read Quran",
             "short_name": "Quran",
-            "url": "/#quran"
+            "url": "./index.html#quran",
+            "icons": [{ "src": "IMG 1.png", "sizes": "192x192" }]
         },
         {
             "name": "Read Hadith",
             "short_name": "Hadith",
-            "url": "/#hadith"
+            "url": "./index.html#hadith",
+            "icons": [{ "src": "IMG 1.png", "sizes": "192x192" }]
         },
         {
             "name": "Daily Duas",
             "short_name": "Duas",
-            "url": "/#duas"
+            "url": "./index.html#duas",
+            "icons": [{ "src": "IMG 1.png", "sizes": "192x192" }]
         }
     ]
 }

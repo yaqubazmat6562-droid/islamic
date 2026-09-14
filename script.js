@@ -441,7 +441,7 @@ document.addEventListener("DOMContentLoaded", () => {
             document.activeElement.tagName !== "INPUT"
         ) {
             event.preventDefault();
-            const searchInput = document.querySelector("#searchInput");
+            const searchInput = document.querySelector("#globalSearchInput");
             if (searchInput) {
                 searchInput.focus();
             }

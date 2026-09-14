@@ -4570,4 +4570,195 @@ body.light-theme::-webkit-scrollbar-thumb {
     .search-result-content p {
         font-size: 12px;
     }
+}/* =========================================================
+   PWA INSTALL BUTTON
+========================================================= */
+
+.pwa-install-wrapper {
+    display: flex;
+    justify-content: center;
+    padding: 0 20px 22px;
+}
+
+.pwa-install-btn {
+    display: none; /* JS will show it when ready */
+    align-items: center;
+    gap: 14px;
+    padding: 14px 24px;
+    border-radius: 50px;
+    border: 2px solid rgba(34, 200, 80, 0.5);
+    background: linear-gradient(135deg, #0a5c22, #1a8a42);
+    color: #ffffff;
+    cursor: pointer;
+    font-family: inherit;
+    box-shadow:
+        0 10px 30px rgba(10, 122, 46, 0.35),
+        inset 0 0 20px rgba(34, 200, 80, 0.15);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    animation: pwaPulse 2.5s infinite ease-in-out;
+    max-width: 420px;
+    width: 100%;
+}
+
+.pwa-install-btn.pwa-ready {
+    display: flex;
+}
+
+.pwa-install-btn:hover {
+    transform: translateY(-4px) scale(1.02);
+    box-shadow:
+        0 15px 40px rgba(10, 122, 46, 0.5),
+        inset 0 0 30px rgba(34, 200, 80, 0.25);
+    border-color: #4ade80;
+}
+
+.pwa-install-btn:active {
+    transform: translateY(0) scale(0.98);
+}
+
+.pwa-install-icon {
+    font-size: 26px;
+    line-height: 1;
+    animation: pwaBounce 1.5s infinite ease-in-out;
+}
+
+.pwa-install-text {
+    flex: 1;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.pwa-install-text strong {
+    font-size: 15px;
+    font-weight: 800;
+    letter-spacing: 0.3px;
+    color: #ffffff;
+}
+
+.pwa-install-text small {
+    font-size: 11px;
+    font-weight: 500;
+    color: #9be8b0;
+    letter-spacing: 0.3px;
+}
+
+.pwa-install-arrow {
+    font-size: 20px;
+    font-weight: 800;
+    animation: pwaArrow 1.5s infinite ease-in-out;
+}
+
+/* Light Theme */
+body.light-theme .pwa-install-btn {
+    background: linear-gradient(135deg, #1eaa4e, #0a7a2e);
+    border-color: #0a7a2e;
+    box-shadow:
+        0 10px 30px rgba(10, 122, 46, 0.25),
+        inset 0 0 20px rgba(255, 255, 255, 0.1);
+}
+
+body.light-theme .pwa-install-text small {
+    color: #d4f8e0;
+}
+
+/* =========================================================
+   PWA TOAST
+========================================================= */
+
+.pwa-toast {
+    position: fixed;
+    left: 50%;
+    bottom: 30px;
+    transform: translate(-50%, 30px);
+    z-index: 99999;
+    padding: 14px 24px;
+    border-radius: 30px;
+    background: linear-gradient(135deg, #0a5c22, #1a8a42);
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 700;
+    box-shadow: 0 15px 40px rgba(0, 40, 10, 0.4);
+    border: 1px solid rgba(34, 200, 80, 0.4);
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    white-space: nowrap;
+}
+
+.pwa-toast.show {
+    transform: translate(-50%, 0);
+    opacity: 1;
+}
+
+/* =========================================================
+   ANIMATIONS
+========================================================= */
+
+@keyframes pwaPulse {
+    0%, 100% {
+        box-shadow:
+            0 10px 30px rgba(10, 122, 46, 0.35),
+            inset 0 0 20px rgba(34, 200, 80, 0.15);
+    }
+    50% {
+        box-shadow:
+            0 10px 35px rgba(10, 122, 46, 0.55),
+            inset 0 0 30px rgba(34, 200, 80, 0.3);
+    }
+}
+
+@keyframes pwaBounce {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(-4px); }
+}
+
+@keyframes pwaArrow {
+    0%, 100% { transform: translateY(0); opacity: 1; }
+    50%      { transform: translateY(4px); opacity: 0.6; }
+}
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 600px) {
+    .pwa-install-wrapper {
+        padding: 0 12px 18px;
+    }
+
+    .pwa-install-btn {
+        padding: 12px 18px;
+        gap: 10px;
+        border-radius: 30px;
+    }
+
+    .pwa-install-icon {
+        font-size: 22px;
+    }
+
+    .pwa-install-text strong {
+        font-size: 13px;
+    }
+
+    .pwa-install-text small {
+        font-size: 10px;
+    }
+
+    .pwa-install-arrow {
+        font-size: 17px;
+    }
+
+    .pwa-toast {
+        left: 12px;
+        right: 12px;
+        transform: translate(0, 30px);
+        text-align: center;
+        white-space: normal;
+    }
+
+    .pwa-toast.show {
+        transform: translate(0, 0);
+    }
 }

@@ -1,16 +1,192 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="IslamicWay - Quran, Hadith, Prayer Times, Duas and Islamic Knowledge">
-<title>IslamicWay | Islamic Knowledge</title>
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- ==================================================
+         BASIC META
+    =================================================== -->
 
-<link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <!-- ==================================================
+         PRIMARY SEO
+    =================================================== -->
+
+    <title>IslamicWay | Quran, Hadith, Duas, Prayer Times & Islamic Knowledge</title>
+
+    <meta name="description" content="IslamicWay is your complete Islamic platform — Read the Holy Quran with Urdu translation & audio, explore authentic Hadith collections (Bukhari, Muslim, Abu Dawud, Tirmidhi), daily Duas, Prayer Times, Islamic Calendar, Articles and Guidance.">
+
+    <meta name="keywords" content="Islamic website, Quran online, read Quran with Urdu translation, Quran audio, Hadith collection, Sahih Bukhari, Sahih Muslim, daily Duas, Islamic Duas in Urdu, prayer times, Islamic calendar, Hijri calendar, Islamic articles, Islamic guidance, Muslim app, IslamicWay">
+
+    <meta name="author" content="IslamicWay">
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+    <meta name="googlebot" content="index, follow">
+    <meta name="language" content="English, Urdu, Arabic">
+    <meta name="revisit-after" content="3 days">
+    <meta name="rating" content="general">
+    <meta name="theme-color" content="#0a5c22">
+
+    <!-- ==================================================
+         CANONICAL
+    =================================================== -->
+
+    <link rel="canonical" href="https://islamicway.com/">
+
+    <!-- ==================================================
+         OPEN GRAPH (Facebook / WhatsApp)
+    =================================================== -->
+
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="IslamicWay">
+    <meta property="og:title" content="IslamicWay | Quran, Hadith, Duas & Islamic Knowledge">
+    <meta property="og:description" content="Read Quran with Urdu translation & audio, authentic Hadith, daily Duas, Prayer Times, Islamic Calendar and Articles — all in one place.">
+    <meta property="og:url" content="https://islamicway.com/">
+    <meta property="og:image" content="https://islamicway.com/IMG%201.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="IslamicWay — Islamic Knowledge Platform">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:locale:alternate" content="ur_PK">
+    <meta property="og:locale:alternate" content="ar_SA">
+
+    <!-- ==================================================
+         TWITTER CARD
+    =================================================== -->
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="IslamicWay | Quran, Hadith, Duas & Islamic Knowledge">
+    <meta name="twitter:description" content="Read Quran with Urdu translation & audio, authentic Hadith, daily Duas, Prayer Times and Islamic Guidance.">
+    <meta name="twitter:image" content="https://islamicway.com/IMG%201.png">
+    <meta name="twitter:image:alt" content="IslamicWay — Islamic Knowledge Platform">
+
+    <!-- ==================================================
+         FAVICON
+    =================================================== -->
+
+    <link rel="icon" type="image/png" href="IMG 1.png">
+    <link rel="apple-touch-icon" href="IMG 1.png">
+    <link rel="manifest" href="manifest.json">
+    <!-- ==================================================
+         FONTS
+    =================================================== -->
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="dns-prefetch" href="https://api.alquran.cloud">
+    <link rel="dns-prefetch" href="https://api.aladhan.com">
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- ==================================================
+         STYLESHEET
+    =================================================== -->
+
+    <link rel="stylesheet" href="style.css">
+
+    <!-- ==================================================
+         STRUCTURED DATA (JSON-LD) — Rich Snippets
+    =================================================== -->
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "IslamicWay",
+      "alternateName": "Islamic Way",
+      "url": "https://islamicway.com/",
+      "description": "IslamicWay is a complete Islamic platform offering Quran, Hadith, Duas, Prayer Times, Islamic Calendar and Islamic Guidance.",
+      "inLanguage": ["en", "ur", "ar"],
+      "publisher": {
+        "@type": "Organization",
+        "name": "IslamicWay",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://islamicway.com/IMG%201.png"
+        }
+      },
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://islamicway.com/search?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    }
+    </script>
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "IslamicWay",
+      "url": "https://islamicway.com/",
+      "logo": "https://islamicway.com/IMG%201.png",
+      "sameAs": [
+        "https://facebook.com/islamicway",
+        "https://instagram.com/islamicway",
+        "https://youtube.com/@islamicway",
+        "https://t.me/islamicway"
+      ],
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "customer support",
+        "email": "info@islamicway.com",
+        "availableLanguage": ["English", "Urdu", "Arabic"]
+      }
+    }
+    </script>
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is IslamicWay?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "IslamicWay is a digital Islamic platform designed to provide Quran, Hadith, Duas, Prayer information and Islamic Guidance in one place."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is IslamicWay free to use?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. The website provides Islamic educational resources in an easy and accessible way."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I read the Quran here?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. The Quran section allows users to browse Surahs, read Urdu translations and listen to full Surah audio."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I use IslamicWay on mobile?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. The website works on desktop, tablet and mobile screens."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I share Islamic content?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. Wherever sharing is available, you can copy or share useful Islamic content with others."
+          }
+        }
+      ]
+    }
+    </script>
+
 </head>
 
 <body>

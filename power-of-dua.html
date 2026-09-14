@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Power of Dua</title>
+
+    <link rel="stylesheet" href="power-of-dua.css">
+</head>
+
+<body>
+
+    <!-- Header -->
+    <header class="dua-header">
+
+        <div class="logo">
+            ☪️ Power of Dua
+        </div>
+
+        <button class="back-btn" onclick="goBack()">
+            ← Back
+        </button>
+
+    </header>
+
+
+    <!-- Hero Section -->
+    <section class="dua-hero">
+
+        <div class="hero-content">
+
+            <div class="dua-icon">
+                🤲
+            </div>
+
+            <h1>Power of Dua</h1>
+
+            <p>
+                Dua is the beautiful connection between a believer
+                and Allah. Turn to Allah with hope, patience and trust.
+            </p>
+
+            <button class="explore-btn" onclick="scrollToDuas()">
+                Explore Duas ↓
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- Introduction -->
+    <section class="dua-introduction">
+
+        <h2>The Power of Dua</h2>
+
+        <p>
+            Dua is an act of worship and a means of seeking help,
+            guidance, mercy and blessings from Allah.
+        </p>
+
+        <div class="dua-cards">
+
+            <div class="dua-card">
+                <span>❤️</span>
+                <h3>Hope</h3>
+                <p>
+                    Never lose hope in the mercy of Allah.
+                </p>
+            </div>
+
+            <div class="dua-card">
+                <span>🕊️</span>
+                <h3>Peace</h3>
+                <p>
+                    Dua can bring comfort and peace to the heart.
+                </p>
+            </div>
+
+            <div class="dua-card">
+                <span>🌙</span>
+                <h3>Trust</h3>
+                <p>
+                    Ask Allah and place your trust in Him.
+                </p>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- Daily Dua Section -->
+    <section class="daily-dua" id="duaSection">
+
+        <div class="section-heading">
+
+            <span>🤲</span>
+
+            <h2>Daily Duas</h2>
+
+            <p>
+                Select a category to explore useful duas.
+            </p>
+
+        </div>
+
+
+        <!-- Search -->
+        <div class="dua-search">
+
+            <input
+                type="text"
+                id="duaSearch"
+                placeholder="Search Dua..."
+                oninput="searchDua()"
+            >
+
+            <button onclick="searchDua()">
+                🔍
+            </button>
+
+        </div>
+
+
+        <!-- Categories -->
+        <div class="categories">
+
+            <button onclick="filterDuas('all')">
+                All
+            </button>
+
+            <button onclick="filterDuas('morning')">
+                🌅 Morning
+            </button>
+
+            <button onclick="filterDuas('evening')">
+                🌙 Evening
+            </button>
+
+            <button onclick="filterDuas('protection')">
+                🛡️ Protection
+            </button>
+
+            <button onclick="filterDuas('forgiveness')">
+                ❤️ Forgiveness
+            </button>
+
+        </div>
+
+
+        <!-- Dynamic Dua Container -->
+        <div id="duaContainer" class="dua-container">
+        </div>
+
+    </section>
+
+
+    <!-- Dua Message -->
+    <section class="dua-message">
+
+        <div class="message-box">
+
+            <span>✨</span>
+
+            <h2>Never Stop Making Dua</h2>
+
+            <p>
+                Ask Allah with sincerity, patience and faith.
+                Your dua is never meaningless.
+            </p>
+
+            <button onclick="showDuaMessage()">
+                💚 Remember This
+            </button>
+
+            <div id="duaMessage"></div>
+
+        </div>
+
+    </section>
+
+
+    <!-- Footer -->
+    <footer>
+
+        <p>
+            © 2026 Islamic Website | Power of Dua
+        </p>
+
+    </footer>
+
+
+    <!-- JavaScript -->
+    <script src="power-of-dua.js"></script>
+
+</body>
+</html>

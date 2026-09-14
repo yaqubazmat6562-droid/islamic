@@ -2845,4 +2845,72 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
+});/* =====================================================
+   DYNAMIC SEO — Page Title & Description Update
+===================================================== */
+
+const SEO_DATA = {
+    home: {
+        title: "IslamicWay | Quran, Hadith, Duas, Prayer Times & Islamic Knowledge",
+        description: "IslamicWay — Read Quran with Urdu translation, authentic Hadith, daily Duas, Prayer Times and Islamic Guidance."
+    },
+    quran: {
+        title: "Read Holy Quran Online | Urdu Translation & Audio | IslamicWay",
+        description: "Read all 114 Surahs of the Holy Quran with Urdu translation and full Surah audio."
+    },
+    hadith: {
+        title: "Authentic Hadith Collections | Bukhari, Muslim | IslamicWay",
+        description: "Read authentic Hadith from Sahih Bukhari, Sahih Muslim, Sunan Abu Dawud with Urdu translation."
+    },
+    prayer: {
+        title: "Prayer Times & Islamic Hijri Calendar | IslamicWay",
+        description: "Check today's Prayer Times and view the Islamic Hijri Calendar."
+    },
+    duas: {
+        title: "Daily Islamic Duas in Arabic, Urdu & English | IslamicWay",
+        description: "Read 100+ daily Duas from Quran and Sunnah with translations."
+    },
+    articles: {
+        title: "Islamic Articles & Reminders | IslamicWay",
+        description: "Read Islamic articles on faith, patience, character and daily life."
+    },
+    guidance: {
+        title: "Islamic Guidance from Quran & Sunnah | IslamicWay",
+        description: "Explore Islamic guidance on worship, family, character and daily life."
+    },
+    about: {
+        title: "About IslamicWay | Islamic Knowledge Platform",
+        description: "Learn about IslamicWay — a modern platform for Islamic knowledge."
+    }
+};
+
+function updateSEO(pageName) {
+    const data = SEO_DATA[pageName] || SEO_DATA.home;
+
+    document.title = data.title;
+
+    const metaDescription = document.querySelector('meta[name="description"]');
+    if (metaDescription) metaDescription.setAttribute("content", data.description);
+
+    const ogTitle = document.querySelector('meta[property="og:title"]');
+    if (ogTitle) ogTitle.setAttribute("content", data.title);
+
+    const ogDescription = document.querySelector('meta[property="og:description"]');
+    if (ogDescription) ogDescription.setAttribute("content", data.description);
+
+    const twitterTitle = document.querySelector('meta[name="twitter:title"]');
+    if (twitterTitle) twitterTitle.setAttribute("content", data.title);
+
+    const twitterDescription = document.querySelector('meta[name="twitter:description"]');
+    if (twitterDescription) twitterDescription.setAttribute("content", data.description);
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    window.addEventListener("hashchange", () => {
+        const page = window.location.hash.replace("#", "") || "home";
+        updateSEO(page);
+    });
+
+    const startPage = window.location.hash.replace("#", "") || "home";
+    updateSEO(startPage);
 });

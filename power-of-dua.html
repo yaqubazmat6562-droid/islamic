@@ -3,91 +3,96 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Power of Dua</title>
+    <meta name="description" content="Power of Dua - Discover the beautiful connection between a believer and Allah. Learn about the importance, power and etiquette of making Dua.">
+    <meta name="theme-color" content="#0a5c22">
+    
+    <title>Power of Dua | IslamicWay</title>
 
     <link rel="stylesheet" href="power-of-dua.css">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Inter:wght@400;500;600;700&family=Noto+Nastaliq+Urdu:wght@400;700&display=swap" rel="stylesheet">
 </head>
 
 <body>
 
     <!-- Header -->
     <header class="dua-header">
-
         <div class="logo">
-            ☪️ Power of Dua
+            <span class="logo-icon">🤲</span>
+            <span class="logo-text">Power of Dua</span>
         </div>
 
-        <button class="back-btn" onclick="goBack()">
-            ← Back
-        </button>
-
+        <div class="header-actions">
+            <button class="theme-btn" id="themeBtn" aria-label="Toggle Theme">🌙</button>
+            <button class="back-btn" onclick="goBack()">← Back</button>
+        </div>
     </header>
 
 
     <!-- Hero Section -->
     <section class="dua-hero">
-
+        <div class="hero-overlay"></div>
         <div class="hero-content">
-
-            <div class="dua-icon">
-                🤲
-            </div>
-
+            <div class="dua-icon">🤲</div>
+            <div class="bismillah">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</div>
             <h1>Power of Dua</h1>
-
             <p>
-                Dua is the beautiful connection between a believer
-                and Allah. Turn to Allah with hope, patience and trust.
+                Dua is the beautiful connection between a believer and Allah. 
+                Turn to Allah with hope, patience and trust. Your Dua is never meaningless.
             </p>
-
-            <button class="explore-btn" onclick="scrollToDuas()">
-                Explore Duas ↓
-            </button>
-
+            <div class="hero-buttons">
+                <button class="explore-btn" onclick="scrollToDuas()">
+                    Explore Duas ↓
+                </button>
+                <button class="random-dua-btn" onclick="showRandomDua()">
+                    🎲 Random Dua
+                </button>
+            </div>
         </div>
-
     </section>
 
 
-    <!-- Introduction -->
+    <!-- Introduction Section -->
     <section class="dua-introduction">
-
+        <div class="section-badge">✦ Understanding Dua ✦</div>
         <h2>The Power of Dua</h2>
-
-        <p>
-            Dua is an act of worship and a means of seeking help,
-            guidance, mercy and blessings from Allah.
+        <p class="intro-text">
+            Dua is an act of worship and a means of seeking help, guidance, mercy and blessings from Allah. 
+            It is a direct conversation with your Creator, a moment of vulnerability and hope.
         </p>
 
         <div class="dua-cards">
-
             <div class="dua-card">
-                <span>❤️</span>
+                <span class="card-icon">❤️</span>
                 <h3>Hope</h3>
-                <p>
-                    Never lose hope in the mercy of Allah.
-                </p>
+                <p>Never lose hope in the mercy of Allah. He hears every sincere call.</p>
             </div>
 
             <div class="dua-card">
-                <span>🕊️</span>
+                <span class="card-icon">🕊️</span>
                 <h3>Peace</h3>
-                <p>
-                    Dua can bring comfort and peace to the heart.
-                </p>
+                <p>Dua can bring comfort and peace to the heart, easing anxiety and worry.</p>
             </div>
 
             <div class="dua-card">
-                <span>🌙</span>
+                <span class="card-icon">🌙</span>
                 <h3>Trust</h3>
-                <p>
-                    Ask Allah and place your trust in Him.
-                </p>
+                <p>Ask Allah and place your trust in Him. He knows what is best for you.</p>
             </div>
-
         </div>
+    </section>
 
+
+    <!-- Quran Verse Section -->
+    <section class="quran-verse-section">
+        <div class="verse-card">
+            <div class="verse-arabic">
+                وَقَالَ رَبُّكُمُ ادْعُونِي أَسْتَجِبْ لَكُمْ
+            </div>
+            <p class="verse-translation">
+                "And your Lord says: Call upon Me; I will respond to you."
+            </p>
+            <span class="verse-reference">— Surah Ghafir (40:60)</span>
+        </div>
     </section>
 
 
@@ -95,100 +100,215 @@
     <section class="daily-dua" id="duaSection">
 
         <div class="section-heading">
-
-            <span>🤲</span>
-
+            <span class="heading-icon">🤲</span>
             <h2>Daily Duas</h2>
-
-            <p>
-                Select a category to explore useful duas.
-            </p>
-
+            <p>Select a category to explore useful duas from Quran and Sunnah.</p>
         </div>
 
 
         <!-- Search -->
         <div class="dua-search">
-
             <input
                 type="text"
                 id="duaSearch"
                 placeholder="Search Dua..."
                 oninput="searchDua()"
+                autocomplete="off"
             >
-
-            <button onclick="searchDua()">
-                🔍
-            </button>
-
+            <button onclick="searchDua()">🔍</button>
         </div>
 
 
         <!-- Categories -->
         <div class="categories">
-
-            <button onclick="filterDuas('all')">
-                All
-            </button>
-
-            <button onclick="filterDuas('morning')">
-                🌅 Morning
-            </button>
-
-            <button onclick="filterDuas('evening')">
-                🌙 Evening
-            </button>
-
-            <button onclick="filterDuas('protection')">
-                🛡️ Protection
-            </button>
-
-            <button onclick="filterDuas('forgiveness')">
-                ❤️ Forgiveness
-            </button>
-
+            <button class="cat-btn active" onclick="filterDuas('all', this)">All</button>
+            <button class="cat-btn" onclick="filterDuas('morning', this)">🌅 Morning</button>
+            <button class="cat-btn" onclick="filterDuas('evening', this)">🌙 Evening</button>
+            <button class="cat-btn" onclick="filterDuas('protection', this)">🛡️ Protection</button>
+            <button class="cat-btn" onclick="filterDuas('forgiveness', this)">❤️ Forgiveness</button>
+            <button class="cat-btn" onclick="filterDuas('prayer', this)">🕌 Prayer</button>
+            <button class="cat-btn" onclick="filterDuas('family', this)">👨‍👩‍👧 Family</button>
+            <button class="cat-btn" onclick="filterDuas('health', this)">💚 Health</button>
         </div>
 
 
         <!-- Dynamic Dua Container -->
         <div id="duaContainer" class="dua-container">
+            <!-- Duas will be loaded here dynamically -->
         </div>
 
     </section>
 
 
-    <!-- Dua Message -->
-    <section class="dua-message">
-
-        <div class="message-box">
-
+    <!-- Benefits Section -->
+    <section class="dua-benefits">
+        <div class="benefits-heading">
             <span>✨</span>
+            <h2>Benefits of Making Dua</h2>
+        </div>
+        
+        <div class="benefits-grid">
+            <div class="benefit-card">
+                <span class="benefit-number">1</span>
+                <h3>Act of Worship</h3>
+                <p>The Prophet ﷺ said: "Dua is worship itself." (Tirmidhi)</p>
+            </div>
+            <div class="benefit-card">
+                <span class="benefit-number">2</span>
+                <h3>Brings Peace</h3>
+                <p>Dua calms the heart and removes anxiety and grief.</p>
+            </div>
+            <div class="benefit-card">
+                <span class="benefit-number">3</span>
+                <h3>Changes Destiny</h3>
+                <p>Dua can change what has been decreed by Allah's permission.</p>
+            </div>
+            <div class="benefit-card">
+                <span class="benefit-number">4</span>
+                <h3>Protection</h3>
+                <p>Dua protects from harm, evil eye and difficulties.</p>
+            </div>
+        </div>
+    </section>
 
+
+    <!-- Etiquette Section -->
+    <section class="dua-etiquette">
+        <div class="etiquette-heading">
+            <span>🕌</span>
+            <h2>Etiquette of Making Dua</h2>
+        </div>
+        
+        <div class="etiquette-list">
+            <div class="etiquette-item">
+                <span class="etiquette-icon">1</span>
+                <div>
+                    <h3>Start with Praise of Allah</h3>
+                    <p>Begin your Dua by praising Allah and sending blessings upon the Prophet ﷺ.</p>
+                </div>
+            </div>
+            <div class="etiquette-item">
+                <span class="etiquette-icon">2</span>
+                <div>
+                    <h3>Face the Qibla</h3>
+                    <p>It is recommended to face the direction of the Kaaba while making Dua.</p>
+                </div>
+            </div>
+            <div class="etiquette-item">
+                <span class="etiquette-icon">3</span>
+                <div>
+                    <h3>Have Certainty</h3>
+                    <p>Believe that Allah will answer your Dua. Do not doubt His mercy.</p>
+                </div>
+            </div>
+            <div class="etiquette-item">
+                <span class="etiquette-icon">4</span>
+                <div>
+                    <h3>Be Patient</h3>
+                    <p>Allah answers in His own time. Never give up or lose hope.</p>
+                </div>
+            </div>
+            <div class="etiquette-item">
+                <span class="etiquette-icon">5</span>
+                <div>
+                    <h3>Ask with Humility</h3>
+                    <p>Approach Allah with humility, recognizing your need for Him.</p>
+                </div>
+            </div>
+            <div class="etiquette-item">
+                <span class="etiquette-icon">6</span>
+                <div>
+                    <h3>End with Durood</h3>
+                    <p>Conclude your Dua by sending blessings upon the Prophet ﷺ.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Best Times Section -->
+    <section class="best-times">
+        <div class="times-heading">
+            <span>⏰</span>
+            <h2>Best Times for Dua</h2>
+        </div>
+        
+        <div class="times-grid">
+            <div class="time-card">
+                <span class="time-icon">🌙</span>
+                <h3>Last Third of Night</h3>
+                <p>When Allah descends to the lowest heaven and asks: "Who is calling upon Me?"</p>
+            </div>
+            <div class="time-card">
+                <span class="time-icon">🕌</span>
+                <h3>Between Adhan & Iqamah</h3>
+                <p>A time when Dua is not rejected.</p>
+            </div>
+            <div class="time-card">
+                <span class="time-icon">🌅</span>
+                <h3>Friday Afternoon</h3>
+                <p>The last hour before Maghrib on Friday.</p>
+            </div>
+            <div class="time-card">
+                <span class="time-icon">💧</span>
+                <h3>While Fasting</h3>
+                <p>The Dua of a fasting person is not rejected.</p>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Dua Message Section -->
+    <section class="dua-message">
+        <div class="message-box">
+            <span class="message-icon">✨</span>
             <h2>Never Stop Making Dua</h2>
-
             <p>
                 Ask Allah with sincerity, patience and faith.
-                Your dua is never meaningless.
+                Your Dua is never meaningless. Even if the answer is delayed, 
+                it is never denied.
             </p>
-
-            <button onclick="showDuaMessage()">
+            <button class="message-btn" onclick="showDuaMessage()">
                 💚 Remember This
             </button>
-
             <div id="duaMessage"></div>
-
         </div>
+    </section>
 
+
+    <!-- Hadith Section -->
+    <section class="hadith-section">
+        <div class="hadith-card">
+            <div class="hadith-arabic">
+                مَنْ لَا يَسْأَلُ اللَّهَ يَغْضَبْ عَلَيْهِ
+            </div>
+            <p class="hadith-translation">
+                "Whoever does not ask Allah, He becomes angry with him."
+            </p>
+            <span class="hadith-source">— Sunan Ibn Majah</span>
+        </div>
     </section>
 
 
     <!-- Footer -->
-    <footer>
-
-        <p>
-            © 2026 Islamic Website | Power of Dua
-        </p>
-
+    <footer class="dua-footer">
+        <div class="footer-content">
+            <div class="footer-logo">
+                
+                <span>🤲</span>
+                <div>
+                    <h3>Power of Dua</h3>
+                    <p>IslamicWay</p>
+                </div>
+            </div>
+            <div class="footer-links">
+                <a href="index.html">Home</a>
+                <a href="index.html#quran">Quran</a>
+                <a href="index.html#hadith">Hadith</a>
+                <a href="index.html#duas">Duas</a>
+            </div>
+            <p class="copyright">© 2026 IslamicWay | Power of Dua</p>
+        </div>
     </footer>
 
 

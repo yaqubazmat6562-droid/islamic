@@ -1,6 +1,6 @@
-```css
 /* =========================================
-   POWER OF DUA - ISLAMIC DYNAMIC CSS
+   POWER OF DUA - COMPLETE DYNAMIC CSS
+   Green Theme with Light/Dark Mode
    ========================================= */
 
 * {
@@ -14,11 +14,12 @@ html {
 }
 
 body {
-    font-family: "Segoe UI", Arial, sans-serif;
-    background: linear-gradient(135deg, #061b17, #0b3028, #09231f);
+    font-family: "Inter", "Segoe UI", Arial, sans-serif;
+    background: #0a1f0f;
     color: #ffffff;
     min-height: 100vh;
     overflow-x: hidden;
+    transition: background 0.4s ease, color 0.4s ease;
 }
 
 
@@ -30,434 +31,427 @@ body {
     position: sticky;
     top: 0;
     z-index: 1000;
-
     width: 100%;
     min-height: 70px;
-
     display: flex;
     align-items: center;
     justify-content: space-between;
-
     padding: 15px 6%;
-
-    background: rgba(5, 30, 25, 0.88);
+    background: linear-gradient(90deg, rgba(8, 35, 15, 0.96), rgba(12, 55, 22, 0.94));
     backdrop-filter: blur(15px);
-
-    border-bottom: 1px solid rgba(120, 255, 190, 0.2);
-
+    border-bottom: 1px solid rgba(34, 200, 80, 0.3);
     box-shadow: 0 5px 25px rgba(0, 0, 0, 0.3);
 }
 
-
 .logo {
-    font-size: 23px;
-    font-weight: 700;
-    color: #8fffc3;
-
-    text-shadow:
-        0 0 10px rgba(100, 255, 180, 0.5);
+    display: flex;
+    align-items: center;
+    gap: 12px;
 }
 
+.logo-icon {
+    font-size: 28px;
+    filter: drop-shadow(0 0 10px rgba(34, 220, 100, 0.5));
+}
+
+.logo-text {
+    font-size: 22px;
+    font-weight: 700;
+    color: #8fffc3;
+    text-shadow: 0 0 10px rgba(100, 255, 180, 0.4);
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.theme-btn {
+    width: 42px;
+    height: 42px;
+    border: 1px solid rgba(34, 200, 80, 0.4);
+    border-radius: 50%;
+    background: rgba(34, 140, 60, 0.15);
+    color: #ffffff;
+    font-size: 18px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.theme-btn:hover {
+    background: rgba(34, 200, 80, 0.3);
+    transform: scale(1.1);
+}
 
 .back-btn {
     border: 1px solid #62e6a3;
     background: transparent;
     color: #ffffff;
-
-    padding: 10px 18px;
+    padding: 10px 20px;
     border-radius: 25px;
-
     cursor: pointer;
-
+    font-size: 14px;
+    font-weight: 600;
     transition: 0.3s ease;
 }
 
 .back-btn:hover {
     background: #52d995;
     color: #06231b;
-
     transform: translateX(-4px);
-
     box-shadow: 0 0 20px rgba(82, 217, 149, 0.5);
 }
 
 
 /* =========================================
-   HERO
+   HERO SECTION
    ========================================= */
 
 .dua-hero {
     position: relative;
-
-    min-height: 520px;
-
+    min-height: 580px;
     display: flex;
     align-items: center;
     justify-content: center;
-
     text-align: center;
-
     padding: 80px 20px;
-
     overflow: hidden;
-
     background:
-        radial-gradient(circle at 20% 30%,
-        rgba(71, 230, 151, 0.18),
-        transparent 30%),
-
-        radial-gradient(circle at 80% 70%,
-        rgba(52, 180, 140, 0.16),
-        transparent 30%);
+        linear-gradient(135deg, rgba(6, 26, 10, 0.92), rgba(6, 26, 10, 0.75)),
+        radial-gradient(circle at 20% 30%, rgba(71, 230, 151, 0.2), transparent 40%),
+        radial-gradient(circle at 80% 70%, rgba(52, 180, 140, 0.18), transparent 40%),
+        #061a0a;
 }
 
-
-/* Decorative circles */
+.hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%2322c850' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    opacity: 0.5;
+}
 
 .dua-hero::before,
 .dua-hero::after {
     content: "";
-
     position: absolute;
-
-    width: 280px;
-    height: 280px;
-
+    width: 350px;
+    height: 350px;
     border-radius: 50%;
-
-    border: 1px solid rgba(110, 255, 180, 0.12);
-
-    animation: floatingCircle 8s infinite ease-in-out;
+    border: 2px solid rgba(110, 255, 180, 0.08);
+    animation: floatingCircle 10s infinite ease-in-out;
 }
 
 .dua-hero::before {
-    left: -100px;
+    left: -120px;
     top: 40px;
 }
 
 .dua-hero::after {
-    right: -100px;
+    right: -120px;
     bottom: 20px;
-
-    animation-delay: 2s;
+    animation-delay: 3s;
 }
-
 
 @keyframes floatingCircle {
-
-    0%,
-    100% {
-        transform: translateY(0) scale(1);
-    }
-
-    50% {
-        transform: translateY(-30px) scale(1.08);
-    }
+    0%, 100% { transform: translateY(0) scale(1); }
+    50% { transform: translateY(-40px) scale(1.1); }
 }
-
 
 .hero-content {
     position: relative;
     z-index: 2;
-
-    max-width: 800px;
-
+    max-width: 850px;
     animation: heroAppear 1.2s ease;
 }
 
-
 @keyframes heroAppear {
-
-    from {
-        opacity: 0;
-        transform: translateY(40px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+    from { opacity: 0; transform: translateY(40px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
-
 .dua-icon {
-    width: 95px;
-    height: 95px;
-
+    width: 110px;
+    height: 110px;
     margin: 0 auto 25px;
-
     display: flex;
     align-items: center;
     justify-content: center;
-
-    font-size: 45px;
-
+    font-size: 52px;
     border-radius: 50%;
-
     background: rgba(77, 225, 151, 0.12);
-
-    border: 1px solid rgba(100, 255, 180, 0.35);
-
-    box-shadow:
-        0 0 30px rgba(74, 220, 145, 0.25);
-
+    border: 2px solid rgba(100, 255, 180, 0.35);
+    box-shadow: 0 0 40px rgba(74, 220, 145, 0.3), inset 0 0 30px rgba(74, 220, 145, 0.1);
     animation: duaFloat 3s infinite ease-in-out;
 }
 
-
 @keyframes duaFloat {
-
-    0%,
-    100% {
-        transform: translateY(0);
-    }
-
-    50% {
-        transform: translateY(-12px);
-    }
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-15px); }
 }
 
+.bismillah {
+    font-family: "Amiri", serif;
+    font-size: 26px;
+    color: #55ff99;
+    margin-bottom: 20px;
+    text-shadow: 0 0 20px rgba(34, 200, 80, 0.4);
+}
 
 .dua-hero h1 {
-    font-size: clamp(42px, 7vw, 75px);
-
-    margin-bottom: 18px;
-
-    background: linear-gradient(
-        90deg,
-        #ffffff,
-        #8fffc3,
-        #ffffff
-    );
-
+    font-family: "Amiri", serif;
+    font-size: clamp(44px, 7vw, 80px);
+    margin-bottom: 20px;
+    background: linear-gradient(90deg, #ffffff, #8fffc3, #ffffff);
     background-size: 200% auto;
-
     -webkit-background-clip: text;
     background-clip: text;
-
     color: transparent;
-
     animation: textShine 4s linear infinite;
+    line-height: 1.1;
 }
-
 
 @keyframes textShine {
-
-    to {
-        background-position: 200% center;
-    }
+    to { background-position: 200% center; }
 }
-
 
 .dua-hero p {
-    max-width: 650px;
-
+    max-width: 680px;
     margin: auto;
-
-    line-height: 1.8;
-
+    line-height: 1.9;
     color: #c9e9dc;
-
-    font-size: 17px;
+    font-size: 18px;
 }
 
+.hero-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin-top: 35px;
+}
 
 .explore-btn {
-    margin-top: 30px;
-
-    padding: 14px 28px;
-
+    padding: 16px 32px;
     border: none;
     border-radius: 30px;
-
-    background: linear-gradient(
-        135deg,
-        #51dc97,
-        #28aa72
-    );
-
+    background: linear-gradient(135deg, #51dc97, #28aa72);
     color: #06251b;
-
     font-size: 16px;
     font-weight: 700;
-
     cursor: pointer;
-
     transition: 0.3s ease;
-
-    box-shadow:
-        0 8px 25px rgba(54, 210, 137, 0.25);
+    box-shadow: 0 8px 25px rgba(54, 210, 137, 0.3);
 }
 
 .explore-btn:hover {
     transform: translateY(-5px) scale(1.03);
+    box-shadow: 0 15px 40px rgba(54, 210, 137, 0.45);
+}
 
-    box-shadow:
-        0 12px 35px rgba(54, 210, 137, 0.4);
+.random-dua-btn {
+    padding: 16px 32px;
+    border: 2px solid rgba(100, 255, 180, 0.4);
+    border-radius: 30px;
+    background: rgba(34, 200, 80, 0.1);
+    color: #8fffc3;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+.random-dua-btn:hover {
+    background: rgba(34, 200, 80, 0.25);
+    border-color: #8fffc3;
+    transform: translateY(-5px);
 }
 
 
 /* =========================================
-   INTRODUCTION
+   INTRODUCTION SECTION
    ========================================= */
 
 .dua-introduction {
     max-width: 1200px;
-
     margin: auto;
-
-    padding: 80px 6%;
-
+    padding: 90px 6%;
     text-align: center;
 }
 
+.section-badge {
+    display: inline-block;
+    padding: 8px 22px;
+    margin-bottom: 20px;
+    border-radius: 25px;
+    background: linear-gradient(135deg, #1a8a42, #0d6a28);
+    color: #ffffff;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    box-shadow: 0 5px 20px rgba(34, 200, 80, 0.3);
+}
 
 .dua-introduction h2,
 .section-heading h2 {
-    font-size: 38px;
-
-    margin-bottom: 15px;
-
+    font-family: "Amiri", serif;
+    font-size: 42px;
+    margin-bottom: 20px;
     color: #8fffc3;
 }
 
-
-.dua-introduction > p {
-    max-width: 700px;
-
-    margin: 0 auto 45px;
-
+.intro-text {
+    max-width: 750px;
+    margin: 0 auto 50px;
     color: #b9dcd0;
-
-    line-height: 1.8;
+    line-height: 1.9;
+    font-size: 17px;
 }
 
 
 /* =========================================
-   INFORMATION CARDS
+   INFO CARDS
    ========================================= */
 
 .dua-cards {
     display: grid;
-
-    grid-template-columns:
-        repeat(3, 1fr);
-
+    grid-template-columns: repeat(3, 1fr);
     gap: 25px;
 }
 
-
 .dua-card {
-    padding: 35px 25px;
-
-    background:
-        linear-gradient(
-            145deg,
-            rgba(42, 104, 83, 0.35),
-            rgba(9, 45, 36, 0.7)
-        );
-
+    padding: 40px 28px;
+    background: linear-gradient(145deg, rgba(42, 104, 83, 0.35), rgba(9, 45, 36, 0.7));
     border: 1px solid rgba(112, 255, 180, 0.15);
-
-    border-radius: 22px;
-
+    border-radius: 24px;
     transition: 0.4s ease;
-
     position: relative;
-
     overflow: hidden;
 }
 
-
 .dua-card::before {
     content: "";
-
     position: absolute;
-
-    width: 100px;
-    height: 100px;
-
-    background: rgba(90, 230, 160, 0.12);
-
+    width: 120px;
+    height: 120px;
+    background: rgba(90, 230, 160, 0.1);
     border-radius: 50%;
-
-    top: -50px;
-    right: -50px;
-
-    transition: 0.4s ease;
+    top: -60px;
+    right: -60px;
+    transition: 0.5s ease;
 }
-
 
 .dua-card:hover {
-    transform: translateY(-10px);
-
-    border-color: rgba(100, 255, 180, 0.45);
-
-    box-shadow:
-        0 15px 40px rgba(0, 0, 0, 0.35),
-        0 0 20px rgba(76, 225, 150, 0.12);
+    transform: translateY(-12px);
+    border-color: rgba(100, 255, 180, 0.5);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4), 0 0 30px rgba(76, 225, 150, 0.15);
 }
-
 
 .dua-card:hover::before {
-    transform: scale(2);
+    transform: scale(2.5);
+    background: rgba(90, 230, 160, 0.08);
 }
 
-
-.dua-card span {
-    font-size: 40px;
-
+.card-icon {
+    font-size: 48px;
     display: block;
-
-    margin-bottom: 18px;
+    margin-bottom: 20px;
+    filter: drop-shadow(0 0 15px rgba(34, 220, 100, 0.4));
 }
-
 
 .dua-card h3 {
-    font-size: 23px;
-
-    margin-bottom: 12px;
-
+    font-family: "Amiri", serif;
+    font-size: 26px;
+    margin-bottom: 14px;
     color: #8fffc3;
 }
 
-
 .dua-card p {
     color: #bddbd0;
-
-    line-height: 1.7;
+    line-height: 1.8;
+    font-size: 15px;
 }
 
 
 /* =========================================
-   DAILY DUA
+   QURAN VERSE SECTION
+   ========================================= */
+
+.quran-verse-section {
+    padding: 60px 6%;
+    display: flex;
+    justify-content: center;
+}
+
+.verse-card {
+    max-width: 900px;
+    width: 100%;
+    padding: 50px 40px;
+    text-align: center;
+    border-radius: 28px;
+    background: linear-gradient(145deg, rgba(20, 75, 59, 0.6), rgba(6, 34, 28, 0.9));
+    border: 2px solid rgba(100, 255, 180, 0.25);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35), inset 0 0 50px rgba(34, 180, 80, 0.05);
+}
+
+.verse-arabic {
+    font-family: "Amiri", "Traditional Arabic", serif;
+    direction: rtl;
+    font-size: clamp(30px, 5vw, 42px);
+    line-height: 2;
+    color: #ffffff;
+    margin-bottom: 25px;
+    text-shadow: 0 0 25px rgba(34, 200, 80, 0.3);
+}
+
+.verse-translation {
+    font-size: 20px;
+    font-style: italic;
+    color: #d8ffe5;
+    line-height: 1.8;
+    margin-bottom: 18px;
+}
+
+.verse-reference {
+    display: inline-block;
+    padding: 8px 18px;
+    border-radius: 20px;
+    background: rgba(34, 200, 80, 0.15);
+    color: #55ff90;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+
+/* =========================================
+   DAILY DUA SECTION
    ========================================= */
 
 .daily-dua {
     max-width: 1200px;
-
     margin: auto;
-
-    padding: 80px 6%;
+    padding: 90px 6%;
 }
-
 
 .section-heading {
     text-align: center;
-
-    margin-bottom: 40px;
+    margin-bottom: 45px;
 }
 
-
-.section-heading > span {
-    font-size: 38px;
+.heading-icon {
+    font-size: 48px;
+    display: block;
+    margin-bottom: 15px;
+    filter: drop-shadow(0 0 15px rgba(34, 220, 100, 0.5));
 }
-
 
 .section-heading p {
     color: #b9dcd0;
-
-    margin-top: 10px;
+    margin-top: 12px;
+    font-size: 16px;
 }
 
 
@@ -466,73 +460,53 @@ body {
    ========================================= */
 
 .dua-search {
-    max-width: 650px;
-
+    max-width: 700px;
     margin: 0 auto 30px;
-
     display: flex;
-
     background: rgba(255, 255, 255, 0.06);
-
-    border: 1px solid rgba(125, 255, 190, 0.2);
-
+    border: 1px solid rgba(125, 255, 190, 0.25);
     border-radius: 35px;
-
     padding: 6px;
-
     transition: 0.3s ease;
 }
 
-
 .dua-search:focus-within {
     border-color: #5ee5a2;
-
-    box-shadow:
-        0 0 25px rgba(77, 225, 151, 0.15);
+    box-shadow: 0 0 30px rgba(77, 225, 151, 0.2);
 }
-
 
 .dua-search input {
     flex: 1;
-
     border: none;
     outline: none;
-
     background: transparent;
-
     color: white;
-
-    padding: 13px 18px;
-
-    font-size: 15px;
+    padding: 14px 20px;
+    font-size: 16px;
+    font-family: inherit;
 }
-
 
 .dua-search input::placeholder {
     color: #91afa4;
 }
 
-
 .dua-search button {
-    width: 48px;
-    height: 48px;
-
+    width: 52px;
+    height: 52px;
     border: none;
-
     border-radius: 50%;
-
-    background: #4bd994;
-
+    background: linear-gradient(135deg, #4bd994, #28aa72);
     cursor: pointer;
-
-    font-size: 18px;
-
+    font-size: 20px;
     transition: 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
-
 
 .dua-search button:hover {
     transform: rotate(10deg) scale(1.08);
+    box-shadow: 0 0 25px rgba(75, 217, 148, 0.4);
 }
 
 
@@ -542,40 +516,35 @@ body {
 
 .categories {
     display: flex;
-
     flex-wrap: wrap;
-
     justify-content: center;
-
     gap: 12px;
-
-    margin-bottom: 35px;
+    margin-bottom: 45px;
 }
 
-
-.categories button {
-    padding: 10px 18px;
-
+.cat-btn {
+    padding: 11px 20px;
     border-radius: 25px;
-
     border: 1px solid rgba(100, 255, 180, 0.25);
-
     background: rgba(57, 145, 110, 0.12);
-
     color: #d8f5e8;
-
     cursor: pointer;
-
+    font-size: 14px;
+    font-weight: 600;
     transition: 0.3s ease;
+    font-family: inherit;
 }
 
-
-.categories button:hover {
-    background: #42c988;
-
-    color: #06251b;
-
+.cat-btn:hover {
+    background: rgba(66, 201, 136, 0.3);
     transform: translateY(-3px);
+}
+
+.cat-btn.active {
+    background: linear-gradient(135deg, #42c988, #28aa72);
+    color: #06251b;
+    border-color: #42c988;
+    box-shadow: 0 5px 20px rgba(66, 201, 136, 0.4);
 }
 
 
@@ -585,95 +554,100 @@ body {
 
 .dua-container {
     display: grid;
-
-    grid-template-columns:
-        repeat(2, 1fr);
-
+    grid-template-columns: repeat(2, 1fr);
     gap: 25px;
 }
 
-
 .dynamic-dua-card {
     position: relative;
-
-    padding: 30px;
-
-    border-radius: 22px;
-
-    background:
-        linear-gradient(
-            145deg,
-            rgba(20, 75, 59, 0.8),
-            rgba(6, 34, 28, 0.9)
-        );
-
+    padding: 32px;
+    border-radius: 24px;
+    background: linear-gradient(145deg, rgba(20, 75, 59, 0.85), rgba(6, 34, 28, 0.95));
     border: 1px solid rgba(100, 255, 180, 0.18);
-
     transition: 0.4s ease;
-
     animation: cardAppear 0.6s ease both;
 }
 
-
 @keyframes cardAppear {
-
-    from {
-        opacity: 0;
-        transform: translateY(25px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
 }
-
 
 .dynamic-dua-card:hover {
-    transform: translateY(-7px);
-
-    border-color: rgba(100, 255, 180, 0.45);
-
-    box-shadow:
-        0 15px 40px rgba(0, 0, 0, 0.35);
+    transform: translateY(-8px);
+    border-color: rgba(100, 255, 180, 0.5);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4), 0 0 30px rgba(76, 225, 150, 0.1);
 }
 
-
-.dynamic-dua-card h3 {
-    color: #8fffc3;
-
-    font-size: 22px;
-
+.dua-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     margin-bottom: 20px;
 }
 
+.dynamic-dua-card h3 {
+    color: #8fffc3;
+    font-family: "Amiri", serif;
+    font-size: 24px;
+    margin: 0;
+}
+
+.dua-category-badge {
+    padding: 5px 12px;
+    border-radius: 15px;
+    background: rgba(34, 200, 80, 0.15);
+    color: #55ff90;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
 
 .arabic-dua {
     direction: rtl;
-
     text-align: right;
-
-    font-size: 25px;
-
-    line-height: 2;
-
+    font-size: 28px;
+    line-height: 2.1;
     color: #ffffff;
-
-    margin-bottom: 18px;
-
-    font-family:
-        "Traditional Arabic",
-        "Amiri",
-        serif;
+    margin-bottom: 20px;
+    padding: 20px;
+    border-radius: 16px;
+    background: rgba(34, 200, 80, 0.08);
+    border-right: 4px solid #42c988;
+    font-family: "Amiri", "Traditional Arabic", serif;
 }
-
 
 .dua-translation {
     color: #b9dcd0;
+    line-height: 1.9;
+    margin-bottom: 15px;
+    font-size: 16px;
+}
 
-    line-height: 1.8;
+.dua-urdu {
+    direction: rtl;
+    text-align: right;
+    color: #d8ffe5;
+    line-height: 2;
+    margin-bottom: 20px;
+    padding: 15px;
+    border-radius: 12px;
+    background: rgba(34, 200, 80, 0.05);
+    font-family: "Noto Nastaliq Urdu", "Jameel Noori Nastaleeq", serif;
+    font-size: 17px;
+}
 
-    margin-bottom: 22px;
+.dua-reference {
+    padding-top: 15px;
+    border-top: 1px solid rgba(100, 255, 180, 0.12);
+    color: #91afa4;
+    font-size: 13px;
+    margin-bottom: 20px;
+}
+
+.dua-reference strong {
+    color: #55ff90;
 }
 
 
@@ -683,36 +657,41 @@ body {
 
 .dua-actions {
     display: flex;
-
     gap: 10px;
-
     flex-wrap: wrap;
 }
 
-
 .dua-actions button {
-    padding: 9px 15px;
-
-    border-radius: 20px;
-
-    border: 1px solid rgba(100, 255, 180, 0.2);
-
+    padding: 11px 18px;
+    border-radius: 22px;
+    border: 1px solid rgba(100, 255, 180, 0.25);
     background: rgba(255, 255, 255, 0.05);
-
     color: white;
-
     cursor: pointer;
-
+    font-size: 13px;
+    font-weight: 600;
     transition: 0.3s ease;
+    font-family: inherit;
 }
-
 
 .dua-actions button:hover {
     background: #42c988;
-
     color: #06251b;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(66, 201, 136, 0.3);
+}
 
-    transform: translateY(-2px);
+.dua-actions .copy-btn:hover {
+    background: #4bd994;
+}
+
+.dua-actions .share-btn:hover {
+    background: #3bb8d4;
+}
+
+.dua-actions .favorite-btn:hover {
+    background: #ff6b9d;
+    color: #ffffff;
 }
 
 
@@ -722,14 +701,245 @@ body {
 
 .no-dua {
     grid-column: 1 / -1;
-
     text-align: center;
-
-    padding: 50px;
-
+    padding: 70px 30px;
     color: #a7cabe;
-
     font-size: 18px;
+}
+
+.no-dua-icon {
+    font-size: 60px;
+    margin-bottom: 15px;
+}
+
+.no-dua h3 {
+    color: #8fffc3;
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+
+/* =========================================
+   BENEFITS SECTION
+   ========================================= */
+
+.dua-benefits {
+    max-width: 1200px;
+    margin: auto;
+    padding: 80px 6%;
+}
+
+.benefits-heading {
+    text-align: center;
+    margin-bottom: 45px;
+}
+
+.benefits-heading span {
+    font-size: 42px;
+    display: block;
+    margin-bottom: 15px;
+}
+
+.benefits-heading h2 {
+    font-family: "Amiri", serif;
+    font-size: 38px;
+    color: #8fffc3;
+}
+
+.benefits-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 22px;
+}
+
+.benefit-card {
+    padding: 35px 25px;
+    border-radius: 22px;
+    background: linear-gradient(145deg, rgba(42, 104, 83, 0.3), rgba(9, 45, 36, 0.6));
+    border: 1px solid rgba(112, 255, 180, 0.12);
+    text-align: center;
+    transition: 0.4s ease;
+    position: relative;
+}
+
+.benefit-card:hover {
+    transform: translateY(-10px);
+    border-color: rgba(100, 255, 180, 0.45);
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.35);
+}
+
+.benefit-number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #42c988, #28aa72);
+    color: #ffffff;
+    font-size: 22px;
+    font-weight: 800;
+    margin-bottom: 18px;
+    box-shadow: 0 5px 20px rgba(66, 201, 136, 0.4);
+}
+
+.benefit-card h3 {
+    font-family: "Amiri", serif;
+    font-size: 22px;
+    color: #8fffc3;
+    margin-bottom: 12px;
+}
+
+.benefit-card p {
+    color: #b9dcd0;
+    line-height: 1.7;
+    font-size: 14px;
+}
+
+
+/* =========================================
+   ETIQUETTE SECTION
+   ========================================= */
+
+.dua-etiquette {
+    max-width: 900px;
+    margin: auto;
+    padding: 80px 6%;
+}
+
+.etiquette-heading {
+    text-align: center;
+    margin-bottom: 45px;
+}
+
+.etiquette-heading span {
+    font-size: 42px;
+    display: block;
+    margin-bottom: 15px;
+}
+
+.etiquette-heading h2 {
+    font-family: "Amiri", serif;
+    font-size: 38px;
+    color: #8fffc3;
+}
+
+.etiquette-list {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.etiquette-item {
+    display: flex;
+    gap: 20px;
+    padding: 25px;
+    border-radius: 20px;
+    background: linear-gradient(145deg, rgba(20, 75, 59, 0.5), rgba(6, 34, 28, 0.8));
+    border: 1px solid rgba(100, 255, 180, 0.15);
+    transition: 0.3s ease;
+}
+
+.etiquette-item:hover {
+    transform: translateX(10px);
+    border-color: rgba(100, 255, 180, 0.4);
+}
+
+.etiquette-icon {
+    min-width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #42c988, #28aa72);
+    color: #ffffff;
+    font-size: 20px;
+    font-weight: 800;
+    box-shadow: 0 5px 18px rgba(66, 201, 136, 0.35);
+    flex-shrink: 0;
+}
+
+.etiquette-item h3 {
+    font-family: "Amiri", serif;
+    font-size: 21px;
+    color: #8fffc3;
+    margin-bottom: 8px;
+}
+
+.etiquette-item p {
+    color: #b9dcd0;
+    line-height: 1.7;
+    font-size: 15px;
+}
+
+
+/* =========================================
+   BEST TIMES SECTION
+   ========================================= */
+
+.best-times {
+    max-width: 1200px;
+    margin: auto;
+    padding: 80px 6%;
+}
+
+.times-heading {
+    text-align: center;
+    margin-bottom: 45px;
+}
+
+.times-heading span {
+    font-size: 42px;
+    display: block;
+    margin-bottom: 15px;
+}
+
+.times-heading h2 {
+    font-family: "Amiri", serif;
+    font-size: 38px;
+    color: #8fffc3;
+}
+
+.times-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 22px;
+}
+
+.time-card {
+    padding: 35px 25px;
+    border-radius: 22px;
+    background: linear-gradient(145deg, rgba(42, 104, 83, 0.3), rgba(9, 45, 36, 0.6));
+    border: 1px solid rgba(112, 255, 180, 0.12);
+    text-align: center;
+    transition: 0.4s ease;
+}
+
+.time-card:hover {
+    transform: translateY(-10px);
+    border-color: rgba(100, 255, 180, 0.45);
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.35);
+}
+
+.time-icon {
+    font-size: 42px;
+    display: block;
+    margin-bottom: 18px;
+    filter: drop-shadow(0 0 12px rgba(34, 220, 100, 0.4));
+}
+
+.time-card h3 {
+    font-family: "Amiri", serif;
+    font-size: 20px;
+    color: #8fffc3;
+    margin-bottom: 12px;
+}
+
+.time-card p {
+    color: #b9dcd0;
+    line-height: 1.7;
+    font-size: 14px;
 }
 
 
@@ -739,94 +949,134 @@ body {
 
 .dua-message {
     padding: 80px 6%;
-
     display: flex;
-
     justify-content: center;
 }
 
-
 .message-box {
-    width: min(800px, 100%);
-
+    width: min(850px, 100%);
     text-align: center;
-
-    padding: 50px 30px;
-
-    border-radius: 28px;
-
-    background:
-        linear-gradient(
-            145deg,
-            rgba(34, 110, 82, 0.45),
-            rgba(7, 43, 34, 0.8)
-        );
-
-    border: 1px solid rgba(100, 255, 180, 0.2);
-
-    box-shadow:
-        0 20px 60px rgba(0, 0, 0, 0.3);
+    padding: 60px 40px;
+    border-radius: 30px;
+    background: linear-gradient(145deg, rgba(34, 110, 82, 0.5), rgba(7, 43, 34, 0.9));
+    border: 2px solid rgba(100, 255, 180, 0.25);
+    box-shadow: 0 25px 70px rgba(0, 0, 0, 0.35), inset 0 0 60px rgba(34, 180, 80, 0.05);
 }
 
-
-.message-box > span {
-    font-size: 35px;
+.message-icon {
+    font-size: 48px;
+    display: block;
+    margin-bottom: 20px;
+    animation: duaFloat 3s infinite ease-in-out;
 }
-
 
 .message-box h2 {
-    margin: 15px 0;
-
+    font-family: "Amiri", serif;
+    margin: 15px 0 20px;
     color: #8fffc3;
-
-    font-size: 30px;
+    font-size: 36px;
 }
-
 
 .message-box p {
     color: #c2ded4;
-
-    line-height: 1.8;
-
-    margin-bottom: 25px;
+    line-height: 1.9;
+    margin-bottom: 30px;
+    font-size: 17px;
 }
 
-
-.message-box button {
-    padding: 12px 24px;
-
+.message-btn {
+    padding: 15px 32px;
     border: none;
-
-    border-radius: 25px;
-
-    background: #4bd994;
-
+    border-radius: 30px;
+    background: linear-gradient(135deg, #4bd994, #28aa72);
     color: #06251b;
-
     font-weight: 700;
-
+    font-size: 16px;
     cursor: pointer;
-
     transition: 0.3s ease;
+    box-shadow: 0 8px 25px rgba(75, 217, 148, 0.3);
 }
 
-
-.message-box button:hover {
-    transform: scale(1.05);
-
-    box-shadow:
-        0 0 25px rgba(75, 217, 148, 0.35);
+.message-btn:hover {
+    transform: scale(1.05) translateY(-3px);
+    box-shadow: 0 15px 40px rgba(75, 217, 148, 0.45);
 }
-
 
 #duaMessage {
-    margin-top: 20px;
-
+    margin-top: 25px;
     color: #8fffc3;
-
     font-weight: 600;
+    font-size: 17px;
+    min-height: 28px;
+    transition: opacity 0.5s ease;
+}
 
-    min-height: 25px;
+
+/* =========================================
+   HADITH SECTION
+   ========================================= */
+
+.hadith-section {
+    padding: 60px 6%;
+    display: flex;
+    justify-content: center;
+}
+
+.hadith-card {
+    max-width: 800px;
+    width: 100%;
+    padding: 45px 40px;
+    text-align: center;
+    border-radius: 28px;
+    background: linear-gradient(135deg, rgba(34, 200, 80, 0.12), rgba(34, 200, 80, 0.04));
+    border: 2px solid rgba(34, 200, 80, 0.35);
+    box-shadow: 0 15px 45px rgba(34, 200, 80, 0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+.hadith-card::before {
+    content: "❝";
+    position: absolute;
+    top: 15px;
+    left: 25px;
+    font-size: 90px;
+    color: rgba(34, 200, 80, 0.12);
+    font-family: serif;
+    line-height: 1;
+}
+
+.hadith-arabic {
+    direction: rtl;
+    font-family: "Amiri", "Traditional Arabic", serif;
+    font-size: clamp(26px, 4vw, 36px);
+    line-height: 2;
+    color: #ffffff;
+    margin-bottom: 25px;
+    position: relative;
+    z-index: 2;
+}
+
+.hadith-translation {
+    font-size: 20px;
+    font-style: italic;
+    color: #d8ffe5;
+    line-height: 1.8;
+    margin-bottom: 18px;
+    position: relative;
+    z-index: 2;
+}
+
+.hadith-source {
+    display: inline-block;
+    padding: 8px 18px;
+    border-radius: 20px;
+    background: rgba(34, 200, 80, 0.2);
+    color: #55ff90;
+    font-size: 14px;
+    font-weight: 600;
+    position: relative;
+    z-index: 2;
 }
 
 
@@ -834,18 +1084,65 @@ body {
    FOOTER
    ========================================= */
 
-footer {
-    text-align: center;
-
-    padding: 25px;
-
-    background: rgba(2, 18, 14, 0.8);
-
+.dua-footer {
+    padding: 45px 6% 30px;
+    background: rgba(2, 18, 14, 0.9);
     border-top: 1px solid rgba(100, 255, 180, 0.12);
+}
 
+.footer-content {
+    max-width: 1200px;
+    margin: auto;
+    text-align: center;
+}
+
+.footer-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.footer-logo span {
+    font-size: 32px;
+}
+
+.footer-logo h3 {
+    font-family: "Amiri", serif;
+    font-size: 22px;
+    color: #8fffc3;
+    margin: 0;
+}
+
+.footer-logo p {
     color: #91afa4;
+    font-size: 12px;
+    margin: 0;
+}
 
+.footer-links {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 25px;
+    margin-bottom: 25px;
+}
+
+.footer-links a {
+    color: #91afa4;
+    text-decoration: none;
     font-size: 14px;
+    transition: 0.3s ease;
+}
+
+.footer-links a:hover {
+    color: #55ff90;
+}
+
+.copyright {
+    color: #5a7a6a;
+    font-size: 13px;
 }
 
 
@@ -854,7 +1151,7 @@ footer {
    ========================================= */
 
 ::-webkit-scrollbar {
-    width: 9px;
+    width: 10px;
 }
 
 ::-webkit-scrollbar-track {
@@ -862,8 +1159,7 @@ footer {
 }
 
 ::-webkit-scrollbar-thumb {
-    background: #3fc987;
-
+    background: linear-gradient(#3fc987, #28aa72);
     border-radius: 10px;
 }
 
@@ -871,13 +1167,296 @@ footer {
     background: #70e6aa;
 }
 
+::selection {
+    background: rgba(34, 200, 80, 0.4);
+    color: #ffffff;
+}
+
 
 /* =========================================
-   MOBILE
+   LIGHT THEME OVERRIDE
    ========================================= */
 
-@media (max-width: 850px) {
+body.light-theme {
+    background: #f5faf6;
+    color: #0a2e14;
+}
 
+body.light-theme .dua-header {
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0.97), rgba(240, 250, 243, 0.95));
+    border-bottom: 1px solid rgba(34, 200, 80, 0.3);
+}
+
+body.light-theme .logo-text {
+    color: #0a5c22;
+    text-shadow: none;
+}
+
+body.light-theme .theme-btn {
+    background: rgba(34, 140, 60, 0.12);
+    color: #0a5c22;
+    border-color: rgba(34, 200, 80, 0.4);
+}
+
+body.light-theme .back-btn {
+    color: #0a5c22;
+    border-color: #0a7a2e;
+}
+
+body.light-theme .back-btn:hover {
+    background: #0a7a2e;
+    color: #ffffff;
+}
+
+body.light-theme .dua-hero {
+    background:
+        linear-gradient(135deg, rgba(240, 250, 243, 0.95), rgba(232, 245, 236, 0.9)),
+        radial-gradient(circle at 20% 30%, rgba(71, 230, 151, 0.15), transparent 40%),
+        radial-gradient(circle at 80% 70%, rgba(52, 180, 140, 0.12), transparent 40%);
+}
+
+body.light-theme .bismillah {
+    color: #0a7a2e;
+    text-shadow: none;
+}
+
+body.light-theme .dua-hero h1 {
+    background: linear-gradient(90deg, #0a2e14, #0a7a2e, #0a2e14);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+}
+
+body.light-theme .dua-hero p {
+    color: #1a4a24;
+}
+
+body.light-theme .random-dua-btn {
+    color: #0a5c22;
+    border-color: rgba(34, 200, 80, 0.5);
+    background: rgba(34, 200, 80, 0.1);
+}
+
+body.light-theme .section-badge {
+    background: linear-gradient(135deg, #1eaa4e, #0a7a2e);
+}
+
+body.light-theme .dua-introduction h2,
+body.light-theme .section-heading h2,
+body.light-theme .benefits-heading h2,
+body.light-theme .etiquette-heading h2,
+body.light-theme .times-heading h2 {
+    color: #0a5c22;
+}
+
+body.light-theme .intro-text {
+    color: #2a6a3a;
+}
+
+body.light-theme .dua-card {
+    background: linear-gradient(145deg, #ffffff, #f0faf3);
+    border: 1px solid rgba(34, 200, 80, 0.3);
+    box-shadow: 0 8px 25px rgba(0, 50, 20, 0.06);
+}
+
+body.light-theme .dua-card h3 {
+    color: #0a5c22;
+}
+
+body.light-theme .dua-card p {
+    color: #2a6a3a;
+}
+
+body.light-theme .verse-card {
+    background: linear-gradient(145deg, #ffffff, #f0faf3);
+    border: 2px solid rgba(34, 200, 80, 0.3);
+}
+
+body.light-theme .verse-arabic {
+    color: #0a2e14;
+    text-shadow: none;
+}
+
+body.light-theme .verse-translation {
+    color: #1a4a24;
+}
+
+body.light-theme .verse-reference {
+    background: rgba(34, 200, 80, 0.12);
+    color: #0a7a2e;
+}
+
+body.light-theme .dua-search {
+    background: #ffffff;
+    border: 1px solid rgba(34, 200, 80, 0.3);
+}
+
+body.light-theme .dua-search input {
+    color: #0a2e14;
+}
+
+body.light-theme .dua-search input::placeholder {
+    color: #7a9a8a;
+}
+
+body.light-theme .cat-btn {
+    background: rgba(34, 200, 80, 0.08);
+    color: #1a4a24;
+    border-color: rgba(34, 200, 80, 0.3);
+}
+
+body.light-theme .cat-btn:hover {
+    background: rgba(66, 201, 136, 0.2);
+}
+
+body.light-theme .cat-btn.active {
+    background: linear-gradient(135deg, #1eaa4e, #0a7a2e);
+    color: #ffffff;
+}
+
+body.light-theme .dynamic-dua-card {
+    background: linear-gradient(145deg, #ffffff, #f5fdf8);
+    border: 1px solid rgba(34, 200, 80, 0.25);
+    box-shadow: 0 8px 25px rgba(0, 50, 20, 0.06);
+}
+
+body.light-theme .dynamic-dua-card h3 {
+    color: #0a5c22;
+}
+
+body.light-theme .arabic-dua {
+    background: rgba(34, 200, 80, 0.06);
+    color: #0a2e14;
+    border-right: 4px solid #0a7a2e;
+}
+
+body.light-theme .dua-translation {
+    color: #1a4a24;
+}
+
+body.light-theme .dua-urdu {
+    background: rgba(34, 200, 80, 0.05);
+    color: #1a4a24;
+}
+
+body.light-theme .dua-reference {
+    color: #4a7a5a;
+    border-top: 1px solid rgba(34, 200, 80, 0.15);
+}
+
+body.light-theme .dua-reference strong {
+    color: #0a7a2e;
+}
+
+body.light-theme .dua-actions button {
+    background: #ffffff;
+    color: #1a5c2a;
+    border: 1px solid rgba(34, 200, 80, 0.3);
+}
+
+body.light-theme .dua-actions button:hover {
+    background: #0a7a2e;
+    color: #ffffff;
+}
+
+body.light-theme .benefit-card,
+body.light-theme .time-card {
+    background: linear-gradient(145deg, #ffffff, #f0faf3);
+    border: 1px solid rgba(34, 200, 80, 0.25);
+    box-shadow: 0 8px 25px rgba(0, 50, 20, 0.06);
+}
+
+body.light-theme .benefit-card h3,
+body.light-theme .time-card h3 {
+    color: #0a5c22;
+}
+
+body.light-theme .benefit-card p,
+body.light-theme .time-card p {
+    color: #2a6a3a;
+}
+
+body.light-theme .etiquette-item {
+    background: linear-gradient(145deg, #ffffff, #f5fdf8);
+    border: 1px solid rgba(34, 200, 80, 0.25);
+}
+
+body.light-theme .etiquette-item h3 {
+    color: #0a5c22;
+}
+
+body.light-theme .etiquette-item p {
+    color: #2a6a3a;
+}
+
+body.light-theme .message-box {
+    background: linear-gradient(145deg, #ffffff, #f0faf3);
+    border: 2px solid rgba(34, 200, 80, 0.3);
+}
+
+body.light-theme .message-box h2 {
+    color: #0a5c22;
+}
+
+body.light-theme .message-box p {
+    color: #1a4a24;
+}
+
+body.light-theme #duaMessage {
+    color: #0a7a2e;
+}
+
+body.light-theme .hadith-card {
+    background: linear-gradient(135deg, rgba(34, 200, 80, 0.08), rgba(34, 200, 80, 0.02));
+    border: 2px solid rgba(34, 200, 80, 0.3);
+}
+
+body.light-theme .hadith-arabic {
+    color: #0a2e14;
+}
+
+body.light-theme .hadith-translation {
+    color: #1a4a24;
+}
+
+body.light-theme .dua-footer {
+    background: #e8f5ec;
+    border-top: 1px solid rgba(34, 200, 80, 0.3);
+}
+
+body.light-theme .footer-logo h3 {
+    color: #0a5c22;
+}
+
+body.light-theme .footer-links a {
+    color: #1a5c2a;
+}
+
+body.light-theme .footer-links a:hover {
+    color: #0a7a2e;
+}
+
+body.light-theme .copyright {
+    color: #4a7a5a;
+}
+
+body.light-theme::-webkit-scrollbar-track {
+    background: #e8f5ec;
+}
+
+
+/* =========================================
+   RESPONSIVE - TABLET
+   ========================================= */
+
+@media (max-width: 1000px) {
+    .benefits-grid,
+    .times-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 850px) {
     .dua-cards {
         grid-template-columns: 1fr;
     }
@@ -887,85 +1466,316 @@ footer {
     }
 
     .dua-hero {
-        min-height: 470px;
+        min-height: 500px;
+        padding: 60px 20px;
     }
 
     .dua-hero h1 {
-        font-size: 45px;
+        font-size: 48px;
     }
 
-}
-
-
-@media (max-width: 550px) {
-
-    .dua-header {
-        padding: 12px 4%;
+    .dua-hero p {
+        font-size: 16px;
     }
 
-    .logo {
-        font-size: 18px;
-    }
-
-    .back-btn {
-        padding: 8px 13px;
-    }
-
-    .dua-introduction,
-    .daily-dua {
-        padding: 60px 5%;
+    .dua-icon {
+        width: 90px;
+        height: 90px;
+        font-size: 42px;
     }
 
     .dua-introduction h2,
     .section-heading h2 {
+        font-size: 34px;
+    }
+
+    .benefits-heading h2,
+    .etiquette-heading h2,
+    .times-heading h2 {
+        font-size: 32px;
+    }
+
+    .message-box h2 {
         font-size: 30px;
+    }
+}
+
+
+/* =========================================
+   RESPONSIVE - MOBILE
+   ========================================= */
+
+@media (max-width: 600px) {
+    .dua-header {
+        padding: 12px 4%;
+        min-height: 60px;
+    }
+
+    .logo-text {
+        font-size: 17px;
+    }
+
+    .logo-icon {
+        font-size: 22px;
+    }
+
+    .theme-btn {
+        width: 36px;
+        height: 36px;
+        font-size: 15px;
+    }
+
+    .back-btn {
+        padding: 8px 14px;
+        font-size: 12px;
+    }
+
+    .dua-hero {
+        min-height: 480px;
+        padding: 50px 16px;
     }
 
     .dua-hero h1 {
         font-size: 38px;
     }
 
+    .bismillah {
+        font-size: 20px;
+    }
+
     .dua-hero p {
+        font-size: 14px;
+        line-height: 1.8;
+    }
+
+    .hero-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .explore-btn,
+    .random-dua-btn {
+        width: 100%;
+        max-width: 280px;
+        padding: 14px 24px;
+        font-size: 14px;
+    }
+
+    .dua-introduction,
+    .daily-dua,
+    .dua-benefits,
+    .dua-etiquette,
+    .best-times {
+        padding: 60px 5%;
+    }
+
+    .dua-introduction h2,
+    .section-heading h2 {
+        font-size: 28px;
+    }
+
+    .benefits-heading h2,
+    .etiquette-heading h2,
+    .times-heading h2 {
+        font-size: 26px;
+    }
+
+    .intro-text {
         font-size: 15px;
     }
 
+    .dua-card {
+        padding: 30px 22px;
+    }
+
+    .card-icon {
+        font-size: 38px;
+    }
+
+    .dua-card h3 {
+        font-size: 22px;
+    }
+
+    .verse-card {
+        padding: 35px 22px;
+    }
+
+    .verse-arabic {
+        font-size: 26px;
+    }
+
+    .verse-translation {
+        font-size: 17px;
+    }
+
+    .dua-search {
+        padding: 5px;
+    }
+
+    .dua-search input {
+        padding: 12px 16px;
+        font-size: 14px;
+    }
+
+    .dua-search button {
+        width: 46px;
+        height: 46px;
+        font-size: 17px;
+    }
+
+    .categories {
+        gap: 8px;
+    }
+
+    .cat-btn {
+        padding: 9px 15px;
+        font-size: 12px;
+    }
+
     .dynamic-dua-card {
-        padding: 23px;
+        padding: 24px 20px;
+    }
+
+    .dynamic-dua-card h3 {
+        font-size: 20px;
     }
 
     .arabic-dua {
         font-size: 22px;
+        padding: 15px;
     }
 
-    .categories button {
-        font-size: 13px;
-        padding: 8px 13px;
+    .dua-translation {
+        font-size: 14px;
     }
 
+    .dua-urdu {
+        font-size: 15px;
+        padding: 12px;
+    }
+
+    .dua-actions {
+        gap: 8px;
+    }
+
+    .dua-actions button {
+        flex: 1;
+        min-width: calc(50% - 4px);
+        padding: 10px 12px;
+        font-size: 12px;
+    }
+
+    .benefits-grid,
+    .times-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .benefit-card,
+    .time-card {
+        padding: 28px 20px;
+    }
+
+    .etiquette-item {
+        flex-direction: column;
+        gap: 12px;
+        padding: 20px;
+    }
+
+    .etiquette-icon {
+        min-width: 42px;
+        height: 42px;
+        font-size: 18px;
+    }
+
+    .etiquette-item h3 {
+        font-size: 18px;
+    }
+
+    .etiquette-item p {
+        font-size: 14px;
+    }
+
+    .message-box {
+        padding: 40px 22px;
+    }
+
+    .message-box h2 {
+        font-size: 24px;
+    }
+
+    .message-box p {
+        font-size: 15px;
+    }
+
+    .message-btn {
+        padding: 13px 26px;
+        font-size: 14px;
+    }
+
+    .hadith-card {
+        padding: 35px 22px;
+    }
+
+    .hadith-arabic {
+        font-size: 24px;
+    }
+
+    .hadith-translation {
+        font-size: 17px;
+    }
+
+    .footer-links {
+        gap: 15px;
+    }
 }
 
 
 /* =========================================
-   EXTRA GLOW ANIMATION
+   EXTRA ANIMATIONS
    ========================================= */
 
 @keyframes softGlow {
-
-    0%,
-    100% {
-        box-shadow:
-            0 0 10px rgba(80, 220, 150, 0.08);
+    0%, 100% {
+        box-shadow: 0 0 15px rgba(80, 220, 150, 0.08);
     }
-
     50% {
-        box-shadow:
-            0 0 30px rgba(80, 220, 150, 0.2);
+        box-shadow: 0 0 35px rgba(80, 220, 150, 0.2);
     }
 }
 
 .dynamic-dua-card {
-    animation:
-        cardAppear 0.6s ease both,
-        softGlow 4s infinite ease-in-out;
+    animation: cardAppear 0.6s ease both, softGlow 5s infinite ease-in-out;
 }
-```
+
+
+/* =========================================
+   PRINT STYLES
+   ========================================= */
+
+@media print {
+    .dua-header,
+    .dua-hero,
+    .dua-introduction,
+    .quran-verse-section,
+    .dua-search,
+    .categories,
+    .dua-actions,
+    .dua-message,
+    .dua-benefits,
+    .dua-etiquette,
+    .best-times,
+    .dua-footer {
+        display: none;
+    }
+
+    .dua-container {
+        display: block;
+    }
+
+    .dynamic-dua-card {
+        break-inside: avoid;
+        border: 1px solid #000;
+        margin-bottom: 20px;
+        padding: 20px;
+    }
+}

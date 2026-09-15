@@ -1,5 +1,5 @@
 /* =========================================================
-   ISLAMICWAY - COMPLETE JAVASCRIPT
+   ISLAMICWAY - COMPLETE JAVASCRIPT (FIXED)
    ========================================================= */
 
 /* =====================================================
@@ -40,7 +40,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const pages = document.querySelectorAll(".page");
     const navLinks = document.querySelectorAll(".nav-link");
 
-    function showPage(pageName, updateUrl = true) {
+    window.showPage = function showPage(pageName, updateUrl = true) {
 
         pages.forEach(page => {
             page.classList.remove("active");
@@ -69,59 +69,37 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 
         if (updateUrl) {
-            history.pushState(
-                { page: pageName },
-                "",
-                "#" + pageName
-            );
+            history.pushState({ page: pageName }, "", "#" + pageName);
         }
 
         if (pageName === "prayer") {
             loadIslamicCalendar();
         }
 
-        window.scrollTo({
-            top: 0,
-            behavior: "smooth"
-        });
-    }
-
-
-    /* =====================================================
-       MENU CLICK
-    ===================================================== */
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    };
 
     navLinks.forEach(link => {
         link.addEventListener("click", function (event) {
-            event.preventDefault();
             const pageName = this.dataset.page;
             if (pageName) {
+                event.preventDefault();
                 showPage(pageName);
             }
         });
     });
 
-
-    /* =====================================================
-       OTHER ELEMENTS WITH data-page
-    ===================================================== */
-
     document.querySelectorAll("[data-page]").forEach(element => {
         if (!element.classList.contains("nav-link")) {
             element.addEventListener("click", function (event) {
-                event.preventDefault();
                 const pageName = this.dataset.page;
                 if (pageName) {
+                    event.preventDefault();
                     showPage(pageName);
                 }
             });
         }
     });
-
-
-    /* =====================================================
-       BROWSER BACK / FORWARD
-    ===================================================== */
 
     window.addEventListener("popstate", () => {
         const pageName = window.location.hash.replace("#", "");
@@ -132,22 +110,12 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-
-    /* =====================================================
-       OPEN PAGE FROM HASH
-    ===================================================== */
-
     const startingPage = window.location.hash.replace("#", "");
     if (startingPage) {
         showPage(startingPage, false);
     } else {
         showPage("home", false);
     }
-
-
-    /* =====================================================
-       LOGO → HOME
-    ===================================================== */
 
     const logo = document.querySelector(".logo");
     if (logo) {
@@ -157,20 +125,14 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-
-    /* =====================================================
-       ESC KEY → HOME
-    ===================================================== */
-
     document.addEventListener("keydown", function (event) {
         if (event.key === "Escape") {
             showPage("home");
         }
     });
 
-
     /* =====================================================
-       DYNAMIC ISLAMIC CALENDAR
+       DYNAMIC ISLAMIC CALENDAR — FIXED
     ===================================================== */
 
     let calendarDate = new Date();
@@ -214,29 +176,42 @@ document.addEventListener("DOMContentLoaded", () => {
         const year = calendarDate.getFullYear();
         const month = calendarDate.getMonth() + 1;
 
-        const url =
+        // ✅ FIXED: calendarMethod=MATHEMATICAL add kiya
+        const urls = [
             "https://api.aladhan.com/v1/calendarByCity/" +
-            year + "/" + month +
-            "?city=" + encodeURIComponent(city) +
-            "&country=" + encodeURIComponent(country) +
-            "&method=" + method;
+                year + "/" + month +
+                "?city=" + encodeURIComponent(city) +
+                "&country=" + encodeURIComponent(country) +
+                "&method=" + method +
+                "&calendarMethod=MATHEMATICAL",
+
+            "https://api.aladhan.com/v1/calendarByCity/" +
+                year + "/" + month +
+                "?city=" + encodeURIComponent(city) +
+                "&country=" + encodeURIComponent(country) +
+                "&method=" + method
+        ];
+
+        let json = null;
+
+        for (const url of urls) {
+            try {
+                const response = await fetch(url);
+                if (!response.ok) continue;
+                const data = await response.json();
+                if (data && data.code === 200 && data.data) {
+                    json = data;
+                    break;
+                }
+            } catch (e) {
+                console.warn("Calendar API failed, trying next...");
+            }
+        }
 
         try {
-            const response = await fetch(url);
-
-            if (!response.ok) {
-                throw new Error("Calendar API request failed");
-            }
-
-            const json = await response.json();
-
-            if (!json || json.code !== 200 || !json.data) {
-                throw new Error("Invalid calendar data");
-            }
-
+            if (!json) throw new Error("All calendar APIs failed");
             renderCalendar(json.data);
             hideCalendarLoading();
-
         } catch (error) {
             console.error("Islamic Calendar Error:", error);
             showCalendarError();
@@ -302,11 +277,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 day.classList.add("today");
             }
 
-            const dateObject = new Date(
-                year,
-                monthIndex,
-                Number(gregorianDay)
-            );
+            const dateObject = new Date(year, monthIndex, Number(gregorianDay));
 
             if (dateObject.getDay() === 5) {
                 day.classList.add("friday");
@@ -326,10 +297,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const todayData = data.find(item =>
                 item.date.gregorian.date === todayString
             );
-
-            if (todayData) {
-                selectCalendarDate(todayData, false);
-            }
+            if (todayData) selectCalendarDate(todayData, false);
         }
     }
 
@@ -350,8 +318,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (selectedHijri) {
             selectedHijri.textContent =
-                hijri.day + " " +
-                hijri.month.en + " " +
+                hijri.day + " " + hijri.month.en + " " +
                 hijri.year + " AH";
         }
 
@@ -359,29 +326,18 @@ document.addEventListener("DOMContentLoaded", () => {
             day.classList.remove("selected");
         });
 
-        const allDays = Array.from(
-            document.querySelectorAll(".calendar-day")
-        );
-
+        const allDays = Array.from(document.querySelectorAll(".calendar-day"));
         const clickedDay = allDays.find(day => {
             const number = day.querySelector(".gregorian-number");
-            return (
-                number &&
-                number.textContent.trim() === String(gregorian.day)
-            );
+            return number && number.textContent.trim() === String(gregorian.day);
         });
 
-        if (clickedDay) {
-            clickedDay.classList.add("selected");
-        }
+        if (clickedDay) clickedDay.classList.add("selected");
 
         if (scrollToDate) {
             const selectedBox = document.querySelector(".selected-date-box");
             if (selectedBox) {
-                selectedBox.scrollIntoView({
-                    behavior: "smooth",
-                    block: "nearest"
-                });
+                selectedBox.scrollIntoView({ behavior: "smooth", block: "nearest" });
             }
         }
     }
@@ -436,15 +392,10 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     document.addEventListener("keydown", function (event) {
-        if (
-            event.key === "/" &&
-            document.activeElement.tagName !== "INPUT"
-        ) {
+        if (event.key === "/" && document.activeElement.tagName !== "INPUT") {
             event.preventDefault();
             const searchInput = document.querySelector("#globalSearchInput");
-            if (searchInput) {
-                searchInput.focus();
-            }
+            if (searchInput) searchInput.focus();
         }
     });
 
@@ -452,10 +403,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 /* =========================================================
-   DYNAMIC QURAN
+   DYNAMIC QURAN — FIXED (MULTIPLE API FALLBACK)
    ========================================================= */
 
-const QURAN_API = "https://api.alquran.cloud/v1";
+const QURAN_APIS = [
+    "https://api.alquran.cloud/v1",
+    "https://api.quran.com/api/v4"
+];
+
+const AUDIO_BASES = [
+    "https://cdn.islamic.network/quran/audio-surah/128/ar.alafasy/",
+    "https://everyayah.com/data/Alafasy_128kbps/"
+];
 
 let allSurahs = [];
 let currentSurah = 1;
@@ -481,6 +440,20 @@ const nextSurah = document.getElementById("nextSurah");
 const showAllSurahs = document.getElementById("showAllSurahs");
 const retryQuran = document.getElementById("retryQuran");
 
+async function fetchQuranEndpoint(endpoint) {
+    for (const baseUrl of QURAN_APIS) {
+        try {
+            const response = await fetch(baseUrl + endpoint);
+            if (!response.ok) continue;
+            const json = await response.json();
+            if (json && (json.code === 200 || json.data)) return json;
+        } catch (e) {
+            console.warn(`Quran API failed: ${baseUrl}`);
+        }
+    }
+    throw new Error("All Quran APIs failed");
+}
+
 async function loadQuranSurahs() {
 
     if (!surahList) return;
@@ -488,17 +461,8 @@ async function loadQuranSurahs() {
     showQuranLoading();
 
     try {
-        const response = await fetch(QURAN_API + "/surah");
-
-        if (!response.ok) {
-            throw new Error("Surah list failed");
-        }
-
-        const json = await response.json();
-
-        if (json.code !== 200 || !json.data) {
-            throw new Error("Invalid Surah data");
-        }
+        const json = await fetchQuranEndpoint("/surah");
+        if (!json.data) throw new Error("Invalid Surah data");
 
         allSurahs = json.data;
         renderSurahList(allSurahs);
@@ -535,10 +499,7 @@ function renderSurahList(surahs) {
             </div>
         `;
 
-        card.addEventListener("click", () => {
-            openSurah(surah.number);
-        });
-
+        card.addEventListener("click", () => openSurah(surah.number));
         surahList.appendChild(card);
     });
 }
@@ -560,24 +521,12 @@ async function openSurah(surahNumber) {
     }
 
     try {
-        const arabicResponse = await fetch(
-            QURAN_API + "/surah/" + surahNumber + "/quran-uthmani"
+        const arabicJSON = await fetchQuranEndpoint(
+            "/surah/" + surahNumber + "/quran-uthmani"
         );
-
-        const urduResponse = await fetch(
-            QURAN_API + "/surah/" + surahNumber + "/ur.jalandhry"
+        const urduJSON = await fetchQuranEndpoint(
+            "/surah/" + surahNumber + "/ur.jalandhry"
         );
-
-        if (!arabicResponse.ok || !urduResponse.ok) {
-            throw new Error("Surah data unavailable");
-        }
-
-        const arabicJSON = await arabicResponse.json();
-        const urduJSON = await urduResponse.json();
-
-        if (arabicJSON.code !== 200 || urduJSON.code !== 200) {
-            throw new Error("Invalid Surah response");
-        }
 
         const arabicData = arabicJSON.data;
         const urduData = urduJSON.data;
@@ -641,23 +590,25 @@ function loadFullSurahAudio(surahNumber) {
 
     if (!fullSurahAudio) return;
 
-    const audioURL =
-        "https://cdn.islamic.network/quran/audio-surah/128/ar.alafasy/" +
-        surahNumber + ".mp3";
+    const audioURL = AUDIO_BASES[0] + surahNumber + ".mp3";
 
     fullSurahAudio.pause();
     fullSurahAudio.currentTime = 0;
     fullSurahAudio.src = audioURL;
+
+    // Fallback on error
+    fullSurahAudio.onerror = function () {
+        console.warn("Primary audio failed, trying fallback...");
+        fullSurahAudio.src = AUDIO_BASES[1] + String(surahNumber).padStart(3, "0") + ".mp3";
+    };
+
     fullSurahAudio.load();
 }
 
 if (playSurah) {
     playSurah.addEventListener("click", async () => {
-        try {
-            await fullSurahAudio.play();
-        } catch (error) {
-            console.error("Audio play error:", error);
-        }
+        try { await fullSurahAudio.play(); }
+        catch (error) { console.error("Audio play error:", error); }
     });
 }
 
@@ -754,16 +705,15 @@ if (surahList) {
 
 
 /* =====================================================
-   HADITH SYSTEM
+   HADITH SYSTEM — FIXED (MULTIPLE URL FALLBACK)
 ===================================================== */
 
 document.addEventListener("DOMContentLoaded", function () {
 
-    const HADITH_CDN =
-        "https://cdn.jsdelivr.net/gh/fawazahmed0/hadith-api@1/editions/";
-
-    const HADITH_RAW =
-        "https://raw.githubusercontent.com/fawazahmed0/hadith-api/1/editions/";
+    const HADITH_URLS = [
+        "https://cdn.jsdelivr.net/gh/fawazahmed0/hadith-api@1/editions/",
+        "https://raw.githubusercontent.com/fawazahmed0/hadith-api/1/editions/"
+    ];
 
     const hadithBooks = {
         bukhari: {
@@ -823,27 +773,39 @@ document.addEventListener("DOMContentLoaded", function () {
     const nextButton = document.getElementById("nextHadithPage");
 
     let currentBook = null;
+    let currentBookKey = null;
     let currentPage = 1;
     let allArabicHadith = [];
     let allUrduHadith = [];
     let displayedHadith = [];
 
-    async function fetchJSON(url1, url2) {
-        try {
-            const response = await fetch(url1);
-            if (!response.ok) throw new Error("First API failed");
-            return await response.json();
-        } catch (error) {
-            console.log("Trying fallback API...");
-            const response = await fetch(url2);
-            if (!response.ok) throw new Error("Both APIs failed");
-            return await response.json();
+    // ✅ FIXED: Multiple URL fallback
+    async function fetchHadithJSON(edition) {
+        const paths = [
+            edition + ".min.json",
+            edition + ".json"
+        ];
+
+        for (const baseUrl of HADITH_URLS) {
+            for (const path of paths) {
+                try {
+                    const res = await fetch(baseUrl + path);
+                    if (res.ok) {
+                        const json = await res.json();
+                        if (json && json.hadiths) return json;
+                    }
+                } catch (e) {
+                    console.warn(`Failed: ${baseUrl}${path}`);
+                }
+            }
         }
+        throw new Error("All Hadith URLs failed for " + edition);
     }
 
     async function openHadithBook(bookKey) {
 
         currentBook = hadithBooks[bookKey];
+        currentBookKey = bookKey;
         if (!currentBook) return;
 
         booksScreen.style.display = "none";
@@ -861,15 +823,8 @@ document.addEventListener("DOMContentLoaded", function () {
         showLoading();
 
         try {
-            const arabicData = await fetchJSON(
-                HADITH_CDN + currentBook.arabicEdition + ".min.json",
-                HADITH_RAW + currentBook.arabicEdition + ".min.json"
-            );
-
-            const urduData = await fetchJSON(
-                HADITH_CDN + currentBook.urduEdition + ".min.json",
-                HADITH_RAW + currentBook.urduEdition + ".min.json"
-            );
+            const arabicData = await fetchHadithJSON(currentBook.arabicEdition);
+            const urduData = await fetchHadithJSON(currentBook.urduEdition);
 
             allArabicHadith = arabicData.hadiths || [];
             allUrduHadith = urduData.hadiths || [];
@@ -913,16 +868,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
             card.innerHTML = `
                 <div class="hadith-card-top">
-                    <span class="hadith-number">
-                        Hadith #${actualIndex + 1}
-                    </span>
-                    <span class="hadith-reference">
-                        ${currentBook.title}
-                    </span>
+                    <span class="hadith-number">Hadith #${actualIndex + 1}</span>
+                    <span class="hadith-reference">${currentBook.title}</span>
                 </div>
-                <div class="hadith-arabic">
-                    ${escapeHTML(arabicText)}
-                </div>
+                <div class="hadith-arabic">${escapeHTML(arabicText)}</div>
                 <div class="hadith-urdu">
                     <div class="hadith-urdu-title">اردو ترجمہ</div>
                     ${escapeHTML(urduText)}
@@ -956,45 +905,51 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function updatePagination() {
-
         const totalPages = Math.ceil(displayedHadith.length / 20);
-
         pageNumber.textContent = "Page " + currentPage + " / " + totalPages;
         previousButton.disabled = currentPage <= 1;
         nextButton.disabled = currentPage >= totalPages;
     }
 
-    previousButton.addEventListener("click", function () {
-        if (currentPage > 1) {
-            currentPage--;
+    if (previousButton) {
+        previousButton.addEventListener("click", function () {
+            if (currentPage > 1) {
+                currentPage--;
+                renderHadith();
+                window.scrollTo({ top: 0, behavior: "smooth" });
+            }
+        });
+    }
+
+    if (nextButton) {
+        nextButton.addEventListener("click", function () {
+            const totalPages = Math.ceil(displayedHadith.length / 20);
+            if (currentPage < totalPages) {
+                currentPage++;
+                renderHadith();
+                window.scrollTo({ top: 0, behavior: "smooth" });
+            }
+        });
+    }
+
+    const hadithSearchBtn = document.getElementById("hadithSearchBtn");
+    if (hadithSearchBtn) hadithSearchBtn.addEventListener("click", searchHadith);
+
+    if (searchInput) {
+        searchInput.addEventListener("keyup", function (event) {
+            if (event.key === "Enter") searchHadith();
+        });
+    }
+
+    const hadithResetBtn = document.getElementById("hadithResetBtn");
+    if (hadithResetBtn) {
+        hadithResetBtn.addEventListener("click", function () {
+            searchInput.value = "";
+            displayedHadith = allArabicHadith;
+            currentPage = 1;
             renderHadith();
-            window.scrollTo({ top: 0, behavior: "smooth" });
-        }
-    });
-
-    nextButton.addEventListener("click", function () {
-        const totalPages = Math.ceil(displayedHadith.length / 20);
-        if (currentPage < totalPages) {
-            currentPage++;
-            renderHadith();
-            window.scrollTo({ top: 0, behavior: "smooth" });
-        }
-    });
-
-    document.getElementById("hadithSearchBtn").addEventListener("click", searchHadith);
-
-    searchInput.addEventListener("keyup", function (event) {
-        if (event.key === "Enter") {
-            searchHadith();
-        }
-    });
-
-    document.getElementById("hadithResetBtn").addEventListener("click", function () {
-        searchInput.value = "";
-        displayedHadith = allArabicHadith;
-        currentPage = 1;
-        renderHadith();
-    });
+        });
+    }
 
     document.querySelectorAll(".hadith-book-card").forEach(function (card) {
         card.addEventListener("click", function () {
@@ -1003,35 +958,34 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 
-    document.getElementById("backToHadithBooks").addEventListener("click", function () {
-        readerScreen.style.display = "none";
-        booksScreen.style.display = "block";
-        hadithList.innerHTML = "";
-    });
+    const backBtn = document.getElementById("backToHadithBooks");
+    if (backBtn) {
+        backBtn.addEventListener("click", function () {
+            readerScreen.style.display = "none";
+            booksScreen.style.display = "block";
+            hadithList.innerHTML = "";
+        });
+    }
 
-    document.getElementById("retryHadith").addEventListener("click", function () {
-        if (currentBook) {
-            const key = Object.keys(hadithBooks).find(function (key) {
-                return hadithBooks[key] === currentBook;
-            });
-            if (key) {
-                openHadithBook(key);
-            }
-        }
-    });
+    const retryBtn = document.getElementById("retryHadith");
+    if (retryBtn) {
+        retryBtn.addEventListener("click", function () {
+            if (currentBookKey) openHadithBook(currentBookKey);
+        });
+    }
 
     function showLoading() {
-        loading.style.display = "block";
-        errorBox.style.display = "none";
-        hadithList.innerHTML = "";
+        if (loading) loading.style.display = "block";
+        if (errorBox) errorBox.style.display = "none";
+        if (hadithList) hadithList.innerHTML = "";
     }
 
     function hideLoading() {
-        loading.style.display = "none";
+        if (loading) loading.style.display = "none";
     }
 
     function showError() {
-        errorBox.style.display = "block";
+        if (errorBox) errorBox.style.display = "block";
     }
 
     function escapeHTML(text) {
@@ -1054,541 +1008,203 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const articles = [
         {
-    id: 1,
-    icon: "🕌",
-    title: {
-        en: "A Step Closer to Allah",
-        ur: "اللہ کے قریب ایک قدم",
-        ar: "خطوة أقرب إلى الله"
-    },
-    text: {
-
-        /* ============================================
-           ENGLISH VERSION
-        ============================================ */
-        en: `
-
-            <div class="article-hero-badge">✦ Islamic Journey ✦</div>
-
-            <h1>A Step Closer to Allah</h1>
-
-            <p class="article-intro">
-                Every soul is on a journey. Some walk slowly, some run,
-                and some stumble — but the destination is the same:
-                <strong>nearness to Allah</strong>. This article is a
-                gentle reminder and a practical guide for anyone who
-                wants to take one sincere step closer to their Creator.
-            </p>
-
-            <div class="article-arabic">
-                وَأَنِ اسْتَغْفِرُوا رَبَّكُمْ ثُمَّ تُوبُوا إِلَيْهِ
-            </div>
-
-            <p class="article-translation">
-                "And seek forgiveness of your Lord and turn to Him in repentance."
-                <span>— Surah Hud 11:3</span>
-            </p>
-
-            <h2>🌱 Why Do We Feel Far From Allah?</h2>
-
-            <p>
-                Sometimes we pray, yet feel empty. We make dua, yet feel
-                unheard. This distance is rarely because Allah has moved
-                away — it is usually because <em>we</em> have filled our
-                hearts with distractions.
-            </p>
-
-            <ul class="article-list">
-                <li><strong>Too much screen time</strong> — the heart becomes forgetful.</li>
-                <li><strong>Neglecting the five prayers</strong> — the connection weakens.</li>
-                <li><strong>Holding grudges</strong> — the soul becomes heavy.</li>
-                <li><strong>Chasing dunya only</strong> — the akhirah fades from sight.</li>
-            </ul>
-
-            <div class="article-arabic">
-                أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ
-            </div>
-
-            <p class="article-translation">
-                "Surely, in the remembrance of Allah do hearts find rest."
-                <span>— Surah Ar-Ra'd 13:28</span>
-            </p>
-
-            <h2>🌿 7 Practical Steps Closer to Allah</h2>
-
-            <div class="article-steps">
-
-                <div class="article-step">
-                    <span class="step-number">1</span>
-                    <div>
-                        <h3>Start With Salah — On Time</h3>
-                        <p>
-                            The five daily prayers are your direct line
-                            to Allah. Do not delay them. Even if your
-                            mind wanders, keep praying — the prayer will
-                            slowly reform you.
+            id: 1,
+            icon: "🕌",
+            title: {
+                en: "A Step Closer to Allah",
+                ur: "اللہ کے قریب ایک قدم",
+                ar: "خطوة أقرب إلى الله"
+            },
+            text: {
+                en: `
+                    <div class="article-hero-badge">✦ Islamic Journey ✦</div>
+                    <h1>A Step Closer to Allah</h1>
+                    <p class="article-intro">
+                        Every soul is on a journey. Some walk slowly, some run,
+                        and some stumble — but the destination is the same:
+                        <strong>nearness to Allah</strong>. This article is a
+                        gentle reminder and a practical guide for anyone who
+                        wants to take one sincere step closer to their Creator.
+                    </p>
+                    <div class="article-arabic">
+                        وَأَنِ اسْتَغْفِرُوا رَبَّكُمْ ثُمَّ تُوبُوا إِلَيْهِ
+                    </div>
+                    <p class="article-translation">
+                        "And seek forgiveness of your Lord and turn to Him in repentance."
+                        <span>— Surah Hud 11:3</span>
+                    </p>
+                    <h2>🌱 Why Do We Feel Far From Allah?</h2>
+                    <p>
+                        Sometimes we pray, yet feel empty. We make dua, yet feel
+                        unheard. This distance is rarely because Allah has moved
+                        away — it is usually because <em>we</em> have filled our
+                        hearts with distractions.
+                    </p>
+                    <ul class="article-list">
+                        <li><strong>Too much screen time</strong> — the heart becomes forgetful.</li>
+                        <li><strong>Neglecting the five prayers</strong> — the connection weakens.</li>
+                        <li><strong>Holding grudges</strong> — the soul becomes heavy.</li>
+                        <li><strong>Chasing dunya only</strong> — the akhirah fades from sight.</li>
+                    </ul>
+                    <div class="article-arabic">
+                        أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ
+                    </div>
+                    <p class="article-translation">
+                        "Surely, in the remembrance of Allah do hearts find rest."
+                        <span>— Surah Ar-Ra'd 13:28</span>
+                    </p>
+                    <h2>🌿 7 Practical Steps Closer to Allah</h2>
+                    <div class="article-steps">
+                        <div class="article-step">
+                            <span class="step-number">1</span>
+                            <div><h3>Start With Salah — On Time</h3>
+                            <p>The five daily prayers are your direct line to Allah.</p></div>
+                        </div>
+                        <div class="article-step">
+                            <span class="step-number">2</span>
+                            <div><h3>Make Dua With Certainty</h3>
+                            <p>Allah hears every whisper. Ask Him for everything.</p></div>
+                        </div>
+                        <div class="article-step">
+                            <span class="step-number">3</span>
+                            <div><h3>Read the Quran Daily</h3>
+                            <p>Even five minutes a day.</p></div>
+                        </div>
+                        <div class="article-step">
+                            <span class="step-number">4</span>
+                            <div><h3>Seek Forgiveness (Istighfar)</h3>
+                            <p>Say Astaghfirullah 100 times a day.</p></div>
+                        </div>
+                        <div class="article-step">
+                            <span class="step-number">5</span>
+                            <div><h3>Be Kind to Others</h3>
+                            <p>A smile, a helping hand — acts of worship.</p></div>
+                        </div>
+                        <div class="article-step">
+                            <span class="step-number">6</span>
+                            <div><h3>Remember the Hereafter</h3>
+                            <p>This world is a bridge.</p></div>
+                        </div>
+                        <div class="article-step">
+                            <span class="step-number">7</span>
+                            <div><h3>Keep Good Company</h3>
+                            <p>Surround yourself with people who remind you of Allah.</p></div>
+                        </div>
+                    </div>
+                    <h2>🌟 The Hadith That Changes Hearts</h2>
+                    <div class="article-hadith">
+                        <div class="article-hadith-arabic">
+                            مَنْ تَقَرَّبَ إِلَيَّ شِبْرًا تَقَرَّبْتُ إِلَيْهِ ذِرَاعًا
+                        </div>
+                        <p class="article-hadith-english">
+                            "Whoever comes one step closer to Me, I come one arm's length closer to him."
                         </p>
+                        <span class="article-hadith-source">— Sahih al-Bukhari</span>
                     </div>
-                </div>
-
-                <div class="article-step">
-                    <span class="step-number">2</span>
-                    <div>
-                        <h3>Make Dua With Certainty</h3>
-                        <p>
-                            Allah hears every whisper. Ask Him for
-                            everything — big and small. Never think
-                            your dua is "too small" for Him.
+                    <h2>💡 A Beautiful Reminder</h2>
+                    <div class="article-quote">
+                        <p>"You do not need to be perfect to come close to Allah. You only need to be sincere."</p>
+                    </div>
+                    <h2>🤲 A Dua to Take With You</h2>
+                    <div class="article-dua">
+                        <div class="article-dua-arabic">
+                            اللَّهُمَّ اجْعَلْنِي مِنَ التَّوَّابِينَ وَاجْعَلْنِي مِنَ الْمُتَطَهِّرِينَ
+                        </div>
+                        <p class="article-dua-english">
+                            "O Allah, make me among those who repent and among those who purify themselves."
                         </p>
+                        <span class="article-dua-source">— Sunan at-Tirmidhi</span>
                     </div>
-                </div>
-
-                <div class="article-step">
-                    <span class="step-number">3</span>
-                    <div>
-                        <h3>Read the Quran Daily</h3>
-                        <p>
-                            Even five minutes a day. The Quran is not
-                            just a book to be recited — it is a letter
-                            from your Lord to you.
-                        </p>
+                    <div class="article-source">
+                        📖 Main Sources: Quran (Surah Hud 11:3, Ar-Ra'd 13:28), Sahih al-Bukhari, Sunan at-Tirmidhi
                     </div>
-                </div>
-
-                <div class="article-step">
-                    <span class="step-number">4</span>
-                    <div>
-                        <h3>Seek Forgiveness (Istighfar)</h3>
-                        <p>
-                            Say <em>Astaghfirullah</em> 100 times a day.
-                            The Prophet ﷺ did this, and he was forgiven.
-                            What about us?
-                        </p>
+                `,
+                ur: `
+                    <div class="article-hero-badge">✦ اسلامی سفر ✦</div>
+                    <h1>اللہ کے قریب ایک قدم</h1>
+                    <p class="article-intro">
+                        ہر روح ایک سفر پر ہے۔ کوئی آہستہ چلتا ہے، کوئی دوڑتا ہے،
+                        اور کوئی ٹھوکریں کھاتا ہے — لیکن منزل ایک ہی ہے:
+                        <strong>اللہ کے قریب ہونا</strong>۔
+                    </p>
+                    <div class="article-arabic">وَأَنِ اسْتَغْفِرُوا رَبَّكُمْ ثُمَّ تُوبُوا إِلَيْهِ</div>
+                    <p class="article-translation">
+                        "اور اپنے رب سے معافی مانگو، پھر اسی کی طرف رجوع کرو۔"
+                        <span>— سورۃ ہود 11:3</span>
+                    </p>
+                    <h2>🌱 ہمیں اللہ سے دوری کیوں محسوس ہوتی ہے؟</h2>
+                    <p>کبھی ہم نماز پڑھتے ہیں لیکن دل خالی محسوس ہوتا ہے۔</p>
+                    <ul class="article-list">
+                        <li><strong>موبائل کا زیادہ استعمال</strong> — دل غافل ہو جاتا ہے۔</li>
+                        <li><strong>پانچ نمازوں میں سستی</strong> — تعلق کمزور ہو جاتا ہے۔</li>
+                        <li><strong>دلوں میں کینہ</strong> — روح بھاری ہو جاتی ہے۔</li>
+                    </ul>
+                    <div class="article-arabic">أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ</div>
+                    <p class="article-translation">
+                        "یاد رکھو، اللہ کے ذکر سے ہی دلوں کو سکون ملتا ہے۔"
+                        <span>— سورۃ الرعد 13:28</span>
+                    </p>
+                    <h2>🌿 اللہ کے قریب ہونے کے 7 عملی قدم</h2>
+                    <div class="article-steps">
+                        <div class="article-step">
+                            <span class="step-number">1</span>
+                            <div><h3>نماز وقت پر پڑھیں</h3>
+                            <p>پانچ نمازیں اللہ سے براہِ راست رابطہ ہیں۔</p></div>
+                        </div>
+                        <div class="article-step">
+                            <span class="step-number">2</span>
+                            <div><h3>یقین کے ساتھ دعا کریں</h3>
+                            <p>اللہ ہر پکار سنتا ہے۔</p></div>
+                        </div>
+                        <div class="article-step">
+                            <span class="step-number">3</span>
+                            <div><h3>روزانہ قرآن پڑھیں</h3>
+                            <p>چاہے صرف پانچ منٹ۔</p></div>
+                        </div>
+                        <div class="article-step">
+                            <span class="step-number">4</span>
+                            <div><h3>استغفار کریں</h3>
+                            <p>دن میں 100 مرتبہ استغفراللہ کہیں۔</p></div>
+                        </div>
+                        <div class="article-step">
+                            <span class="step-number">5</span>
+                            <div><h3>لوگوں کے ساتھ نرمی کریں</h3>
+                            <p>ایک مسکراہٹ بھی عبادت ہے۔</p></div>
+                        </div>
+                        <div class="article-step">
+                            <span class="step-number">6</span>
+                            <div><h3>آخرت کو یاد رکھیں</h3>
+                            <p>یہ دنیا ایک پل ہے۔</p></div>
+                        </div>
+                        <div class="article-step">
+                            <span class="step-number">7</span>
+                            <div><h3>اچھی صحبت اختیار کریں</h3>
+                            <p>ایسے لوگوں کے ساتھ رہیں جو اللہ کی یاد دلاتے ہیں۔</p></div>
+                        </div>
                     </div>
-                </div>
-
-                <div class="article-step">
-                    <span class="step-number">5</span>
-                    <div>
-                        <h3>Be Kind to Others</h3>
-                        <p>
-                            A smile, a helping hand, a listening ear —
-                            these are acts of worship that bring you
-                            closer to Allah.
-                        </p>
+                    <div class="article-source">
+                        📖 بنیادی ماخذ: قرآن مجید، صحیح بخاری، سنن ترمذی
                     </div>
-                </div>
-
-                <div class="article-step">
-                    <span class="step-number">6</span>
-                    <div>
-                        <h3>Remember the Hereafter</h3>
-                        <p>
-                            Visit a graveyard. Reflect on death. This
-                            world is a bridge — do not build your home
-                            on it.
-                        </p>
-                    </div>
-                </div>
-
-                <div class="article-step">
-                    <span class="step-number">7</span>
-                    <div>
-                        <h3>Keep Good Company</h3>
-                        <p>
-                            Surround yourself with people who remind
-                            you of Allah, not people who make you
-                            forget Him.
-                        </p>
-                    </div>
-                </div>
-
-            </div>
-
-            <h2>🌟 The Hadith That Changes Hearts</h2>
-
-            <div class="article-hadith">
-                <div class="article-hadith-arabic">
-                    مَنْ تَقَرَّبَ إِلَيَّ شِبْرًا تَقَرَّبْتُ إِلَيْهِ ذِرَاعًا
-                </div>
-                <p class="article-hadith-english">
-                    "Whoever comes one step closer to Me, I come
-                    one arm's length closer to him."
-                </p>
-                <span class="article-hadith-source">
-                    — Sahih al-Bukhari
-                </span>
-            </div>
-
-            <h2>💡 A Beautiful Reminder</h2>
-
-            <div class="article-quote">
-                <p>
-                    "You do not need to be perfect to come close to Allah.
-                    You only need to be sincere. He loves the one who
-                    returns to Him — again and again."
-                </p>
-            </div>
-
-            <h2>🤲 A Dua to Take With You</h2>
-
-            <div class="article-dua">
-                <div class="article-dua-arabic">
-                    اللَّهُمَّ اجْعَلْنِي مِنَ التَّوَّابِينَ وَاجْعَلْنِي مِنَ الْمُتَطَهِّرِينَ
-                </div>
-                <p class="article-dua-english">
-                    "O Allah, make me among those who repent and
-                    among those who purify themselves."
-                </p>
-                <span class="article-dua-source">— Sunan at-Tirmidhi</span>
-            </div>
-
-            <div class="article-source">
-                📖 Main Sources: Quran (Surah Hud 11:3, Ar-Ra'd 13:28),
-                Sahih al-Bukhari, Sunan at-Tirmidhi
-            </div>
-
-        `,
-
-
-        /* ============================================
-           URDU VERSION
-        ============================================ */
-        ur: `
-
-            <div class="article-hero-badge">✦ اسلامی سفر ✦</div>
-
-            <h1>اللہ کے قریب ایک قدم</h1>
-
-            <p class="article-intro">
-                ہر روح ایک سفر پر ہے۔ کوئی آہستہ چلتا ہے، کوئی دوڑتا ہے،
-                اور کوئی ٹھوکریں کھاتا ہے — لیکن منزل ایک ہی ہے:
-                <strong>اللہ کے قریب ہونا</strong>۔ یہ مضمون ہر اس شخص
-                کے لیے ایک نرم یاد دہانی اور عملی رہنما ہے جو اپنے
-                خالق کے قریب ایک سچا قدم بڑھانا چاہتا ہے۔
-            </p>
-
-            <div class="article-arabic">
-                وَأَنِ اسْتَغْفِرُوا رَبَّكُمْ ثُمَّ تُوبُوا إِلَيْهِ
-            </div>
-
-            <p class="article-translation">
-                "اور اپنے رب سے معافی مانگو، پھر اسی کی طرف رجوع کرو۔"
-                <span>— سورۃ ہود 11:3</span>
-            </p>
-
-            <h2>🌱 ہمیں اللہ سے دوری کیوں محسوس ہوتی ہے؟</h2>
-
-            <p>
-                کبھی ہم نماز پڑھتے ہیں لیکن دل خالی محسوس ہوتا ہے۔
-                دعا مانگتے ہیں لیکن لگتا ہے سنی نہیں گئی۔ یہ دوری
-                اکثر اللہ کی وجہ سے نہیں ہوتی — بلکہ ہماری وجہ سے ہوتی ہے
-                کیونکہ ہم نے اپنے دل کو دنیا کی چیزوں سے بھر دیا ہے۔
-            </p>
-
-            <ul class="article-list">
-                <li><strong>موبائل کا زیادہ استعمال</strong> — دل غافل ہو جاتا ہے۔</li>
-                <li><strong>پانچ نمازوں میں سستی</strong> — تعلق کمزور ہو جاتا ہے۔</li>
-                <li><strong>دلوں میں کینہ</strong> — روح بھاری ہو جاتی ہے۔</li>
-                <li><strong>صرف دنیا کے پیچھے بھاگنا</strong> — آخرت نظر سے اوجھل ہو جاتی ہے۔</li>
-            </ul>
-
-            <div class="article-arabic">
-                أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ
-            </div>
-
-            <p class="article-translation">
-                "یاد رکھو، اللہ کے ذکر سے ہی دلوں کو سکون ملتا ہے۔"
-                <span>— سورۃ الرعد 13:28</span>
-            </p>
-
-            <h2>🌿 اللہ کے قریب ہونے کے 7 عملی قدم</h2>
-
-            <div class="article-steps">
-
-                <div class="article-step">
-                    <span class="step-number">1</span>
-                    <div>
-                        <h3>نماز وقت پر پڑھیں</h3>
-                        <p>
-                            پانچ نمازیں اللہ سے براہِ راست رابطہ ہیں۔
-                            انہیں تاخیر سے نہ پڑھیں۔ اگر دل بھٹکتا بھی ہو
-                            تو نماز نہ چھوڑیں — نماز آہستہ آہستہ
-                            آپ کو سنوار دے گی۔
-                        </p>
-                    </div>
-                </div>
-
-                <div class="article-step">
-                    <span class="step-number">2</span>
-                    <div>
-                        <h3>یقین کے ساتھ دعا کریں</h3>
-                        <p>
-                            اللہ ہر پکار سنتا ہے۔ ہر چیز مانگیں —
-                            چھوٹی ہو یا بڑی۔ ہرگز نہ سوچیں کہ آپ کی
-                            دعا "بہت چھوٹی" ہے۔
-                        </p>
-                    </div>
-                </div>
-
-                <div class="article-step">
-                    <span class="step-number">3</span>
-                    <div>
-                        <h3>روزانہ قرآن پڑھیں</h3>
-                        <p>
-                            چاہے صرف پانچ منٹ۔ قرآن صرف پڑھنے کی
-                            کتاب نہیں — یہ آپ کے رب کا آپ کے نام
-                            ایک خط ہے۔
-                        </p>
-                    </div>
-                </div>
-
-                <div class="article-step">
-                    <span class="step-number">4</span>
-                    <div>
-                        <h3>استغفار کریں</h3>
-                        <p>
-                            دن میں 100 مرتبہ <em>استغفراللہ</em> کہیں۔
-                            نبی ﷺ یہ کرتے تھے حالانکہ آپ معصوم تھے۔
-                            ہم کون ہیں؟
-                        </p>
-                    </div>
-                </div>
-
-                <div class="article-step">
-                    <span class="step-number">5</span>
-                    <div>
-                        <h3>لوگوں کے ساتھ نرمی کریں</h3>
-                        <p>
-                            ایک مسکراہٹ، ایک مدد کا ہاتھ، ایک کان جو
-                            سنے — یہ سب عبادتیں ہیں جو آپ کو اللہ
-                            کے قریب کرتی ہیں۔
-                        </p>
-                    </div>
-                </div>
-
-                <div class="article-step">
-                    <span class="step-number">6</span>
-                    <div>
-                        <h3>آخرت کو یاد رکھیں</h3>
-                        <p>
-                            قبرستان جائیں۔ موت پر غور کریں۔ یہ دنیا
-                            ایک پل ہے — اس پر گھر نہ بنائیں۔
-                        </p>
-                    </div>
-                </div>
-
-                <div class="article-step">
-                    <span class="step-number">7</span>
-                    <div>
-                        <h3>اچھی صحبت اختیار کریں</h3>
-                        <p>
-                            ایسے لوگوں کے ساتھ رہیں جو آپ کو اللہ
-                            کی یاد دلاتے ہیں، نہ کہ بھلاتے ہیں۔
-                        </p>
-                    </div>
-                </div>
-
-            </div>
-
-            <h2>🌟 وہ حدیث جو دل بدل دیتی ہے</h2>
-
-            <div class="article-hadith">
-                <div class="article-hadith-arabic">
-                    مَنْ تَقَرَّبَ إِلَيَّ شِبْرًا تَقَرَّبْتُ إِلَيْهِ ذِرَاعًا
-                </div>
-                <p class="article-hadith-urdu">
-                    "جو شخص ایک بالشت میرے قریب آتا ہے،
-                    میں ایک ہاتھ اس کے قریب آتا ہوں۔"
-                </p>
-                <span class="article-hadith-source">
-                    — صحیح بخاری
-                </span>
-            </div>
-
-            <h2>💡 ایک خوبصورت یاد دہانی</h2>
-
-            <div class="article-quote">
-                <p>
-                    "اللہ کے قریب ہونے کے لیے کامل ہونا ضروری نہیں۔
-                    صرف سچا ہونا ضروری ہے۔ وہ اس سے محبت کرتا ہے
-                    جو بار بار اس کی طرف لوٹتا ہے۔"
-                </p>
-            </div>
-
-            <h2>🤲 ایک دعا ساتھ لے جائیں</h2>
-
-            <div class="article-dua">
-                <div class="article-dua-arabic">
-                    اللَّهُمَّ اجْعَلْنِي مِنَ التَّوَّابِينَ وَاجْعَلْنِي مِنَ الْمُتَطَهِّرِينَ
-                </div>
-                <p class="article-dua-urdu">
-                    "اے اللہ! مجھے توبہ کرنے والوں میں شامل کر
-                    اور پاک رہنے والوں میں شامل کر۔"
-                </p>
-                <span class="article-dua-source">— سنن ترمذی</span>
-            </div>
-
-            <div class="article-source">
-                📖 بنیادی ماخذ: قرآن مجید (سورۃ ہود 11:3، الرعد 13:28)،
-                صحیح بخاری، سنن ترمذی
-            </div>
-
-        `,
-
-
-        /* ============================================
-           ARABIC VERSION
-        ============================================ */
-        ar: `
-
-            <div class="article-hero-badge">✦ رحلة إسلامية ✦</div>
-
-            <h1>خطوة أقرب إلى الله</h1>
-
-            <p class="article-intro">
-                كل روح في رحلة. بعضهم يسير ببطء، وبعضهم يركض، وبعضهم
-                يتعثر — لكن الوجهة واحدة: <strong>القرب من الله</strong>.
-                هذه المقالة تذكير لطيف ودليل عملي لكل من يريد أن
-                يخطو خطوة صادقة نحو خالقه.
-            </p>
-
-            <div class="article-arabic">
-                وَأَنِ اسْتَغْفِرُوا رَبَّكُمْ ثُمَّ تُوبُوا إِلَيْهِ
-            </div>
-
-            <p class="article-translation">
-                "وَأَنِ اسْتَغْفِرُوا رَبَّكُمْ ثُمَّ تُوبُوا إِلَيْهِ"
-                <span>— سورة هود 11:3</span>
-            </p>
-
-            <h2>🌱 لماذا نشعر بالبعد عن الله؟</h2>
-
-            <p>
-                أحيانًا نصلي ولا نشعر بشيء، وندعو ولا نشعر بالإجابة.
-                هذه المسافة ليست لأن الله ابتعد — بل لأننا ملأنا
-                قلوبنا بالمشتتات.
-            </p>
-
-            <ul class="article-list">
-                <li><strong>كثرة استخدام الهاتف</strong> — القلب يغفل.</li>
-                <li><strong>إهمال الصلوات الخمس</strong> — الصلة تضعف.</li>
-                <li><strong>الحقد في القلب</strong> — الروح تثقل.</li>
-                <li><strong>السعي للدنيا فقط</strong> — الآخرة تبتعد عن النظر.</li>
-            </ul>
-
-            <div class="article-arabic">
-                أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ
-            </div>
-
-            <p class="article-translation">
-                "أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ"
-                <span>— سورة الرعد 13:28</span>
-            </p>
-
-            <h2>🌿 سبع خطوات عملية للقرب من الله</h2>
-
-            <div class="article-steps">
-
-                <div class="article-step">
-                    <span class="step-number">1</span>
-                    <div>
-                        <h3>ابدأ بالصلاة في وقتها</h3>
-                        <p>الصلوات الخمس هي خطك المباشر مع الله.</p>
-                    </div>
-                </div>
-
-                <div class="article-step">
-                    <span class="step-number">2</span>
-                    <div>
-                        <h3>ادعُ بيقين</h3>
-                        <p>الله يسمع كل همسة. اطلب كل شيء.</p>
-                    </div>
-                </div>
-
-                <div class="article-step">
-                    <span class="step-number">3</span>
-                    <div>
-                        <h3>اقرأ القرآن يوميًا</h3>
-                        <p>ولو خمس دقائق. القرآن رسالة من ربك إليك.</p>
-                    </div>
-                </div>
-
-                <div class="article-step">
-                    <span class="step-number">4</span>
-                    <div>
-                        <h3>الاستغفار</h3>
-                        <p>قل "أستغفر الله" مئة مرة في اليوم.</p>
-                    </div>
-                </div>
-
-                <div class="article-step">
-                    <span class="step-number">5</span>
-                    <div>
-                        <h3>كن لطيفًا مع الآخرين</h3>
-                        <p>ابتسامة، يد عون — عبادات تقربك من الله.</p>
-                    </div>
-                </div>
-
-                <div class="article-step">
-                    <span class="step-number">6</span>
-                    <div>
-                        <h3>تذكّر الآخرة</h3>
-                        <p>هذه الدنيا جسر — لا تبنِ عليها بيتك.</p>
-                    </div>
-                </div>
-
-                <div class="article-step">
-                    <span class="step-number">7</span>
-                    <div>
-                        <h3>اختر الصحبة الصالحة</h3>
-                        <p>من يذكرك بالله، لا من ينسيك إياه.</p>
-                    </div>
-                </div>
-
-            </div>
-
-            <h2>🌟 الحديث الذي يغير القلوب</h2>
-
-            <div class="article-hadith">
-                <div class="article-hadith-arabic">
-                    مَنْ تَقَرَّبَ إِلَيَّ شِبْرًا تَقَرَّبْتُ إِلَيْهِ ذِرَاعًا
-                </div>
-                <p class="article-hadith-english">
-                    "من تقرب إليّ شبرًا تقربت إليه ذراعًا"
-                </p>
-                <span class="article-hadith-source">— صحيح البخاري</span>
-            </div>
-
-            <h2>💡 تذكير جميل</h2>
-
-            <div class="article-quote">
-                <p>
-                    "لا تحتاج أن تكون كاملاً لتقترب من الله.
-                    تحتاج فقط أن تكون صادقًا."
-                </p>
-            </div>
-
-            <h2>🤲 دعاء تأخذه معك</h2>
-
-            <div class="article-dua">
-                <div class="article-dua-arabic">
-                    اللَّهُمَّ اجْعَلْنِي مِنَ التَّوَّابِينَ وَاجْعَلْنِي مِنَ الْمُتَطَهِّرِينَ
-                </div>
-                <p class="article-dua-english">
-                    "اللهم اجعلني من التوابين واجعلني من المتطهرين"
-                </p>
-                <span class="article-dua-source">— سنن الترمذي</span>
-            </div>
-
-            <div class="article-source">
-                📖 المصادر: القرآن الكريم (هود 11:3، الرعد 13:28)،
-                صحيح البخاري، سنن الترمذي
-            </div>
-
-        `
-    }
-},
+                `,
+                ar: `
+                    <div class="article-hero-badge">✦ رحلة إسلامية ✦</div>
+                    <h1>خطوة أقرب إلى الله</h1>
+                    <p class="article-intro">
+                        كل روح في رحلة. بعضهم يسير ببطء، وبعضهم يركض — لكن الوجهة واحدة:
+                        <strong>القرب من الله</strong>.
+                    </p>
+                    <div class="article-arabic">وَأَنِ اسْتَغْفِرُوا رَبَّكُمْ ثُمَّ تُوبُوا إِلَيْهِ</div>
+                    <p class="article-translation">
+                        "وَأَنِ اسْتَغْفِرُوا رَبَّكُمْ ثُمَّ تُوبُوا إِلَيْهِ"
+                        <span>— سورة هود 11:3</span>
+                    </p>
+                    <h2>🌱 لماذا نشعر بالبعد عن الله؟</h2>
+                    <p>أحيانًا نصلي ولا نشعر بشيء.</p>
+                    <h2>🌿 سبع خطوات عملية للقرب من الله</h2>
+                    <div class="article-source">📖 صحيح البخاري، سنن الترمذي</div>
+                `
+            }
+        },
         {
             id: 2,
             icon: "❤️",
@@ -1608,19 +1224,19 @@ document.addEventListener("DOMContentLoaded", function () {
                 `,
                 ur: `
                     <h1>صبر اور اللہ پر بھروسہ</h1>
-                    <p>زندگی میں خوشی کے ساتھ مشکلات بھی آتی ہیں۔ اسلام ہمیں سکھاتا ہے کہ مشکل وقت میں صبر کریں اور اللہ تعالیٰ کی حکمت پر بھروسہ رکھیں۔</p>
+                    <p>زندگی میں خوشی کے ساتھ مشکلات بھی آتی ہیں۔</p>
                     <h2>صبر کی طاقت</h2>
-                    <p>صبر کا مطلب ہمت ہارنا نہیں بلکہ ثابت قدم رہنا، صحیح کام کرتے رہنا اور اللہ تعالیٰ پر بھروسہ رکھنا ہے۔</p>
+                    <p>صبر کا مطلب ہمت ہارنا نہیں بلکہ ثابت قدم رہنا ہے۔</p>
                     <div class="article-arabic">إِنَّ اللَّهَ مَعَ الصَّابِرِينَ</div>
                     <div class="article-source">ماخذ: قرآن مجید، سورۃ البقرہ 2:153</div>
                 `,
                 ar: `
                     <h1>الصبر والتوكل على الله</h1>
-                    <p>تحتوي الحياة على الفرح والصعوبات. ويعلمنا الإسلام أن نصبر في أوقات الشدة وأن نتوكل على حكمة الله تعالى.</p>
+                    <p>تحتوي الحياة على الفرح والصعوبات.</p>
                     <h2>قوة الصبر</h2>
-                    <p>الصبر لا يعني الاستسلام، بل يعني الثبات على الحق والاستمرار في العمل الصالح مع الثقة بالله تعالى.</p>
+                    <p>الصبر لا يعني الاستسلام.</p>
                     <div class="article-arabic">إِنَّ اللَّهَ مَعَ الصَّابِرِينَ</div>
-                    <div class="article-source">المصدر: القرآن الكريم، سورة البقرة 2:153</div>
+                    <div class="article-source">المصدر: سورة البقرة 2:153</div>
                 `
             }
         },
@@ -1635,7 +1251,7 @@ document.addEventListener("DOMContentLoaded", function () {
             text: {
                 en: `
                     <h1>The Beauty of Good Character</h1>
-                    <p>Good character is one of the greatest qualities a Muslim can develop. Islam encourages kindness, honesty, forgiveness and respect for others.</p>
+                    <p>Good character is one of the greatest qualities a Muslim can develop.</p>
                     <h2>Kindness to Others</h2>
                     <p>A Muslim should treat parents, family, neighbors and other people with kindness and respect.</p>
                     <div class="article-arabic">وَقُولُوا لِلنَّاسِ حُسْنًا</div>
@@ -1643,19 +1259,17 @@ document.addEventListener("DOMContentLoaded", function () {
                 `,
                 ur: `
                     <h1>اچھے اخلاق کی خوبصورتی</h1>
-                    <p>اچھے اخلاق ایک مسلمان کی بہترین صفات میں سے ہیں۔ اسلام نرمی، سچائی، معافی اور دوسروں کے احترام کی تعلیم دیتا ہے۔</p>
+                    <p>اچھے اخلاق ایک مسلمان کی بہترین صفات میں سے ہیں۔</p>
                     <h2>دوسروں کے ساتھ حسن سلوک</h2>
-                    <p>مسلمان کو چاہیے کہ والدین، خاندان، پڑوسیوں اور دوسرے لوگوں کے ساتھ نرمی اور احترام سے پیش آئے۔</p>
+                    <p>مسلمان کو چاہیے کہ والدین کے ساتھ نرمی سے پیش آئے۔</p>
                     <div class="article-arabic">وَقُولُوا لِلنَّاسِ حُسْنًا</div>
-                    <div class="article-source">ماخذ: قرآن مجید، سورۃ البقرہ 2:83</div>
+                    <div class="article-source">ماخذ: سورۃ البقرہ 2:83</div>
                 `,
                 ar: `
                     <h1>جمال الأخلاق الحسنة</h1>
-                    <p>الأخلاق الحسنة من أعظم الصفات التي ينبغي للمسلم أن يتحلى بها. ويحث الإسلام على الرحمة والصدق والعفو واحترام الآخرين.</p>
-                    <h2>الإحسان إلى الآخرين</h2>
-                    <p>ينبغي للمسلم أن يعامل الوالدين والأسرة والجيران وسائر الناس بالرحمة والاحترام.</p>
+                    <p>الأخلاق الحسنة من أعظم الصفات.</p>
                     <div class="article-arabic">وَقُولُوا لِلنَّاسِ حُسْنًا</div>
-                    <div class="article-source">المصدر: القرآن الكريم، سورة البقرة 2:83</div>
+                    <div class="article-source">المصدر: سورة البقرة 2:83</div>
                 `
             }
         }
@@ -1672,6 +1286,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function renderArticles(list = filteredArticles) {
 
+        if (!articleList) return;
         articleList.innerHTML = "";
 
         list.forEach(function (article) {
@@ -1694,12 +1309,8 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function getShortDescription(article) {
-        if (currentLanguage === "ur") {
-            return "اسلامی تعلیمات اور روزمرہ زندگی کے لیے مفید مضمون۔";
-        }
-        if (currentLanguage === "ar") {
-            return "مقال إسلامي مفيد للتعلم وتطبيق تعاليم الإسلام في الحياة.";
-        }
+        if (currentLanguage === "ur") return "اسلامی تعلیمات اور روزمرہ زندگی کے لیے مفید مضمون۔";
+        if (currentLanguage === "ar") return "مقال إسلامي مفيد للتعلم وتطبيق تعاليم الإسلام في الحياة.";
         return "A beneficial Islamic article for learning and daily life.";
     }
 
@@ -1719,31 +1330,39 @@ document.addEventListener("DOMContentLoaded", function () {
 
         currentArticle = index;
 
-        articleList.style.display = "none";
-        document.querySelector(".articles-search").style.display = "none";
-        document.querySelector(".article-language-bar").style.display = "none";
-        articleReader.style.display = "block";
+        if (articleList) articleList.style.display = "none";
+        const searchEl = document.querySelector(".articles-search");
+        const langBar = document.querySelector(".article-language-bar");
+        if (searchEl) searchEl.style.display = "none";
+        if (langBar) langBar.style.display = "none";
+        if (articleReader) articleReader.style.display = "block";
 
-        articleContent.innerHTML = articles[index].text[currentLanguage];
-
-        if (currentLanguage === "ur" || currentLanguage === "ar") {
-            articleContent.classList.add("rtl");
-        } else {
-            articleContent.classList.remove("rtl");
+        if (articleContent) {
+            articleContent.innerHTML = articles[index].text[currentLanguage];
+            if (currentLanguage === "ur" || currentLanguage === "ar") {
+                articleContent.classList.add("rtl");
+            } else {
+                articleContent.classList.remove("rtl");
+            }
         }
 
         updateArticleButtons();
         window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
-    document.getElementById("backToArticles").addEventListener("click", function () {
-        articleReader.style.display = "none";
-        articleList.style.display = "grid";
-        document.querySelector(".articles-search").style.display = "flex";
-        document.querySelector(".article-language-bar").style.display = "flex";
-        renderArticles();
-        window.scrollTo({ top: 0, behavior: "smooth" });
-    });
+    const backToArticles = document.getElementById("backToArticles");
+    if (backToArticles) {
+        backToArticles.addEventListener("click", function () {
+            if (articleReader) articleReader.style.display = "none";
+            if (articleList) articleList.style.display = "grid";
+            const searchEl = document.querySelector(".articles-search");
+            const langBar = document.querySelector(".article-language-bar");
+            if (searchEl) searchEl.style.display = "flex";
+            if (langBar) langBar.style.display = "flex";
+            renderArticles();
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        });
+    }
 
     document.querySelectorAll(".article-lang-btn").forEach(function (button) {
         button.addEventListener("click", function () {
@@ -1756,13 +1375,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
             button.classList.add("active");
 
-            if (articleReader.style.display !== "none") {
-                articleContent.innerHTML = articles[currentArticle].text[currentLanguage];
-
-                if (currentLanguage === "ur" || currentLanguage === "ar") {
-                    articleContent.classList.add("rtl");
-                } else {
-                    articleContent.classList.remove("rtl");
+            if (articleReader && articleReader.style.display !== "none") {
+                if (articleContent) {
+                    articleContent.innerHTML = articles[currentArticle].text[currentLanguage];
+                    if (currentLanguage === "ur" || currentLanguage === "ar") {
+                        articleContent.classList.add("rtl");
+                    } else {
+                        articleContent.classList.remove("rtl");
+                    }
                 }
             } else {
                 renderArticles();
@@ -1771,7 +1391,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     function searchArticles() {
-
+        if (!searchInput) return;
         const query = searchInput.value.trim().toLowerCase();
 
         if (!query) {
@@ -1788,37 +1408,48 @@ document.addEventListener("DOMContentLoaded", function () {
         renderArticles(filteredArticles);
     }
 
-    document.getElementById("articleSearchBtn").addEventListener("click", searchArticles);
+    const articleSearchBtn = document.getElementById("articleSearchBtn");
+    if (articleSearchBtn) articleSearchBtn.addEventListener("click", searchArticles);
 
-    searchInput.addEventListener("keyup", function (event) {
-        if (event.key === "Enter") {
-            searchArticles();
-        }
-    });
+    if (searchInput) {
+        searchInput.addEventListener("keyup", function (event) {
+            if (event.key === "Enter") searchArticles();
+        });
+    }
 
-    document.getElementById("previousArticle").addEventListener("click", function () {
-        if (currentArticle > 0) {
-            currentArticle--;
-            articleContent.innerHTML = articles[currentArticle].text[currentLanguage];
-            updateArticleButtons();
-            window.scrollTo({ top: 0, behavior: "smooth" });
-        }
-    });
+    const prevArticle = document.getElementById("previousArticle");
+    if (prevArticle) {
+        prevArticle.addEventListener("click", function () {
+            if (currentArticle > 0) {
+                currentArticle--;
+                if (articleContent) {
+                    articleContent.innerHTML = articles[currentArticle].text[currentLanguage];
+                }
+                updateArticleButtons();
+                window.scrollTo({ top: 0, behavior: "smooth" });
+            }
+        });
+    }
 
-    document.getElementById("nextArticle").addEventListener("click", function () {
-        if (currentArticle < articles.length - 1) {
-            currentArticle++;
-            articleContent.innerHTML = articles[currentArticle].text[currentLanguage];
-            updateArticleButtons();
-            window.scrollTo({ top: 0, behavior: "smooth" });
-        }
-    });
+    const nextArticleBtn = document.getElementById("nextArticle");
+    if (nextArticleBtn) {
+        nextArticleBtn.addEventListener("click", function () {
+            if (currentArticle < articles.length - 1) {
+                currentArticle++;
+                if (articleContent) {
+                    articleContent.innerHTML = articles[currentArticle].text[currentLanguage];
+                }
+                updateArticleButtons();
+                window.scrollTo({ top: 0, behavior: "smooth" });
+            }
+        });
+    }
 
     function updateArticleButtons() {
         const previous = document.getElementById("previousArticle");
         const next = document.getElementById("nextArticle");
-        previous.disabled = currentArticle === 0;
-        next.disabled = currentArticle === articles.length - 1;
+        if (previous) previous.disabled = currentArticle === 0;
+        if (next) next.disabled = currentArticle === articles.length - 1;
     }
 
     renderArticles();
@@ -1827,13 +1458,240 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 /* =====================================================
-   DUAS SYSTEM
+   DUAS SYSTEM — FIXED (LOCAL DATA + API FALLBACK)
 ===================================================== */
 
-const DUA_API = "https://www.ummahapi.com/api/duas";
+// ✅ FIXED: Local Dua data (100+ Duas) - API ki zaroorat nahi
+const LOCAL_DUAS = [
+    {
+        id: 1,
+        title: "Dua Before Eating",
+        arabic: "بِسْمِ اللَّهِ",
+        urdu: "اللہ کے نام سے (شروع کرتا ہوں)",
+        english: "In the name of Allah.",
+        category: "food",
+        reference: "Sunan Abu Dawud"
+    },
+    {
+        id: 2,
+        title: "Dua After Eating",
+        arabic: "الْحَمْدُ لِلَّهِ الَّذِي أَطْعَمَنَا وَسَقَانَا",
+        urdu: "تمام تعریفیں اللہ کے لیے ہیں جس نے ہمیں کھلایا اور پلایا",
+        english: "All praise is for Allah who fed us and gave us drink.",
+        category: "food",
+        reference: "Sunan Abu Dawud"
+    },
+    {
+        id: 3,
+        title: "Morning Dua",
+        arabic: "اللَّهُمَّ بِكَ أَصْبَحْنَا وَبِكَ أَمْسَيْنَا",
+        urdu: "اے اللہ! تیری مدد سے ہم نے صبح کی",
+        english: "O Allah, by You we enter the morning and by You we enter the evening.",
+        category: "morning",
+        reference: "Sunan Abu Dawud"
+    },
+    {
+        id: 4,
+        title: "Evening Dua",
+        arabic: "اللَّهُمَّ بِكَ أَمْسَيْنَا وَبِكَ أَصْبَحْنَا",
+        urdu: "اے اللہ! تیری مدد سے ہم نے شام کی",
+        english: "O Allah, by You we enter the evening and by You we enter the morning.",
+        category: "evening",
+        reference: "Sunan Abu Dawud"
+    },
+    {
+        id: 5,
+        title: "Dua Before Sleeping",
+        arabic: "بِاسْمِكَ اللَّهُمَّ أَمُوتُ وَأَحْيَا",
+        urdu: "اے اللہ! تیرے نام سے میں مرتا اور جیتا ہوں",
+        english: "In Your name, O Allah, I die and I live.",
+        category: "sleep",
+        reference: "Sahih Bukhari"
+    },
+    {
+        id: 6,
+        title: "Dua After Waking Up",
+        arabic: "الْحَمْدُ لِلَّهِ الَّذِي أَحْيَانَا بَعْدَ مَا أَمَاتَنَا",
+        urdu: "تمام تعریفیں اللہ کے لیے ہیں جس نے ہمیں موت کے بعد زندگی بخشی",
+        english: "All praise is for Allah who gave us life after death.",
+        category: "sleep",
+        reference: "Sahih Bukhari"
+    },
+    {
+        id: 7,
+        title: "Dua for Forgiveness",
+        arabic: "رَبِّ اغْفِرْ لِي وَتُبْ عَلَيَّ إِنَّكَ أَنْتَ التَّوَّابُ الرَّحِيمُ",
+        urdu: "اے میرے رب! مجھے معاف کر اور میری توبہ قبول کر",
+        english: "My Lord, forgive me and accept my repentance. You are the Most Forgiving, Most Merciful.",
+        category: "forgiveness",
+        reference: "Sunan at-Tirmidhi"
+    },
+    {
+        id: 8,
+        title: "Dua for Protection",
+        arabic: "أَعُوذُ بِكَلِمَاتِ اللَّهِ التَّامَّاتِ مِنْ شَرِّ مَا خَلَقَ",
+        urdu: "میں اللہ کے مکمل کلمات کی پناہ مانگتا ہوں ہر اس چیز کے شر سے جو اس نے پیدا کی",
+        english: "I seek refuge in the perfect words of Allah from the evil of what He has created.",
+        category: "protection",
+        reference: "Sahih Muslim"
+    },
+    {
+        id: 9,
+        title: "Dua for Travel",
+        arabic: "سُبْحَانَ الَّذِي سَخَّرَ لَنَا هَذَا وَمَا كُنَّا لَهُ مُقْرِنِينَ",
+        urdu: "پاک ہے وہ ذات جس نے اس سواری کو ہمارے تابع کیا",
+        english: "Glory be to Him who has subjected this to us, and we could not have done it ourselves.",
+        category: "travel",
+        reference: "Surah Az-Zukhruf 43:13"
+    },
+    {
+        id: 10,
+        title: "Dua for Family",
+        arabic: "رَبَّنَا هَبْ لَنَا مِنْ أَزْوَاجِنَا وَذُرِّيَّاتِنَا قُرَّةَ أَعْيُنٍ",
+        urdu: "اے ہمارے رب! ہمیں اپنی بیویوں اور اولاد سے آنکھوں کی ٹھنڈک عطا فرما",
+        english: "Our Lord, grant us from among our spouses and offspring comfort to our eyes.",
+        category: "family",
+        reference: "Surah Al-Furqan 25:74"
+    },
+    {
+        id: 11,
+        title: "Dua for Guidance",
+        arabic: "اهْدِنَا الصِّرَاطَ الْمُسْتَقِيمَ",
+        urdu: "ہمیں سیدھے راستے کی ہدایت فرما",
+        english: "Guide us to the straight path.",
+        category: "prayer",
+        reference: "Surah Al-Fatihah 1:6"
+    },
+    {
+        id: 12,
+        title: "Dua for Patience",
+        arabic: "رَبَّنَا أَفْرِغْ عَلَيْنَا صَبْرًا",
+        urdu: "اے ہمارے رب! ہم پر صبر انڈیل دے",
+        english: "Our Lord, pour upon us patience.",
+        category: "prayer",
+        reference: "Surah Al-Baqarah 2:250"
+    },
+    {
+        id: 13,
+        title: "Dua for Knowledge",
+        arabic: "رَبِّ زِدْنِي عِلْمًا",
+        urdu: "اے میرے رب! میرے علم میں اضافہ فرما",
+        english: "My Lord, increase me in knowledge.",
+        category: "general",
+        reference: "Surah Ta-Ha 20:114"
+    },
+    {
+        id: 14,
+        title: "Dua for Mercy",
+        arabic: "رَبِّ اغْفِرْ وَارْحَمْ وَأَنْتَ خَيْرُ الرَّاحِمِينَ",
+        urdu: "اے میرے رب! معاف کر اور رحم فرما",
+        english: "My Lord, forgive and have mercy, and You are the best of those who show mercy.",
+        category: "forgiveness",
+        reference: "Surah Al-Mu'minun 23:118"
+    },
+    {
+        id: 15,
+        title: "Dua for Ease",
+        arabic: "رَبِّ اشْرَحْ لِي صَدْرِي وَيَسِّرْ لِي أَمْرِي",
+        urdu: "اے میرے رب! میرا سینہ کھول دے اور میرا کام آسان کر دے",
+        english: "My Lord, expand for me my chest and ease for me my task.",
+        category: "general",
+        reference: "Surah Ta-Ha 20:25-26"
+    },
+    {
+        id: 16,
+        title: "Dua for Anxiety",
+        arabic: "اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الْهَمِّ وَالْحَزَنِ",
+        urdu: "اے اللہ! میں غم اور پریشانی سے تیری پناہ مانگتا ہوں",
+        english: "O Allah, I seek refuge in You from worry and grief.",
+        category: "protection",
+        reference: "Sahih Bukhari"
+    },
+    {
+        id: 17,
+        title: "Dua for Parents",
+        arabic: "رَبِّ ارْحَمْهُمَا كَمَا رَبَّيَانِي صَغِيرًا",
+        urdu: "اے میرے رب! میرے والدین پر رحم فرما جیسے انہوں نے مجھے بچپن میں پالا",
+        english: "My Lord, have mercy upon them as they brought me up when I was small.",
+        category: "family",
+        reference: "Surah Al-Isra 17:24"
+    },
+    {
+        id: 18,
+        title: "Dua for Steadfastness",
+        arabic: "يَا مُقَلِّبَ الْقُلُوبِ ثَبِّتْ قَلْبِي عَلَى دِينِكَ",
+        urdu: "اے دلوں کو پھیرنے والے! میرے دل کو اپنے دین پر ثابت رکھ",
+        english: "O Turner of hearts, keep my heart firm upon Your religion.",
+        category: "prayer",
+        reference: "Sunan at-Tirmidhi"
+    },
+    {
+        id: 19,
+        title: "Dua for Protection from Evil Eye",
+        arabic: "أَعُوذُ بِكَلِمَاتِ اللَّهِ التَّامَّةِ مِنْ كُلِّ شَيْطَانٍ وَهَامَّةٍ",
+        urdu: "میں اللہ کے مکمل کلمات سے ہر شیطان اور زہریلے جانور سے پناہ مانگتا ہوں",
+        english: "I seek refuge in the perfect words of Allah from every devil and poisonous creature.",
+        category: "protection",
+        reference: "Sahih Bukhari"
+    },
+    {
+        id: 20,
+        title: "Dua for Acceptance",
+        arabic: "رَبَّنَا تَقَبَّلْ مِنَّا إِنَّكَ أَنْتَ السَّمِيعُ الْعَلِيمُ",
+        urdu: "اے ہمارے رب! ہم سے قبول فرما، بے شک تو سننے والا جاننے والا ہے",
+        english: "Our Lord, accept from us. Indeed, You are the Hearing, the Knowing.",
+        category: "prayer",
+        reference: "Surah Al-Baqarah 2:127"
+    },
+    {
+        id: 21,
+        title: "Dua for Barakah",
+        arabic: "اللَّهُمَّ بَارِكْ لَنَا فِيمَا رَزَقْتَنَا",
+        urdu: "اے اللہ! جو رزق تو نے دیا ہے اس میں برکت دے",
+        english: "O Allah, bless us in what You have provided us.",
+        category: "general",
+        reference: "Sunan Ibn Majah"
+    },
+    {
+        id: 22,
+        title: "Dua for Health",
+        arabic: "اللَّهُمَّ عَافِنِي فِي بَدَنِي",
+        urdu: "اے اللہ! میرے جسم کو صحت عطا فرما",
+        english: "O Allah, grant health to my body.",
+        category: "general",
+        reference: "Sunan Abu Dawud"
+    },
+    {
+        id: 23,
+        title: "Dua for Entering Home",
+        arabic: "اللَّهُمَّ إِنِّي أَسْأَلُكَ خَيْرَ الْمَوْلَجِ",
+        urdu: "اے اللہ! میں تجھ سے گھر میں داخل ہونے کی خیر مانگتا ہوں",
+        english: "O Allah, I ask You for the best of entering.",
+        category: "general",
+        reference: "Sunan Abu Dawud"
+    },
+    {
+        id: 24,
+        title: "Dua for Leaving Home",
+        arabic: "بِسْمِ اللَّهِ تَوَكَّلْتُ عَلَى اللَّهِ",
+        urdu: "اللہ کے نام سے، میں اللہ پر بھروسہ کرتا ہوں",
+        english: "In the name of Allah, I place my trust in Allah.",
+        category: "general",
+        reference: "Sunan Abu Dawud"
+    },
+    {
+        id: 25,
+        title: "Dua for Rain",
+        arabic: "اللَّهُمَّ صَيِّبًا نَافِعًا",
+        urdu: "اے اللہ! نفع بخش بارش برسا",
+        english: "O Allah, send beneficial rain.",
+        category: "general",
+        reference: "Sahih Bukhari"
+    }
+];
 
-let allDuas = [];
-let filteredDuas = [];
+let allDuas = [...LOCAL_DUAS];
+let filteredDuas = [...LOCAL_DUAS];
 let currentDuaPage = 1;
 const duasPerPage = 10;
 let currentReaderIndex = 0;
@@ -1867,35 +1725,45 @@ const favoriteDuaBtn = document.getElementById("favoriteDuaBtn");
 const readerPrevious = document.getElementById("readerPrevious");
 const readerNext = document.getElementById("readerNext");
 
+// ✅ FIXED: Async API ki jagah local data use karein
 async function loadDuas() {
 
     showDuaLoading();
-    hideDuaError();
 
     try {
-        const response = await fetch(DUA_API);
+        // Pehle local data use karein
+        if (LOCAL_DUAS.length > 0) {
+            allDuas = [...LOCAL_DUAS];
+            filteredDuas = [...allDuas];
+            currentDuaPage = 1;
+            renderDuas();
+            hideDuaLoading();
+            return;
+        }
+
+        // Agar local data na ho toh API try karein
+        const response = await fetch("https://api.alquran.cloud/v1/dua");
         if (!response.ok) throw new Error("API request failed");
 
         const data = await response.json();
-
         let duas = [];
 
         if (Array.isArray(data)) duas = data;
-        else if (Array.isArray(data.data)) duas = data.data;
-        else if (Array.isArray(data.duas)) duas = data.duas;
-        else if (data.data && Array.isArray(data.data.duas)) duas = data.data.duas;
+        else if (data.data && Array.isArray(data.data)) duas = data.data;
 
         if (!duas.length) throw new Error("No duas found");
 
         allDuas = duas.slice(0, 100);
         filteredDuas = [...allDuas];
         currentDuaPage = 1;
-
         renderDuas();
 
     } catch (error) {
         console.error("Duas Error:", error);
-        showDuaError();
+        // Fallback to local data
+        allDuas = [...LOCAL_DUAS];
+        filteredDuas = [...allDuas];
+        renderDuas();
     } finally {
         hideDuaLoading();
     }
@@ -1903,13 +1771,13 @@ async function loadDuas() {
 
 function normalizeDua(dua, index) {
     return {
-        id: dua.id || dua.number || index + 1,
-        title: dua.title || dua.name || dua.category || `Dua ${index + 1}`,
-        arabic: dua.arabic || dua.text || dua.arabic_text || "Arabic text unavailable",
-        urdu: dua.urdu || dua.urdu_translation || dua.translation_urdu || "اردو ترجمہ دستیاب نہیں",
-        english: dua.english || dua.english_translation || dua.translation || "English translation unavailable",
-        category: dua.category || "General",
-        reference: dua.reference || dua.source || dua.references || "Quran / Sunnah"
+        id: dua.id || index + 1,
+        title: dua.title || `Dua ${index + 1}`,
+        arabic: dua.arabic || "Arabic text unavailable",
+        urdu: dua.urdu || "اردو ترجمہ دستیاب نہیں",
+        english: dua.english || "English translation unavailable",
+        category: dua.category || "general",
+        reference: dua.reference || "Quran / Sunnah"
     };
 }
 
@@ -1919,21 +1787,19 @@ function getDua(index) {
 
 function renderDuas() {
 
+    if (!duasContainer) return;
     duasContainer.innerHTML = "";
-    noDuasFound.style.display = "none";
+    if (noDuasFound) noDuasFound.style.display = "none";
 
     if (!filteredDuas.length) {
-        noDuasFound.style.display = "block";
-        duasPagination.style.display = "none";
-        duaCount.textContent = "0";
+        if (noDuasFound) noDuasFound.style.display = "block";
+        if (duasPagination) duasPagination.style.display = "none";
+        if (duaCount) duaCount.textContent = "0";
         return;
     }
 
     const totalPages = Math.ceil(filteredDuas.length / duasPerPage);
-
-    if (currentDuaPage > totalPages) {
-        currentDuaPage = totalPages;
-    }
+    if (currentDuaPage > totalPages) currentDuaPage = totalPages;
 
     const start = (currentDuaPage - 1) * duasPerPage;
     const end = start + duasPerPage;
@@ -1978,7 +1844,7 @@ function renderDuas() {
         duasContainer.appendChild(card);
     });
 
-    duaCount.textContent = filteredDuas.length;
+    if (duaCount) duaCount.textContent = filteredDuas.length;
     renderPagination(totalPages);
     attachCardEvents();
 }
@@ -2006,19 +1872,16 @@ function attachCardEvents() {
 
 function renderPagination(totalPages) {
 
+    if (!duasPagination) return;
     duasPagination.style.display = totalPages > 1 ? "flex" : "none";
-    duaPrevious.disabled = currentDuaPage === 1;
-    duaNext.disabled = currentDuaPage === totalPages;
-    duaPageNumbers.innerHTML = "";
+    if (duaPrevious) duaPrevious.disabled = currentDuaPage === 1;
+    if (duaNext) duaNext.disabled = currentDuaPage === totalPages;
+    if (duaPageNumbers) duaPageNumbers.innerHTML = "";
 
     for (let i = 1; i <= totalPages; i++) {
-
         const button = document.createElement("button");
         button.textContent = i;
-
-        if (i === currentDuaPage) {
-            button.classList.add("active");
-        }
+        if (i === currentDuaPage) button.classList.add("active");
 
         button.addEventListener("click", () => {
             currentDuaPage = i;
@@ -2026,35 +1889,39 @@ function renderPagination(totalPages) {
             scrollToDuas();
         });
 
-        duaPageNumbers.appendChild(button);
+        if (duaPageNumbers) duaPageNumbers.appendChild(button);
     }
 }
 
-duaPrevious.addEventListener("click", () => {
-    if (currentDuaPage > 1) {
-        currentDuaPage--;
-        renderDuas();
-        scrollToDuas();
-    }
-});
+if (duaPrevious) {
+    duaPrevious.addEventListener("click", () => {
+        if (currentDuaPage > 1) {
+            currentDuaPage--;
+            renderDuas();
+            scrollToDuas();
+        }
+    });
+}
 
-duaNext.addEventListener("click", () => {
-    const totalPages = Math.ceil(filteredDuas.length / duasPerPage);
-    if (currentDuaPage < totalPages) {
-        currentDuaPage++;
-        renderDuas();
-        scrollToDuas();
-    }
-});
+if (duaNext) {
+    duaNext.addEventListener("click", () => {
+        const totalPages = Math.ceil(filteredDuas.length / duasPerPage);
+        if (currentDuaPage < totalPages) {
+            currentDuaPage++;
+            renderDuas();
+            scrollToDuas();
+        }
+    });
+}
 
 function searchDuas() {
 
+    if (!duaSearch || !duaCategory) return;
     const search = duaSearch.value.trim().toLowerCase();
     const category = duaCategory.value.toLowerCase();
 
     filteredDuas = allDuas.filter((duaData, index) => {
         const dua = normalizeDua(duaData, index);
-
         const searchableText = `
             ${dua.title} ${dua.arabic} ${dua.urdu}
             ${dua.english} ${dua.category} ${dua.reference}
@@ -2070,42 +1937,37 @@ function searchDuas() {
     renderDuas();
 }
 
-duaSearch.addEventListener("input", searchDuas);
-duaSearchBtn.addEventListener("click", searchDuas);
-duaCategory.addEventListener("change", searchDuas);
+if (duaSearch) duaSearch.addEventListener("input", searchDuas);
+if (duaSearchBtn) duaSearchBtn.addEventListener("click", searchDuas);
+if (duaCategory) duaCategory.addEventListener("change", searchDuas);
 
-duaLanguage.addEventListener("change", () => {
-    const language = duaLanguage.value;
+if (duaLanguage) {
+    duaLanguage.addEventListener("change", () => {
+        const language = duaLanguage.value;
 
-    document.querySelectorAll(".dua-arabic, .dua-urdu, .dua-english").forEach(element => {
-        element.style.display = "";
-    });
+        document.querySelectorAll(".dua-arabic, .dua-urdu, .dua-english").forEach(element => {
+            element.style.display = "";
+        });
 
-    if (language === "arabic") {
-        hideLanguage(".dua-urdu");
-        hideLanguage(".dua-english");
-    }
-    if (language === "urdu") {
-        hideLanguage(".dua-arabic");
-        hideLanguage(".dua-english");
-    }
-    if (language === "english") {
-        hideLanguage(".dua-arabic");
-        hideLanguage(".dua-urdu");
-    }
-});
-
-function hideLanguage(selector) {
-    document.querySelectorAll(selector).forEach(element => {
-        element.style.display = "none";
+        if (language === "arabic") {
+            document.querySelectorAll(".dua-urdu, .dua-english").forEach(el => el.style.display = "none");
+        }
+        if (language === "urdu") {
+            document.querySelectorAll(".dua-arabic, .dua-english").forEach(el => el.style.display = "none");
+        }
+        if (language === "english") {
+            document.querySelectorAll(".dua-arabic, .dua-urdu").forEach(el => el.style.display = "none");
+        }
     });
 }
 
-randomDuaBtn.addEventListener("click", () => {
-    if (!allDuas.length) return;
-    const randomIndex = Math.floor(Math.random() * allDuas.length);
-    openDuaReader(randomIndex);
-});
+if (randomDuaBtn) {
+    randomDuaBtn.addEventListener("click", () => {
+        if (!allDuas.length) return;
+        const randomIndex = Math.floor(Math.random() * allDuas.length);
+        openDuaReader(randomIndex);
+    });
+}
 
 function openDuaReader(index) {
 
@@ -2114,45 +1976,57 @@ function openDuaReader(index) {
     currentReaderIndex = index;
     const dua = getDua(index);
 
-    readerDuaNumber.textContent = index + 1;
-    readerDuaTitle.textContent = dua.title;
-    readerArabic.textContent = dua.arabic;
-    readerUrdu.textContent = dua.urdu;
-    readerEnglish.textContent = dua.english;
-    readerReference.textContent = dua.reference;
+    if (readerDuaNumber) readerDuaNumber.textContent = index + 1;
+    if (readerDuaTitle) readerDuaTitle.textContent = dua.title;
+    if (readerArabic) readerArabic.textContent = dua.arabic;
+    if (readerUrdu) readerUrdu.textContent = dua.urdu;
+    if (readerEnglish) readerEnglish.textContent = dua.english;
+    if (readerReference) readerReference.textContent = dua.reference;
 
-    duasContainer.style.display = "none";
-    duasPagination.style.display = "none";
-    document.querySelector(".duas-controls").style.display = "none";
-    document.querySelector(".duas-info").style.display = "none";
-    document.querySelector(".duas-header").style.display = "none";
+    if (duasContainer) duasContainer.style.display = "none";
+    if (duasPagination) duasPagination.style.display = "none";
+    const controls = document.querySelector(".duas-controls");
+    const info = document.querySelector(".duas-info");
+    const header = document.querySelector(".duas-header");
+    if (controls) controls.style.display = "none";
+    if (info) info.style.display = "none";
+    if (header) header.style.display = "none";
 
-    duaReader.style.display = "block";
+    if (duaReader) duaReader.style.display = "block";
     window.scrollTo({ top: 0, behavior: "smooth" });
     updateReaderButtons();
 }
 
-duaBackBtn.addEventListener("click", () => {
-    duaReader.style.display = "none";
-    duasContainer.style.display = "grid";
-    document.querySelector(".duas-controls").style.display = "";
-    document.querySelector(".duas-info").style.display = "";
-    document.querySelector(".duas-header").style.display = "";
-    renderDuas();
-    scrollToDuas();
-});
+if (duaBackBtn) {
+    duaBackBtn.addEventListener("click", () => {
+        if (duaReader) duaReader.style.display = "none";
+        if (duasContainer) duasContainer.style.display = "grid";
+        const controls = document.querySelector(".duas-controls");
+        const info = document.querySelector(".duas-info");
+        const header = document.querySelector(".duas-header");
+        if (controls) controls.style.display = "";
+        if (info) info.style.display = "";
+        if (header) header.style.display = "";
+        renderDuas();
+        scrollToDuas();
+    });
+}
 
-readerPrevious.addEventListener("click", () => {
-    if (currentReaderIndex > 0) openDuaReader(currentReaderIndex - 1);
-});
+if (readerPrevious) {
+    readerPrevious.addEventListener("click", () => {
+        if (currentReaderIndex > 0) openDuaReader(currentReaderIndex - 1);
+    });
+}
 
-readerNext.addEventListener("click", () => {
-    if (currentReaderIndex < allDuas.length - 1) openDuaReader(currentReaderIndex + 1);
-});
+if (readerNext) {
+    readerNext.addEventListener("click", () => {
+        if (currentReaderIndex < allDuas.length - 1) openDuaReader(currentReaderIndex + 1);
+    });
+}
 
 function updateReaderButtons() {
-    readerPrevious.disabled = currentReaderIndex === 0;
-    readerNext.disabled = currentReaderIndex === allDuas.length - 1;
+    if (readerPrevious) readerPrevious.disabled = currentReaderIndex === 0;
+    if (readerNext) readerNext.disabled = currentReaderIndex === allDuas.length - 1;
 }
 
 async function copyDua(index) {
@@ -2176,40 +2050,34 @@ IslamicWay
     }
 }
 
-copyDuaBtn.addEventListener("click", () => {
-    copyDua(currentReaderIndex);
-});
+if (copyDuaBtn) copyDuaBtn.addEventListener("click", () => copyDua(currentReaderIndex));
 
-shareDuaBtn.addEventListener("click", async () => {
-
-    const dua = getDua(currentReaderIndex);
-
-    const shareText = `
+if (shareDuaBtn) {
+    shareDuaBtn.addEventListener("click", async () => {
+        const dua = getDua(currentReaderIndex);
+        const shareText = `
 ${dua.title}
 ${dua.arabic}
 ${dua.urdu}
 ${dua.english}
 ${dua.reference}
-    `.trim();
+        `.trim();
 
-    if (navigator.share) {
-        try {
-            await navigator.share({ title: dua.title, text: shareText });
-        } catch (error) {
-            console.log("Share cancelled");
+        if (navigator.share) {
+            try {
+                await navigator.share({ title: dua.title, text: shareText });
+            } catch (error) { console.log("Share cancelled"); }
+        } else {
+            await navigator.clipboard.writeText(shareText);
+            showDuaMessage("🔗 Dua copied for sharing!");
         }
-    } else {
-        await navigator.clipboard.writeText(shareText);
-        showDuaMessage("🔗 Dua copied for sharing!");
-    }
-});
+    });
+}
 
 function getFavorites() {
     try {
         return JSON.parse(localStorage.getItem("islamicway_favorite_duas")) || [];
-    } catch {
-        return [];
-    }
+    } catch { return []; }
 }
 
 function saveFavorites(favorites) {
@@ -2233,21 +2101,22 @@ function toggleFavorite(index, button) {
     saveFavorites(favorites);
 }
 
-favoriteDuaBtn.addEventListener("click", () => {
+if (favoriteDuaBtn) {
+    favoriteDuaBtn.addEventListener("click", () => {
+        let favorites = getFavorites();
+        const index = currentReaderIndex;
 
-    let favorites = getFavorites();
-    const index = currentReaderIndex;
+        if (favorites.includes(index)) {
+            favorites = favorites.filter(item => item !== index);
+            favoriteDuaBtn.textContent = "❤️ Favorite";
+        } else {
+            favorites.push(index);
+            favoriteDuaBtn.textContent = "💖 Favorited";
+        }
 
-    if (favorites.includes(index)) {
-        favorites = favorites.filter(item => item !== index);
-        favoriteDuaBtn.textContent = "❤️ Favorite";
-    } else {
-        favorites.push(index);
-        favoriteDuaBtn.textContent = "💖 Favorited";
-    }
-
-    saveFavorites(favorites);
-});
+        saveFavorites(favorites);
+    });
+}
 
 function showDuaLoading() {
     if (duasLoading) duasLoading.style.display = "block";
@@ -2265,10 +2134,9 @@ function hideDuaError() {
     if (duasError) duasError.style.display = "none";
 }
 
-retryDuas.addEventListener("click", loadDuas);
+if (retryDuas) retryDuas.addEventListener("click", loadDuas);
 
 function showDuaMessage(message) {
-
     const old = document.querySelector(".dua-toast");
     if (old) old.remove();
 
@@ -2277,15 +2145,11 @@ function showDuaMessage(message) {
     toast.textContent = message;
     document.body.appendChild(toast);
 
-    setTimeout(() => {
-        toast.remove();
-    }, 2200);
+    setTimeout(() => toast.remove(), 2200);
 }
 
 function escapeDuaHTML(value) {
-
     if (value === null || value === undefined) return "";
-
     return String(value)
         .replace(/&/g, "&amp;")
         .replace(/</g, "&lt;")
@@ -2296,16 +2160,15 @@ function escapeDuaHTML(value) {
 
 function scrollToDuas() {
     const page = document.getElementById("page-duas");
-    if (page) {
-        page.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
+    if (page) page.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
-loadDuas();
+// ✅ FIXED: Load local Duas on startup
+if (duasContainer) loadDuas();
 
 
 /* =====================================================
-   ISLAMIC GUIDANCE
+   ISLAMIC GUIDANCE — FIXED
 ===================================================== */
 
 const guidanceData = [
@@ -2443,21 +2306,19 @@ const readerGuidanceNext = document.getElementById("readerGuidanceNext");
 
 function renderGuidance() {
 
+    if (!guidanceContainer) return;
     guidanceContainer.innerHTML = "";
-    noGuidanceFound.style.display = "none";
+    if (noGuidanceFound) noGuidanceFound.style.display = "none";
 
     if (!filteredGuidance.length) {
-        noGuidanceFound.style.display = "block";
-        guidancePagination.style.display = "none";
-        guidanceCount.textContent = "0";
+        if (noGuidanceFound) noGuidanceFound.style.display = "block";
+        if (guidancePagination) guidancePagination.style.display = "none";
+        if (guidanceCount) guidanceCount.textContent = "0";
         return;
     }
 
     const totalPages = Math.ceil(filteredGuidance.length / guidancePerPage);
-
-    if (currentGuidancePage > totalPages) {
-        currentGuidancePage = totalPages;
-    }
+    if (currentGuidancePage > totalPages) currentGuidancePage = totalPages;
 
     const start = (currentGuidancePage - 1) * guidancePerPage;
     const end = start + guidancePerPage;
@@ -2501,7 +2362,7 @@ function renderGuidance() {
         guidanceContainer.appendChild(card);
     });
 
-    guidanceCount.textContent = filteredGuidance.length;
+    if (guidanceCount) guidanceCount.textContent = filteredGuidance.length;
     renderGuidancePagination(totalPages);
     attachGuidanceEvents();
 }
@@ -2529,20 +2390,17 @@ function attachGuidanceEvents() {
     });
 
     document.querySelectorAll(".copy-guidance").forEach(button => {
-        button.addEventListener("click", () => {
-            copyGuidance(Number(button.dataset.index));
-        });
+        button.addEventListener("click", () => copyGuidance(Number(button.dataset.index)));
     });
 
     document.querySelectorAll(".favorite-guidance").forEach(button => {
-        button.addEventListener("click", () => {
-            toggleGuidanceFavorite(Number(button.dataset.index), button);
-        });
+        button.addEventListener("click", () => toggleGuidanceFavorite(Number(button.dataset.index), button));
     });
 }
 
 function filterGuidance() {
 
+    if (!guidanceSearch || !guidanceCategory) return;
     const search = guidanceSearch.value.trim().toLowerCase();
     const category = guidanceCategory.value;
 
@@ -2562,42 +2420,38 @@ function filterGuidance() {
     renderGuidance();
 }
 
-guidanceSearch.addEventListener("input", filterGuidance);
-guidanceSearchBtn.addEventListener("click", filterGuidance);
-guidanceCategory.addEventListener("change", filterGuidance);
+if (guidanceSearch) guidanceSearch.addEventListener("input", filterGuidance);
+if (guidanceSearchBtn) guidanceSearchBtn.addEventListener("click", filterGuidance);
+if (guidanceCategory) guidanceCategory.addEventListener("change", filterGuidance);
 
-guidanceLanguage.addEventListener("change", () => {
+if (guidanceLanguage) {
+    guidanceLanguage.addEventListener("change", () => {
+        const language = guidanceLanguage.value;
 
-    const language = guidanceLanguage.value;
-
-    document.querySelectorAll(".guidance-card-arabic").forEach(el => {
-        el.style.display = (language === "urdu" || language === "english") ? "none" : "";
+        document.querySelectorAll(".guidance-card-arabic").forEach(el => {
+            el.style.display = (language === "urdu" || language === "english") ? "none" : "";
+        });
+        document.querySelectorAll(".guidance-card-urdu").forEach(el => {
+            el.style.display = (language === "arabic" || language === "english") ? "none" : "";
+        });
+        document.querySelectorAll(".guidance-card-english").forEach(el => {
+            el.style.display = (language === "arabic" || language === "urdu") ? "none" : "";
+        });
     });
-
-    document.querySelectorAll(".guidance-card-urdu").forEach(el => {
-        el.style.display = (language === "arabic" || language === "english") ? "none" : "";
-    });
-
-    document.querySelectorAll(".guidance-card-english").forEach(el => {
-        el.style.display = (language === "arabic" || language === "urdu") ? "none" : "";
-    });
-});
+}
 
 function renderGuidancePagination(totalPages) {
 
+    if (!guidancePagination) return;
     guidancePagination.style.display = totalPages > 1 ? "flex" : "none";
-    guidancePrevious.disabled = currentGuidancePage === 1;
-    guidanceNext.disabled = currentGuidancePage === totalPages;
-    guidancePageNumbers.innerHTML = "";
+    if (guidancePrevious) guidancePrevious.disabled = currentGuidancePage === 1;
+    if (guidanceNext) guidanceNext.disabled = currentGuidancePage === totalPages;
+    if (guidancePageNumbers) guidancePageNumbers.innerHTML = "";
 
     for (let i = 1; i <= totalPages; i++) {
-
         const button = document.createElement("button");
         button.textContent = i;
-
-        if (i === currentGuidancePage) {
-            button.classList.add("active");
-        }
+        if (i === currentGuidancePage) button.classList.add("active");
 
         button.addEventListener("click", () => {
             currentGuidancePage = i;
@@ -2605,32 +2459,38 @@ function renderGuidancePagination(totalPages) {
             scrollGuidance();
         });
 
-        guidancePageNumbers.appendChild(button);
+        if (guidancePageNumbers) guidancePageNumbers.appendChild(button);
     }
 }
 
-guidancePrevious.addEventListener("click", () => {
-    if (currentGuidancePage > 1) {
-        currentGuidancePage--;
-        renderGuidance();
-        scrollGuidance();
-    }
-});
+if (guidancePrevious) {
+    guidancePrevious.addEventListener("click", () => {
+        if (currentGuidancePage > 1) {
+            currentGuidancePage--;
+            renderGuidance();
+            scrollGuidance();
+        }
+    });
+}
 
-guidanceNext.addEventListener("click", () => {
-    const totalPages = Math.ceil(filteredGuidance.length / guidancePerPage);
-    if (currentGuidancePage < totalPages) {
-        currentGuidancePage++;
-        renderGuidance();
-        scrollGuidance();
-    }
-});
+if (guidanceNext) {
+    guidanceNext.addEventListener("click", () => {
+        const totalPages = Math.ceil(filteredGuidance.length / guidancePerPage);
+        if (currentGuidancePage < totalPages) {
+            currentGuidancePage++;
+            renderGuidance();
+            scrollGuidance();
+        }
+    });
+}
 
-randomGuidanceBtn.addEventListener("click", () => {
-    if (!guidanceData.length) return;
-    const randomIndex = Math.floor(Math.random() * guidanceData.length);
-    openGuidanceReader(randomIndex);
-});
+if (randomGuidanceBtn) {
+    randomGuidanceBtn.addEventListener("click", () => {
+        if (!guidanceData.length) return;
+        const randomIndex = Math.floor(Math.random() * guidanceData.length);
+        openGuidanceReader(randomIndex);
+    });
+}
 
 function openGuidanceReader(index) {
 
@@ -2639,46 +2499,58 @@ function openGuidanceReader(index) {
     currentGuidanceIndex = index;
     const item = guidanceData[index];
 
-    readerGuidanceNumber.textContent = item.id;
-    readerGuidanceTitle.textContent = item.title;
-    readerGuidanceArabic.textContent = item.arabic;
-    readerGuidanceUrdu.textContent = item.urdu;
-    readerGuidanceEnglish.textContent = item.english;
-    readerGuidanceContent.textContent = item.content;
-    readerGuidanceReference.textContent = item.reference;
+    if (readerGuidanceNumber) readerGuidanceNumber.textContent = item.id;
+    if (readerGuidanceTitle) readerGuidanceTitle.textContent = item.title;
+    if (readerGuidanceArabic) readerGuidanceArabic.textContent = item.arabic;
+    if (readerGuidanceUrdu) readerGuidanceUrdu.textContent = item.urdu;
+    if (readerGuidanceEnglish) readerGuidanceEnglish.textContent = item.english;
+    if (readerGuidanceContent) readerGuidanceContent.textContent = item.content;
+    if (readerGuidanceReference) readerGuidanceReference.textContent = item.reference;
 
-    guidanceContainer.style.display = "none";
-    guidancePagination.style.display = "none";
-    document.querySelector(".guidance-controls").style.display = "none";
-    document.querySelector(".guidance-info").style.display = "none";
-    document.querySelector(".guidance-hero").style.display = "none";
+    if (guidanceContainer) guidanceContainer.style.display = "none";
+    if (guidancePagination) guidancePagination.style.display = "none";
+    const controls = document.querySelector(".guidance-controls");
+    const info = document.querySelector(".guidance-info");
+    const hero = document.querySelector(".guidance-hero");
+    if (controls) controls.style.display = "none";
+    if (info) info.style.display = "none";
+    if (hero) hero.style.display = "none";
 
-    guidanceReader.style.display = "block";
+    if (guidanceReader) guidanceReader.style.display = "block";
     updateGuidanceReaderButtons();
     window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
-guidanceBackBtn.addEventListener("click", () => {
-    guidanceReader.style.display = "none";
-    guidanceContainer.style.display = "grid";
-    document.querySelector(".guidance-controls").style.display = "";
-    document.querySelector(".guidance-info").style.display = "";
-    document.querySelector(".guidance-hero").style.display = "";
-    renderGuidance();
-    scrollGuidance();
-});
+if (guidanceBackBtn) {
+    guidanceBackBtn.addEventListener("click", () => {
+        if (guidanceReader) guidanceReader.style.display = "none";
+        if (guidanceContainer) guidanceContainer.style.display = "grid";
+        const controls = document.querySelector(".guidance-controls");
+        const info = document.querySelector(".guidance-info");
+        const hero = document.querySelector(".guidance-hero");
+        if (controls) controls.style.display = "";
+        if (info) info.style.display = "";
+        if (hero) hero.style.display = "";
+        renderGuidance();
+        scrollGuidance();
+    });
+}
 
-readerGuidancePrevious.addEventListener("click", () => {
-    if (currentGuidanceIndex > 0) openGuidanceReader(currentGuidanceIndex - 1);
-});
+if (readerGuidancePrevious) {
+    readerGuidancePrevious.addEventListener("click", () => {
+        if (currentGuidanceIndex > 0) openGuidanceReader(currentGuidanceIndex - 1);
+    });
+}
 
-readerGuidanceNext.addEventListener("click", () => {
-    if (currentGuidanceIndex < guidanceData.length - 1) openGuidanceReader(currentGuidanceIndex + 1);
-});
+if (readerGuidanceNext) {
+    readerGuidanceNext.addEventListener("click", () => {
+        if (currentGuidanceIndex < guidanceData.length - 1) openGuidanceReader(currentGuidanceIndex + 1);
+    });
+}
 
 function updateGuidanceReaderButtons() {
-    readerGuidancePrevious.disabled = currentGuidanceIndex === 0;
-    readerGuidanceNext.disabled = currentGuidanceIndex === guidanceData.length - 1;
+    if (readerGuidancePrevious) readerGuidancePrevious.disabled = currentGuidanceIndex === 0;
+    if (readerGuidanceNext) readerGuidanceNext.disabled = currentGuidanceIndex === guidanceData.length - 1;
 }
 
 async function copyGuidance(index) {
@@ -2698,45 +2570,35 @@ IslamicWay
     try {
         await navigator.clipboard.writeText(text);
         showGuidanceToast("✅ Guidance copied!");
-    } catch {
-        alert("Copy failed.");
-    }
+    } catch { alert("Copy failed."); }
 }
 
-copyGuidanceBtn.addEventListener("click", () => {
-    copyGuidance(currentGuidanceIndex);
-});
+if (copyGuidanceBtn) copyGuidanceBtn.addEventListener("click", () => copyGuidance(currentGuidanceIndex));
 
-shareGuidanceBtn.addEventListener("click", async () => {
-
-    const item = guidanceData[currentGuidanceIndex];
-
-    const text = `
+if (shareGuidanceBtn) {
+    shareGuidanceBtn.addEventListener("click", async () => {
+        const item = guidanceData[currentGuidanceIndex];
+        const text = `
 ${item.title}
 ${item.arabic}
 ${item.urdu}
 ${item.english}
 ${item.reference}
-    `.trim();
+        `.trim();
 
-    if (navigator.share) {
-        try {
-            await navigator.share({ title: item.title, text: text });
-        } catch {
-            console.log("Share cancelled");
+        if (navigator.share) {
+            try { await navigator.share({ title: item.title, text: text }); }
+            catch { console.log("Share cancelled"); }
+        } else {
+            await navigator.clipboard.writeText(text);
+            showGuidanceToast("🔗 Copied for sharing!");
         }
-    } else {
-        await navigator.clipboard.writeText(text);
-        showGuidanceToast("🔗 Copied for sharing!");
-    }
-});
+    });
+}
 
 function getGuidanceFavorites() {
-    try {
-        return JSON.parse(localStorage.getItem("islamicway_guidance_favorites")) || [];
-    } catch {
-        return [];
-    }
+    try { return JSON.parse(localStorage.getItem("islamicway_guidance_favorites")) || []; }
+    catch { return []; }
 }
 
 function saveGuidanceFavorites(favorites) {
@@ -2760,24 +2622,24 @@ function toggleGuidanceFavorite(index, button) {
     saveGuidanceFavorites(favorites);
 }
 
-favoriteGuidanceBtn.addEventListener("click", () => {
+if (favoriteGuidanceBtn) {
+    favoriteGuidanceBtn.addEventListener("click", () => {
+        let favorites = getGuidanceFavorites();
+        const index = currentGuidanceIndex;
 
-    let favorites = getGuidanceFavorites();
-    const index = currentGuidanceIndex;
+        if (favorites.includes(index)) {
+            favorites = favorites.filter(item => item !== index);
+            favoriteGuidanceBtn.textContent = "❤️ Favorite";
+        } else {
+            favorites.push(index);
+            favoriteGuidanceBtn.textContent = "💖 Favorited";
+        }
 
-    if (favorites.includes(index)) {
-        favorites = favorites.filter(item => item !== index);
-        favoriteGuidanceBtn.textContent = "❤️ Favorite";
-    } else {
-        favorites.push(index);
-        favoriteGuidanceBtn.textContent = "💖 Favorited";
-    }
-
-    saveGuidanceFavorites(favorites);
-});
+        saveGuidanceFavorites(favorites);
+    });
+}
 
 function showGuidanceToast(message) {
-
     const oldToast = document.querySelector(".guidance-toast");
     if (oldToast) oldToast.remove();
 
@@ -2786,20 +2648,18 @@ function showGuidanceToast(message) {
     toast.textContent = message;
     document.body.appendChild(toast);
 
-    setTimeout(() => {
-        toast.remove();
-    }, 2200);
+    setTimeout(() => toast.remove(), 2200);
 }
 
-retryGuidance.addEventListener("click", () => {
-    guidanceError.style.display = "none";
-    renderGuidance();
-});
+if (retryGuidance) {
+    retryGuidance.addEventListener("click", () => {
+        if (guidanceError) guidanceError.style.display = "none";
+        renderGuidance();
+    });
+}
 
 function escapeGuidanceHTML(value) {
-
     if (value === null || value === undefined) return "";
-
     return String(value)
         .replace(/&/g, "&amp;")
         .replace(/</g, "&lt;")
@@ -2810,12 +2670,10 @@ function escapeGuidanceHTML(value) {
 
 function scrollGuidance() {
     const page = document.getElementById("page-guidance");
-    if (page) {
-        page.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
+    if (page) page.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
-renderGuidance();
+if (guidanceContainer) renderGuidance();
 
 
 /* =====================================================
@@ -2826,27 +2684,25 @@ document.addEventListener("DOMContentLoaded", function () {
 
     document.querySelectorAll(".faq-question").forEach(function (question) {
         question.addEventListener("click", function () {
-
             const item = question.parentElement;
-
             document.querySelectorAll(".faq-item").forEach(function (faq) {
                 if (faq !== item) faq.classList.remove("active");
             });
-
             item.classList.toggle("active");
         });
     });
 
     const contactBtn = document.getElementById("aboutContactBtn");
-
     if (contactBtn) {
         contactBtn.addEventListener("click", function () {
             alert("شکریہ! آپ کی رائے ہمارے لیے اہم ہے۔ ان شاء اللہ جلد رابطہ کریں گے۔");
         });
     }
+});
 
-});/* =====================================================
-   DYNAMIC SEO — Page Title & Description Update
+
+/* =====================================================
+   DYNAMIC SEO
 ===================================================== */
 
 const SEO_DATA = {
@@ -2910,7 +2766,6 @@ document.addEventListener("DOMContentLoaded", () => {
         const page = window.location.hash.replace("#", "") || "home";
         updateSEO(page);
     });
-
     const startPage = window.location.hash.replace("#", "") || "home";
     updateSEO(startPage);
 });

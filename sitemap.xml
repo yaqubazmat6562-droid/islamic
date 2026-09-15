@@ -61,4 +61,18 @@
         <priority>0.6</priority>
     </url>
 
+    <url>
+        <loc>https://islamicway.com/#search</loc>
+        <lastmod>2026-01-01</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.7</priority>
+    </url>
+
+    <url>
+        <loc>https://islamicway.com/power-of-dua.html</loc>
+        <lastmod>2026-01-01</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.75</priority>
+    </url>
+
 </urlset>

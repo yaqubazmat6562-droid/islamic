@@ -1,11 +1,9 @@
 /* =========================================================
-   ISLAMICWAY — SERVICE WORKER (PWA)
-   Offline caching + install support
+   ISLAMICWAY — SERVICE WORKER (FIXED)
    ========================================================= */
 
-const CACHE_NAME = "islamicway-v1.0.0";
+const CACHE_NAME = "islamicway-v1.1.0";
 
-/* Files to cache for offline use */
 const CACHE_FILES = [
     "./",
     "./index.html",
@@ -17,29 +15,19 @@ const CACHE_FILES = [
     "./IMG 1.png"
 ];
 
-/* =========================================================
-   INSTALL EVENT
-   ========================================================= */
 self.addEventListener("install", (event) => {
     console.log("[SW] Installing...");
-
     event.waitUntil(
         caches.open(CACHE_NAME).then((cache) => {
             return cache.addAll(CACHE_FILES).catch((err) => {
                 console.warn("[SW] Some files failed to cache:", err);
             });
-        }).then(() => {
-            return self.skipWaiting();
-        })
+        }).then(() => self.skipWaiting())
     );
 });
 
-/* =========================================================
-   ACTIVATE EVENT
-   ========================================================= */
 self.addEventListener("activate", (event) => {
     console.log("[SW] Activating...");
-
     event.waitUntil(
         caches.keys().then((keys) => {
             return Promise.all(
@@ -50,29 +38,31 @@ self.addEventListener("activate", (event) => {
                     }
                 })
             );
-        }).then(() => {
-            return self.clients.claim();
-        })
+        }).then(() => self.clients.claim())
     );
 });
 
-/* =========================================================
-   FETCH EVENT (Offline support)
-   ========================================================= */
 self.addEventListener("fetch", (event) => {
-    // Only handle GET requests
     if (event.request.method !== "GET") return;
 
-    // Skip external APIs (let them go to network)
     const url = new URL(event.request.url);
+
+    // Skip external APIs (let them go to network)
     if (url.origin !== self.location.origin) {
+        event.respondWith(
+            fetch(event.request).catch(() => {
+                return new Response(
+                    JSON.stringify({ error: "Offline", message: "No internet connection" }),
+                    { status: 503, headers: { "Content-Type": "application/json" } }
+                );
+            })
+        );
         return;
     }
 
     event.respondWith(
         caches.match(event.request).then((cached) => {
             if (cached) {
-                // Return cached, update in background
                 fetch(event.request).then((response) => {
                     if (response && response.status === 200) {
                         caches.open(CACHE_NAME).then((cache) => {
@@ -83,11 +73,8 @@ self.addEventListener("fetch", (event) => {
                 return cached;
             }
 
-            // Not in cache, fetch from network
             return fetch(event.request).then((response) => {
-                if (!response || response.status !== 200) {
-                    return response;
-                }
+                if (!response || response.status !== 200) return response;
 
                 const cloned = response.clone();
                 caches.open(CACHE_NAME).then((cache) => {
@@ -96,10 +83,11 @@ self.addEventListener("fetch", (event) => {
 
                 return response;
             }).catch(() => {
-                // Fallback for HTML navigation
+                // ✅ OFFLINE FALLBACK
                 if (event.request.mode === "navigate") {
                     return caches.match("./index.html");
                 }
+                return new Response("Offline", { status: 503 });
             });
         })
     );

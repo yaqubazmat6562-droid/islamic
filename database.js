@@ -1,13 +1,15 @@
 /* =========================================================
-   ISLAMICWAY — COMPLETE OFFLINE DATABASE v2.0 (FIXED)
-   Full Quran + Hadith + Duas + Guidance
-   Progress bar sirf pehli baar aayega
+   ISLAMICWAY — COMPLETE OFFLINE DATABASE v3.0 (NO DOWNLOAD)
+   Full Quran (built-in) + Hadith + Duas + Guidance
+   ✅ Koi progress bar nahi
+   ✅ Koi auto-download nahi
+   ✅ Website seedha khulti hai
    ========================================================= */
 
 const ISLAMIC_DATABASE = {
 
     /* =====================================================
-       QURAN — SURAH LIST (30 Important Surahs)
+       QURAN — SURAH LIST
     ===================================================== */
     quranSurahs: [
         { number: 1, name: "الفاتحة", englishName: "Al-Fatihah", englishNameTranslation: "The Opening", numberOfAyahs: 7, revelationType: "Meccan" },
@@ -667,7 +669,7 @@ const ISLAMIC_DATABASE = {
     }
 };
 
-console.log("[DB] Islamic Database v2.0 loaded ✅");
+console.log("[DB] Islamic Database v3.0 loaded ✅");
 console.log(`[DB] Quran: ${Object.keys(ISLAMIC_DATABASE.quranContent).length} full surahs offline`);
 console.log(`[DB] Hadith: ${Object.values(ISLAMIC_DATABASE.hadithBooks).reduce((sum, b) => sum + b.hadiths.length, 0)} hadiths offline`);
 console.log(`[DB] Duas: ${ISLAMIC_DATABASE.duas.length} duas offline`);
@@ -675,472 +677,40 @@ console.log(`[DB] Guidance: ${ISLAMIC_DATABASE.guidance.length} topics offline`)
 
 
 /* =========================================================
-   FULL DATABASE AUTO-DOWNLOAD SYSTEM (FIXED)
-   - Progress bar sirf PEHLI BAAR aayega
-   - Baad mein localStorage + IndexedDB dono check honge
+   FULL DATABASE — DISABLED (No download, no progress bar)
+   Yeh stub sirf itna karta hai ke koi error na aaye
 ========================================================= */
 
 const FullDatabase = {
-
-    dbName: "IslamicWayDB",
-    dbVersion: 1,
     db: null,
-
-    /* ---------------------------------------------
-       DOM ELEMENTS (Progress Bar)
-    --------------------------------------------- */
-    getOverlay()   { return document.getElementById("downloadOverlay"); },
-    getStatusEl()  { return document.getElementById("downloadStatus"); },
-    getFillEl()    { return document.getElementById("downloadProgressFill"); },
-    getPercentEl() { return document.getElementById("downloadPercent"); },
-
-    /* ---------------------------------------------
-       UPDATE PROGRESS
-    --------------------------------------------- */
-    updateProgress(percent, statusText) {
-        const overlay = this.getOverlay();
-        const statusEl = this.getStatusEl();
-        const fillEl = this.getFillEl();
-        const percentEl = this.getPercentEl();
-
-        if (overlay)   overlay.style.display = "flex";
-        if (statusEl && statusText) statusEl.textContent = statusText;
-        if (fillEl)    fillEl.style.width = Math.min(100, percent) + "%";
-        if (percentEl) percentEl.textContent = Math.round(percent) + "%";
-    },
-
-    hideProgress() {
-        const overlay = this.getOverlay();
-        if (overlay) {
-            overlay.style.opacity = "0";
-            overlay.style.transition = "opacity 0.5s ease";
-            setTimeout(() => {
-                overlay.style.display = "none";
-                overlay.style.opacity = "1";
-            }, 500);
-        }
-    },
-
-    /* ---------------------------------------------
-       INITIALIZE INDEXEDDB
-    --------------------------------------------- */
-    async init() {
-        return new Promise((resolve, reject) => {
-            const request = indexedDB.open(this.dbName, this.dbVersion);
-
-            request.onupgradeneeded = (event) => {
-                const db = event.target.result;
-
-                if (!db.objectStoreNames.contains("quran")) {
-                    db.createObjectStore("quran", { keyPath: "number" });
-                }
-                if (!db.objectStoreNames.contains("hadith")) {
-                    db.createObjectStore("hadith", { keyPath: "book" });
-                }
-                if (!db.objectStoreNames.contains("meta")) {
-                    db.createObjectStore("meta", { keyPath: "key" });
-                }
-            };
-
-            request.onsuccess = (event) => {
-                this.db = event.target.result;
-                console.log("[FullDB] IndexedDB initialized ✅");
-                resolve(this.db);
-            };
-
-            request.onerror = (event) => {
-                console.error("[FullDB] IndexedDB error:", event.target.error);
-                reject(event.target.error);
-            };
-        });
-    },
-
-    /* ---------------------------------------------
-       SAVE / GET QURAN
-    --------------------------------------------- */
-    async saveQuran(surahNumber, data) {
-        return new Promise((resolve, reject) => {
-            const tx = this.db.transaction("quran", "readwrite");
-            tx.objectStore("quran").put({ number: surahNumber, data: data });
-            tx.oncomplete = () => resolve(true);
-            tx.onerror = () => reject(tx.error);
-        });
-    },
-
-    async getQuran(surahNumber) {
-        return new Promise((resolve, reject) => {
-            const tx = this.db.transaction("quran", "readonly");
-            const request = tx.objectStore("quran").get(surahNumber);
-            request.onsuccess = () => resolve(request.result?.data || null);
-            request.onerror = () => reject(request.error);
-        });
-    },
-
-    /* ---------------------------------------------
-       SAVE / GET HADITH
-    --------------------------------------------- */
-    async saveHadith(bookKey, data) {
-        return new Promise((resolve, reject) => {
-            const tx = this.db.transaction("hadith", "readwrite");
-            tx.objectStore("hadith").put({ book: bookKey, data: data });
-            tx.oncomplete = () => resolve(true);
-            tx.onerror = () => reject(tx.error);
-        });
-    },
-
-    async getHadith(bookKey) {
-        return new Promise((resolve, reject) => {
-            const tx = this.db.transaction("hadith", "readonly");
-            const request = tx.objectStore("hadith").get(bookKey);
-            request.onsuccess = () => resolve(request.result?.data || null);
-            request.onerror = () => reject(request.error);
-        });
-    },
-
-    /* ---------------------------------------------
-       META (Flags)
-    --------------------------------------------- */
-    async getMeta(key) {
-        return new Promise((resolve, reject) => {
-            const tx = this.db.transaction("meta", "readonly");
-            const request = tx.objectStore("meta").get(key);
-            request.onsuccess = () => resolve(request.result?.value || null);
-            request.onerror = () => reject(request.error);
-        });
-    },
-
-    async setMeta(key, value) {
-        return new Promise((resolve, reject) => {
-            const tx = this.db.transaction("meta", "readwrite");
-            tx.objectStore("meta").put({ key: key, value: value });
-            tx.oncomplete = () => resolve(true);
-            tx.onerror = () => reject(tx.error);
-        });
-    },
-
-    /* ---------------------------------------------
-       DOWNLOAD FULL QURAN
-    --------------------------------------------- */
-    async downloadFullQuran() {
-
-        console.log("[FullDB] Starting Quran download...");
-        this.updateProgress(2, "Preparing Quran download...");
-
-        try {
-            const arabicUrl = "https://cdn.jsdelivr.net/gh/fawazahmed0/quran-api@1/editions/ara-quranuthmani.json";
-            const urduUrl   = "https://cdn.jsdelivr.net/gh/fawazahmed0/quran-api@1/editions/urd-abulaalamaududi.json";
-
-            this.updateProgress(5, "Downloading Arabic Quran...");
-            const arabicRes = await fetch(arabicUrl);
-            const arabicData = await arabicRes.json();
-
-            this.updateProgress(20, "Downloading Urdu translation...");
-            const urduRes = await fetch(urduUrl);
-            const urduData = await urduRes.json();
-
-            this.updateProgress(35, "Organizing Quran by Surah...");
-
-            const surahMap = {};
-
-            arabicData.quran.forEach((ayah) => {
-                const surah = ayah.chapter;
-                if (!surahMap[surah]) {
-                    surahMap[surah] = { arabic: [], urdu: [] };
-                }
-                surahMap[surah].arabic.push(ayah.text);
-            });
-
-            urduData.quran.forEach((ayah) => {
-                const surah = ayah.chapter;
-                if (surahMap[surah]) {
-                    surahMap[surah].urdu.push(ayah.text);
-                }
-            });
-
-            const totalSurahs = Object.keys(surahMap).length;
-            let count = 0;
-
-            for (const [surahNum, content] of Object.entries(surahMap)) {
-                await this.saveQuran(Number(surahNum), content);
-                count++;
-
-                const percent = 35 + (count / totalSurahs) * 15;
-                this.updateProgress(percent, `Saving Surah ${count}/${totalSurahs}...`);
-            }
-
-            await this.setMeta("quran_downloaded", true);
-            await this.setMeta("quran_downloaded_at", Date.now());
-
-            // ✅ localStorage flag
-            try {
-                localStorage.setItem("islamicway_quran_ready", "yes");
-            } catch (e) {}
-
-            console.log(`[FullDB] Quran downloaded: ${totalSurahs} surahs ✅`);
-            this.updateProgress(50, "Quran downloaded ✅");
-            return true;
-
-        } catch (error) {
-            console.error("[FullDB] Quran download failed:", error);
-            this.updateProgress(50, "Quran download failed ❌");
-            return false;
-        }
-    },
-
-    /* ---------------------------------------------
-       DOWNLOAD FULL HADITH
-    --------------------------------------------- */
-    async downloadFullHadith() {
-
-        console.log("[FullDB] Starting Hadith download...");
-        this.updateProgress(52, "Preparing Hadith download...");
-
-        const HADITH_URLS = [
-            "https://cdn.jsdelivr.net/gh/fawazahmed0/hadith-api@1/editions/",
-            "https://raw.githubusercontent.com/fawazahmed0/hadith-api/1/editions/"
-        ];
-
-        const books = [
-            { key: "bukhari",  arabic: "ara-bukhari",  urdu: "urd-bukhari"  },
-            { key: "muslim",   arabic: "ara-muslim",   urdu: "urd-muslim"   },
-            { key: "abudawud", arabic: "ara-abudawud", urdu: "urd-abudawud" },
-            { key: "tirmidhi", arabic: "ara-tirmidhi", urdu: "urd-tirmidhi" },
-            { key: "nasai",    arabic: "ara-nasai",    urdu: "urd-nasai"    },
-            { key: "malik",    arabic: "ara-malik",    urdu: "urd-malik"    }
-        ];
-
-        let completed = 0;
-
-        for (const book of books) {
-            try {
-                console.log(`[FullDB] Downloading ${book.key}...`);
-                const percent = 52 + (completed / books.length) * 45;
-                this.updateProgress(percent, `Downloading ${book.key}...`);
-
-                let arabicData = null;
-                let urduData = null;
-
-                for (const baseUrl of HADITH_URLS) {
-                    try {
-                        if (!arabicData) {
-                            const res = await fetch(baseUrl + book.arabic + ".min.json");
-                            if (res.ok) arabicData = await res.json();
-                        }
-                        if (!urduData) {
-                            const res = await fetch(baseUrl + book.urdu + ".min.json");
-                            if (res.ok) urduData = await res.json();
-                        }
-                        if (arabicData && urduData) break;
-                    } catch (e) {
-                        console.warn(`[FullDB] Failed ${baseUrl}${book.key}`);
-                    }
-                }
-
-                if (arabicData && urduData) {
-                    const combined = arabicData.hadiths.map((h, i) => ({
-                        arabic: h.text,
-                        urdu: urduData.hadiths[i]?.text || ""
-                    }));
-
-                    await this.saveHadith(book.key, combined);
-                    console.log(`[FullDB] ${book.key}: ${combined.length} hadiths ✅`);
-                }
-
-                completed++;
-
-            } catch (error) {
-                console.error(`[FullDB] ${book.key} download failed:`, error);
-                completed++;
-            }
-        }
-
-        await this.setMeta("hadith_downloaded", true);
-        await this.setMeta("hadith_downloaded_at", Date.now());
-
-        // ✅ localStorage flag
-        try {
-            localStorage.setItem("islamicway_hadith_ready", "yes");
-        } catch (e) {}
-
-        this.updateProgress(97, "Finalizing database...");
-        console.log("[FullDB] Hadith download complete ✅");
-        return true;
-    },
-
-    /* ---------------------------------------------
-       CHECK IF ALREADY DOWNLOADED
-    --------------------------------------------- */
-    async isFullyDownloaded() {
-        try {
-            const quranDone = await this.getMeta("quran_downloaded");
-            const hadithDone = await this.getMeta("hadith_downloaded");
-            return !!(quranDone && hadithDone);
-        } catch (e) {
-            return false;
-        }
-    },
-
-    /* ---------------------------------------------
-       MAIN SETUP (FIXED)
-    --------------------------------------------- */
-    async setup() {
-
-        // Check browser support
-        if (!window.indexedDB) {
-            console.warn("[FullDB] IndexedDB not supported");
-            return false;
-        }
-
-        try {
-            await this.init();
-
-            // ✅ CHECK 1: Meta flags in IndexedDB
-            const downloaded = await this.isFullyDownloaded();
-
-            if (downloaded) {
-                console.log("[FullDB] Full database already available (IndexedDB meta) ✅");
-                return true;
-            }
-
-            // ✅ CHECK 2: localStorage flag + IndexedDB data verify
-            const localFlag = localStorage.getItem("islamicway_full_db_ready");
-            if (localFlag === "yes") {
-                try {
-                    const quranCheck = await this.getQuran(1);      // Surah Al-Fatihah
-                    const hadithCheck = await this.getHadith("bukhari");
-
-                    if (quranCheck && hadithCheck) {
-                        console.log("[FullDB] Database ready (localStorage + IndexedDB) ✅");
-
-                        // Meta flags bhi reset kar do taake agli baar tez ho
-                        await this.setMeta("quran_downloaded", true);
-                        await this.setMeta("hadith_downloaded", true);
-
-                        return true;
-                    }
-                } catch (e) {
-                    console.warn("[FullDB] Verification failed:", e);
-                }
-            }
-
-            // ❌ Kuch nahi mila — first time download
-            console.log("[FullDB] First time — starting download...");
-
-            this.updateProgress(1, "Starting download...");
-
-            // Download Quran
-            await this.downloadFullQuran();
-
-            // Small delay
-            await new Promise(r => setTimeout(r, 500));
-
-            // Download Hadith
-            await this.downloadFullHadith();
-
-            // Complete
-            this.updateProgress(100, "✅ Download Complete!");
-
-            // ✅ Master flag
-            try {
-                localStorage.setItem("islamicway_full_db_ready", "yes");
-            } catch (e) {}
-
-            await new Promise(r => setTimeout(r, 1500));
-            this.hideProgress();
-
-            console.log("[FullDB] Setup complete ✅");
-            return true;
-
-        } catch (error) {
-            console.error("[FullDB] Setup error:", error);
-            this.updateProgress(0, "Download failed. Please refresh.");
-            return false;
-        }
-    },
-
-    /* ---------------------------------------------
-       GET QURAN SURAH (Wrapper with fallback)
-    --------------------------------------------- */
+    async init() { return null; },
+    async getQuran() { return null; },
+    async getHadith() { return null; },
     async getSurahOffline(surahNumber) {
-        try {
-            const data = await this.getQuran(surahNumber);
-            if (data) return data;
-        } catch (e) {}
-
+        // Sirf built-in database se do
         if (typeof ISLAMIC_DATABASE !== "undefined" &&
             ISLAMIC_DATABASE.quranContent &&
             ISLAMIC_DATABASE.quranContent[surahNumber]) {
             return ISLAMIC_DATABASE.quranContent[surahNumber];
         }
-
         return null;
     },
-
-    /* ---------------------------------------------
-       GET HADITH BOOK (Wrapper with fallback)
-    --------------------------------------------- */
     async getHadithBookOffline(bookKey) {
-        try {
-            const data = await this.getHadith(bookKey);
-            if (data) return data;
-        } catch (e) {}
-
+        // Sirf built-in database se do
         if (typeof ISLAMIC_DATABASE !== "undefined" &&
             ISLAMIC_DATABASE.hadithBooks &&
             ISLAMIC_DATABASE.hadithBooks[bookKey]) {
             return ISLAMIC_DATABASE.hadithBooks[bookKey].hadiths;
         }
-
         return null;
     },
-
-    /* ---------------------------------------------
-       RESET DATABASE (for testing)
-    --------------------------------------------- */
+    async setup() {
+        console.log("[FullDB] Download system disabled — using built-in database only ✅");
+        return true;
+    },
     async reset() {
-        try {
-            const tx = this.db.transaction(["quran", "hadith", "meta"], "readwrite");
-            tx.objectStore("quran").clear();
-            tx.objectStore("hadith").clear();
-            tx.objectStore("meta").clear();
-
-            // ✅ localStorage bhi saaf
-            localStorage.removeItem("islamicway_full_db_ready");
-            localStorage.removeItem("islamicway_quran_ready");
-            localStorage.removeItem("islamicway_hadith_ready");
-
-            console.log("[FullDB] Database reset ✅ (all flags cleared)");
-        } catch (e) {
-            console.warn("[FullDB] Reset error:", e);
-        }
+        console.log("[FullDB] Nothing to reset — no external database ✅");
     }
 };
 
-/* =========================================================
-   AUTO-START ON PAGE LOAD (FIXED)
-   - Pehle localStorage check — agar ready flag hai toh turant skip
-   - Warna IndexedDB check
-========================================================= */
-window.addEventListener("load", () => {
-
-    // ✅ Fast check — agar localStorage mein master flag hai
-    const masterFlag = localStorage.getItem("islamicway_full_db_ready");
-
-    if (masterFlag === "yes") {
-        console.log("[FullDB] Master flag found — skipping progress bar ✅");
-
-        // Optional: Initialize DB in background but don't show progress
-        setTimeout(() => {
-            FullDatabase.init().catch(() => {});
-        }, 1000);
-
-        return;
-    }
-
-    // ❌ Pehli baar — full check karo
-    setTimeout(() => {
-        FullDatabase.setup().catch(err => {
-            console.warn("[FullDB] Setup error:", err);
-        });
-    }, 2000);
-});
+console.log("[FullDB] Auto-download DISABLED — website will never show progress bar ✅");

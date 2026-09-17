@@ -1,6 +1,7 @@
 /* =========================================================
-   ISLAMICWAY — COMPLETE OFFLINE DATABASE v2.0
+   ISLAMICWAY — COMPLETE OFFLINE DATABASE v2.0 (FIXED)
    Full Quran + Hadith + Duas + Guidance
+   Progress bar sirf pehli baar aayega
    ========================================================= */
 
 const ISLAMIC_DATABASE = {
@@ -52,7 +53,6 @@ const ISLAMIC_DATABASE = {
     ===================================================== */
     quranContent: {
 
-        /* -------- 1. SURAH AL-FATIHAH -------- */
         1: {
             arabic: [
                 "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ",
@@ -74,7 +74,6 @@ const ISLAMIC_DATABASE = {
             ]
         },
 
-        /* -------- 36. SURAH YA-SIN (Full 83 Ayahs — shortened here for space) -------- */
         36: {
             arabic: [
                 "يس",
@@ -106,7 +105,6 @@ const ISLAMIC_DATABASE = {
             ]
         },
 
-        /* -------- 55. SURAH AR-RAHMAN (First 25 Ayahs) -------- */
         55: {
             arabic: [
                 "الرَّحْمَٰنُ",
@@ -164,7 +162,6 @@ const ISLAMIC_DATABASE = {
             ]
         },
 
-        /* -------- 56. SURAH AL-WAQI'AH (First 25 Ayahs) -------- */
         56: {
             arabic: [
                 "إِذَا وَقَعَتِ الْوَاقِعَةُ",
@@ -222,7 +219,6 @@ const ISLAMIC_DATABASE = {
             ]
         },
 
-        /* -------- 67. SURAH AL-MULK -------- */
         67: {
             arabic: [
                 "تَبَارَكَ الَّذِي بِيَدِهِ الْمُلْكُ وَهُوَ عَلَىٰ كُلِّ شَيْءٍ قَدِيرٌ",
@@ -250,7 +246,6 @@ const ISLAMIC_DATABASE = {
             ]
         },
 
-        /* -------- 78. SURAH AN-NABA -------- */
         78: {
             arabic: [
                 "عَمَّ يَتَسَاءَلُونَ",
@@ -290,7 +285,6 @@ const ISLAMIC_DATABASE = {
             ]
         },
 
-        /* -------- 94. SURAH ASH-SHARH -------- */
         94: {
             arabic: [
                 "أَلَمْ نَشْرَحْ لَكَ صَدْرَكَ",
@@ -314,7 +308,6 @@ const ISLAMIC_DATABASE = {
             ]
         },
 
-        /* -------- 97. SURAH AL-QADR -------- */
         97: {
             arabic: [
                 "إِنَّا أَنزَلْنَاهُ فِي لَيْلَةِ الْقَدْرِ",
@@ -332,7 +325,6 @@ const ISLAMIC_DATABASE = {
             ]
         },
 
-        /* -------- 103. SURAH AL-ASR -------- */
         103: {
             arabic: [
                 "وَالْعَصْرِ",
@@ -346,7 +338,6 @@ const ISLAMIC_DATABASE = {
             ]
         },
 
-        /* -------- 108. SURAH AL-KAWTHAR -------- */
         108: {
             arabic: [
                 "إِنَّا أَعْطَيْنَاكَ الْكَوْثَرَ",
@@ -360,7 +351,6 @@ const ISLAMIC_DATABASE = {
             ]
         },
 
-        /* -------- 109. SURAH AL-KAFIRUN -------- */
         109: {
             arabic: [
                 "قُلْ يَا أَيُّهَا الْكَافِرُونَ",
@@ -380,7 +370,6 @@ const ISLAMIC_DATABASE = {
             ]
         },
 
-        /* -------- 110. SURAH AN-NASR -------- */
         110: {
             arabic: [
                 "إِذَا جَاءَ نَصْرُ اللَّهِ وَالْفَتْحُ",
@@ -394,7 +383,6 @@ const ISLAMIC_DATABASE = {
             ]
         },
 
-        /* -------- 112. SURAH AL-IKHLAS -------- */
         112: {
             arabic: [
                 "قُلْ هُوَ اللَّهُ أَحَدٌ",
@@ -410,7 +398,6 @@ const ISLAMIC_DATABASE = {
             ]
         },
 
-        /* -------- 113. SURAH AL-FALAQ -------- */
         113: {
             arabic: [
                 "قُلْ أَعُوذُ بِرَبِّ الْفَلَقِ",
@@ -428,7 +415,6 @@ const ISLAMIC_DATABASE = {
             ]
         },
 
-        /* -------- 114. SURAH AN-NAS -------- */
         114: {
             arabic: [
                 "قُلْ أَعُوذُ بِرَبِّ النَّاسِ",
@@ -450,7 +436,7 @@ const ISLAMIC_DATABASE = {
     },
 
     /* =====================================================
-       HADITH — 6 BOOKS (Expanded)
+       HADITH — 6 BOOKS
     ===================================================== */
     hadithBooks: {
 
@@ -589,67 +575,48 @@ const ISLAMIC_DATABASE = {
     },
 
     /* =====================================================
-       DUAS — 40+ Categorized Duas
+       DUAS — 40 Categorized Duas
     ===================================================== */
     duas: [
-        // ---- FOOD ----
         { id: 1, title: "Dua Before Eating", category: "food", arabic: "بِسْمِ اللَّهِ", urdu: "اللہ کے نام سے (شروع کرتا ہوں)", english: "In the name of Allah.", reference: "Sunan Abu Dawud" },
         { id: 2, title: "Dua After Eating", category: "food", arabic: "الْحَمْدُ لِلَّهِ الَّذِي أَطْعَمَنَا وَسَقَانَا", urdu: "تمام تعریفیں اللہ کے لیے ہیں جس نے ہمیں کھلایا اور پلایا", english: "All praise is for Allah who fed us and gave us drink.", reference: "Sunan Abu Dawud" },
         { id: 3, title: "Dua for Forgotten Bismillah", category: "food", arabic: "بِسْمِ اللَّهِ أَوَّلَهُ وَآخِرَهُ", urdu: "شروع اور آخر میں اللہ کا نام", english: "In the name of Allah at its beginning and end.", reference: "Sunan Abu Dawud" },
-
-        // ---- MORNING ----
         { id: 4, title: "Morning Dua", category: "morning", arabic: "اللَّهُمَّ بِكَ أَصْبَحْنَا وَبِكَ أَمْسَيْنَا", urdu: "اے اللہ! تیری مدد سے ہم نے صبح کی", english: "O Allah, by You we enter the morning and by You we enter the evening.", reference: "Sunan Abu Dawud" },
-        { id: 5, title: "Morning Protection", category: "morning", arabic: "أَعُوذُ بِكَلِمَاتِ اللَّهِ التَّامَّاتِ مِنْ شَرِّ مَا خَلَقَ", urdu: "میں اللہ کے مکمل کلمات کی پناہ مانگتا ہوں ہر اس چیز کے شر سے جو اس نے پیدا کی", english: "I seek refuge in the perfect words of Allah from the evil of what He has created.", reference: "Sahih Muslim" },
-        { id: 6, title: "Sayyidul Istighfar", category: "morning", arabic: "اللَّهُمَّ أَنْتَ رَبِّي لَا إِلَٰهَ إِلَّا أَنْتَ، خَلَقْتَنِي وَأَنَا عَبْدُكَ", urdu: "اے اللہ! تو میرا رب ہے، تیرے سوا کوئی معبود نہیں، تو نے مجھے پیدا کیا اور میں تیرا بندہ ہوں", english: "O Allah, You are my Lord, none has the right to be worshipped except You.", reference: "Sahih Bukhari" },
-
-        // ---- EVENING ----
-        { id: 7, title: "Evening Dua", category: "evening", arabic: "اللَّهُمَّ بِكَ أَمْسَيْنَا وَبِكَ أَصْبَحْنَا", urdu: "اے اللہ! تیری مدد سے ہم نے شام کی", english: "O Allah, by You we enter the evening and by You we enter the morning.", reference: "Sunan Abu Dawud" },
+        { id: 5, title: "Morning Protection", category: "morning", arabic: "أَعُوذُ بِكَلِمَاتِ اللَّهِ التَّامَّاتِ مِنْ شَرِّ مَا خَلَقَ", urdu: "میں اللہ کے مکمل کلمات کی پناہ مانگتا ہوں", english: "I seek refuge in the perfect words of Allah.", reference: "Sahih Muslim" },
+        { id: 6, title: "Sayyidul Istighfar", category: "morning", arabic: "اللَّهُمَّ أَنْتَ رَبِّي لَا إِلَٰهَ إِلَّا أَنْتَ، خَلَقْتَنِي وَأَنَا عَبْدُكَ", urdu: "اے اللہ! تو میرا رب ہے، تیرے سوا کوئی معبود نہیں", english: "O Allah, You are my Lord, none has the right to be worshipped except You.", reference: "Sahih Bukhari" },
+        { id: 7, title: "Evening Dua", category: "evening", arabic: "اللَّهُمَّ بِكَ أَمْسَيْنَا وَبِكَ أَصْبَحْنَا", urdu: "اے اللہ! تیری مدد سے ہم نے شام کی", english: "O Allah, by You we enter the evening.", reference: "Sunan Abu Dawud" },
         { id: 8, title: "Evening Protection", category: "evening", arabic: "أَعُوذُ بِكَلِمَاتِ اللَّهِ التَّامَّاتِ مِنْ شَرِّ مَا خَلَقَ", urdu: "میں اللہ کے مکمل کلمات کی پناہ مانگتا ہوں", english: "I seek refuge in the perfect words of Allah.", reference: "Sahih Muslim" },
-
-        // ---- SLEEP ----
         { id: 9, title: "Dua Before Sleeping", category: "sleep", arabic: "بِاسْمِكَ اللَّهُمَّ أَمُوتُ وَأَحْيَا", urdu: "اے اللہ! تیرے نام سے میں مرتا اور جیتا ہوں", english: "In Your name, O Allah, I die and I live.", reference: "Sahih Bukhari" },
         { id: 10, title: "Ayatul Kursi Before Sleep", category: "sleep", arabic: "اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ", urdu: "اللہ کے سوا کوئی معبود نہیں، وہ زندہ اور قائم ہے", english: "Allah - there is no deity except Him, the Ever-Living, the Sustainer.", reference: "Sahih Bukhari" },
         { id: 11, title: "Dua After Waking Up", category: "sleep", arabic: "الْحَمْدُ لِلَّهِ الَّذِي أَحْيَانَا بَعْدَ مَا أَمَاتَنَا", urdu: "تمام تعریفیں اللہ کے لیے ہیں جس نے ہمیں موت کے بعد زندگی بخشی", english: "All praise is for Allah who gave us life after death.", reference: "Sahih Bukhari" },
-
-        // ---- FORGIVENESS ----
         { id: 12, title: "Dua for Forgiveness", category: "forgiveness", arabic: "رَبِّ اغْفِرْ لِي وَتُبْ عَلَيَّ إِنَّكَ أَنْتَ التَّوَّابُ الرَّحِيمُ", urdu: "اے میرے رب! مجھے معاف کر اور میری توبہ قبول کر", english: "My Lord, forgive me and accept my repentance.", reference: "Sunan at-Tirmidhi" },
         { id: 13, title: "Dua for Mercy", category: "forgiveness", arabic: "رَبِّ اغْفِرْ وَارْحَمْ وَأَنْتَ خَيْرُ الرَّاحِمِينَ", urdu: "اے میرے رب! معاف کر اور رحم فرما", english: "My Lord, forgive and have mercy.", reference: "Surah Al-Mu'minun 23:118" },
         { id: 14, title: "Dua for Parents' Forgiveness", category: "forgiveness", arabic: "رَبَّنَا اغْفِرْ لِي وَلِوَالِدَيَّ وَلِلْمُؤْمِنِينَ", urdu: "اے ہمارے رب! مجھے، میرے والدین کو اور تمام مومنین کو معاف فرما", english: "Our Lord, forgive me and my parents and the believers.", reference: "Surah Ibrahim 14:41" },
-
-        // ---- PROTECTION ----
         { id: 15, title: "Dua for Protection", category: "protection", arabic: "أَعُوذُ بِكَلِمَاتِ اللَّهِ التَّامَّاتِ مِنْ شَرِّ مَا خَلَقَ", urdu: "میں اللہ کے مکمل کلمات کی پناہ مانگتا ہوں", english: "I seek refuge in the perfect words of Allah.", reference: "Sahih Muslim" },
         { id: 16, title: "Dua for Anxiety", category: "protection", arabic: "اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الْهَمِّ وَالْحَزَنِ", urdu: "اے اللہ! میں غم اور پریشانی سے تیری پناہ مانگتا ہوں", english: "O Allah, I seek refuge in You from worry and grief.", reference: "Sahih Bukhari" },
-        { id: 17, title: "Dua Against Evil Eye", category: "protection", arabic: "أَعُوذُ بِكَلِمَاتِ اللَّهِ التَّامَّةِ مِنْ كُلِّ شَيْطَانٍ وَهَامَّةٍ", urdu: "میں اللہ کے مکمل کلمات سے ہر شیطان اور زہریلے جانور سے پناہ مانگتا ہوں", english: "I seek refuge in the perfect words of Allah from every devil and poisonous creature.", reference: "Sahih Bukhari" },
+        { id: 17, title: "Dua Against Evil Eye", category: "protection", arabic: "أَعُوذُ بِكَلِمَاتِ اللَّهِ التَّامَّةِ مِنْ كُلِّ شَيْطَانٍ وَهَامَّةٍ", urdu: "میں اللہ کے مکمل کلمات سے ہر شیطان اور زہریلے جانور سے پناہ مانگتا ہوں", english: "I seek refuge in the perfect words of Allah from every devil.", reference: "Sahih Bukhari" },
         { id: 18, title: "Dua for Anger", category: "protection", arabic: "أَعُوذُ بِاللَّهِ مِنَ الشَّيْطَانِ الرَّجِيمِ", urdu: "میں اللہ کی پناہ مانگتا ہوں شیطان مردود سے", english: "I seek refuge in Allah from Satan the accursed.", reference: "Sahih Bukhari" },
-
-        // ---- PRAYER ----
         { id: 19, title: "Dua for Guidance", category: "prayer", arabic: "اهْدِنَا الصِّرَاطَ الْمُسْتَقِيمَ", urdu: "ہمیں سیدھے راستے کی ہدایت فرما", english: "Guide us to the straight path.", reference: "Surah Al-Fatihah 1:6" },
         { id: 20, title: "Dua for Patience", category: "prayer", arabic: "رَبَّنَا أَفْرِغْ عَلَيْنَا صَبْرًا", urdu: "اے ہمارے رب! ہم پر صبر انڈیل دے", english: "Our Lord, pour upon us patience.", reference: "Surah Al-Baqarah 2:250" },
         { id: 21, title: "Dua for Steadfastness", category: "prayer", arabic: "يَا مُقَلِّبَ الْقُلُوبِ ثَبِّتْ قَلْبِي عَلَى دِينِكَ", urdu: "اے دلوں کو پھیرنے والے! میرے دل کو اپنے دین پر ثابت رکھ", english: "O Turner of hearts, keep my heart firm upon Your religion.", reference: "Sunan at-Tirmidhi" },
-        { id: 22, title: "Dua for Acceptance", category: "prayer", arabic: "رَبَّنَا تَقَبَّلْ مِنَّا إِنَّكَ أَنْتَ السَّمِيعُ الْعَلِيمُ", urdu: "اے ہمارے رب! ہم سے قبول فرما", english: "Our Lord, accept from us. Indeed, You are the Hearing, the Knowing.", reference: "Surah Al-Baqarah 2:127" },
+        { id: 22, title: "Dua for Acceptance", category: "prayer", arabic: "رَبَّنَا تَقَبَّلْ مِنَّا إِنَّكَ أَنْتَ السَّمِيعُ الْعَلِيمُ", urdu: "اے ہمارے رب! ہم سے قبول فرما", english: "Our Lord, accept from us.", reference: "Surah Al-Baqarah 2:127" },
         { id: 23, title: "Dua for Ease", category: "prayer", arabic: "رَبِّ اشْرَحْ لِي صَدْرِي وَيَسِّرْ لِي أَمْرِي", urdu: "اے میرے رب! میرا سینہ کھول دے اور میرا کام آسان کر دے", english: "My Lord, expand for me my chest and ease for me my task.", reference: "Surah Ta-Ha 20:25-26" },
-
-        // ---- FAMILY ----
-        { id: 24, title: "Dua for Family", category: "family", arabic: "رَبَّنَا هَبْ لَنَا مِنْ أَزْوَاجِنَا وَذُرِّيَّاتِنَا قُرَّةَ أَعْيُنٍ", urdu: "اے ہمارے رب! ہمیں اپنی بیویوں اور اولاد سے آنکھوں کی ٹھنڈک عطا فرما", english: "Our Lord, grant us from among our spouses and offspring comfort to our eyes.", reference: "Surah Al-Furqan 25:74" },
-        { id: 25, title: "Dua for Parents", category: "family", arabic: "رَبِّ ارْحَمْهُمَا كَمَا رَبَّيَانِي صَغِيرًا", urdu: "اے میرے رب! میرے والدین پر رحم فرما", english: "My Lord, have mercy upon them as they brought me up when I was small.", reference: "Surah Al-Isra 17:24" },
+        { id: 24, title: "Dua for Family", category: "family", arabic: "رَبَّنَا هَبْ لَنَا مِنْ أَزْوَاجِنَا وَذُرِّيَّاتِنَا قُرَّةَ أَعْيُنٍ", urdu: "اے ہمارے رب! ہمیں اپنی بیویوں اور اولاد سے آنکھوں کی ٹھنڈک عطا فرما", english: "Our Lord, grant us comfort to our eyes.", reference: "Surah Al-Furqan 25:74" },
+        { id: 25, title: "Dua for Parents", category: "family", arabic: "رَبِّ ارْحَمْهُمَا كَمَا رَبَّيَانِي صَغِيرًا", urdu: "اے میرے رب! میرے والدین پر رحم فرما", english: "My Lord, have mercy upon them.", reference: "Surah Al-Isra 17:24" },
         { id: 26, title: "Dua for Children", category: "family", arabic: "رَبِّ هَبْ لِي مِنَ الصَّالِحِينَ", urdu: "اے میرے رب! مجھے نیک اولاد عطا فرما", english: "My Lord, grant me from among the righteous.", reference: "Surah As-Saffat 37:100" },
-
-        // ---- TRAVEL ----
         { id: 27, title: "Dua for Travel", category: "travel", arabic: "سُبْحَانَ الَّذِي سَخَّرَ لَنَا هَذَا وَمَا كُنَّا لَهُ مُقْرِنِينَ", urdu: "پاک ہے وہ ذات جس نے اس سواری کو ہمارے تابع کیا", english: "Glory be to Him who has subjected this to us.", reference: "Surah Az-Zukhruf 43:13" },
         { id: 28, title: "Dua for Entering Home", category: "travel", arabic: "اللَّهُمَّ إِنِّي أَسْأَلُكَ خَيْرَ الْمَوْلَجِ", urdu: "اے اللہ! میں تجھ سے گھر میں داخل ہونے کی خیر مانگتا ہوں", english: "O Allah, I ask You for the best of entering.", reference: "Sunan Abu Dawud" },
         { id: 29, title: "Dua for Leaving Home", category: "travel", arabic: "بِسْمِ اللَّهِ تَوَكَّلْتُ عَلَى اللَّهِ", urdu: "اللہ کے نام سے، میں اللہ پر بھروسہ کرتا ہوں", english: "In the name of Allah, I place my trust in Allah.", reference: "Sunan Abu Dawud" },
-
-        // ---- GENERAL ----
         { id: 30, title: "Dua for Knowledge", category: "general", arabic: "رَبِّ زِدْنِي عِلْمًا", urdu: "اے میرے رب! میرے علم میں اضافہ فرما", english: "My Lord, increase me in knowledge.", reference: "Surah Ta-Ha 20:114" },
         { id: 31, title: "Dua for Barakah", category: "general", arabic: "اللَّهُمَّ بَارِكْ لَنَا فِيمَا رَزَقْتَنَا", urdu: "اے اللہ! جو رزق تو نے دیا ہے اس میں برکت دے", english: "O Allah, bless us in what You have provided us.", reference: "Sunan Ibn Majah" },
         { id: 32, title: "Dua for Health", category: "general", arabic: "اللَّهُمَّ عَافِنِي فِي بَدَنِي", urdu: "اے اللہ! میرے جسم کو صحت عطا فرما", english: "O Allah, grant health to my body.", reference: "Sunan Abu Dawud" },
         { id: 33, title: "Dua for Rain", category: "general", arabic: "اللَّهُمَّ صَيِّبًا نَافِعًا", urdu: "اے اللہ! نفع بخش بارش برسا", english: "O Allah, send beneficial rain.", reference: "Sahih Bukhari" },
         { id: 34, title: "Dua for Debt Relief", category: "general", arabic: "اللَّهُمَّ اكْفِنِي بِحَلَالِكَ عَنْ حَرَامِكَ", urdu: "اے اللہ! اپنے حلال سے مجھے کافی کر دے", english: "O Allah, suffice me with Your lawful.", reference: "Sunan at-Tirmidhi" },
-        { id: 35, title: "Dua for Anxiety & Sorrow", category: "general", arabic: "لَا إِلَٰهَ إِلَّا اللَّهُ الْعَظِيمُ الْحَلِيمُ", urdu: "اللہ کے سوا کوئی معبود نہیں، وہ عظیم اور بردبار ہے", english: "None has the right to be worshipped but Allah, the Mighty, the Forbearing.", reference: "Sahih Bukhari" },
+        { id: 35, title: "Dua for Anxiety & Sorrow", category: "general", arabic: "لَا إِلَٰهَ إِلَّا اللَّهُ الْعَظِيمُ الْحَلِيمُ", urdu: "اللہ کے سوا کوئی معبود نہیں، وہ عظیم اور بردبار ہے", english: "None has the right to be worshipped but Allah.", reference: "Sahih Bukhari" },
         { id: 36, title: "Dua for Good Dreams", category: "general", arabic: "اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنْ شَرِّ مَا رَأَيْتُ", urdu: "اے اللہ! میں اس خواب کے شر سے تیری پناہ مانگتا ہوں", english: "O Allah, I seek refuge in You from the evil of what I saw.", reference: "Sahih Muslim" },
         { id: 37, title: "Dua When It Rains", category: "general", arabic: "اللَّهُمَّ صَيِّبًا نَافِعًا", urdu: "اے اللہ! نفع بخش بارش برسا", english: "O Allah, send beneficial rain.", reference: "Sahih Bukhari" },
-        { id: 38, title: "Dua in the Last Third of Night", category: "general", arabic: "اللَّهُمَّ اغْفِرْ لِي وَارْحَمْنِي وَاهْدِنِي وَعَافِنِي وَارْزُقْنِي", urdu: "اے اللہ! مجھے بخش، رحم، ہدایت، صحت اور رزق عطا فرما", english: "O Allah, forgive me, have mercy on me, guide me, grant me health and provide for me.", reference: "Sahih Muslim" },
-        { id: 39, title: "Dua for Steadfast Heart", category: "general", arabic: "رَبَّنَا لَا تُزِغْ قُلُوبَنَا بَعْدَ إِذْ هَدَيْتَنَا", urdu: "اے ہمارے رب! ہمارے دلوں کو ٹیڑھا نہ کر، جب تو نے ہمیں ہدایت دی", english: "Our Lord, let not our hearts deviate after You have guided us.", reference: "Surah Al-Imran 3:8" },
+        { id: 38, title: "Dua in the Last Third of Night", category: "general", arabic: "اللَّهُمَّ اغْفِرْ لِي وَارْحَمْنِي وَاهْدِنِي وَعَافِنِي وَارْزُقْنِي", urdu: "اے اللہ! مجھے بخش، رحم، ہدایت، صحت اور رزق عطا فرما", english: "O Allah, forgive me, have mercy on me, guide me, grant me health.", reference: "Sahih Muslim" },
+        { id: 39, title: "Dua for Steadfast Heart", category: "general", arabic: "رَبَّنَا لَا تُزِغْ قُلُوبَنَا بَعْدَ إِذْ هَدَيْتَنَا", urdu: "اے ہمارے رب! ہمارے دلوں کو ٹیڑھا نہ کر", english: "Our Lord, let not our hearts deviate.", reference: "Surah Al-Imran 3:8" },
         { id: 40, title: "Dua for Jannah", category: "general", arabic: "رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً وَفِي الْآخِرَةِ حَسَنَةً", urdu: "اے ہمارے رب! ہمیں دنیا میں بھی بھلائی دے اور آخرت میں بھی", english: "Our Lord, give us in this world good and in the Hereafter good.", reference: "Surah Al-Baqarah 2:201" }
     ],
 
@@ -659,8 +626,8 @@ const ISLAMIC_DATABASE = {
     guidance: [
         { id: 1, category: "quran", title: "Guidance from the Quran", arabic: "إِنَّ هَٰذَا الْقُرْآنَ يَهْدِي لِلَّتِي هِيَ أَقْوَمُ", urdu: "بے شک یہ قرآن اس راستے کی رہنمائی کرتا ہے جو سب سے سیدھا ہے۔", english: "Indeed, this Quran guides to the way that is most upright.", content: "قرآن مجید مسلمان کی زندگی کے لیے بنیادی رہنمائی فراہم کرتا ہے۔", reference: "Quran 17:9" },
         { id: 2, category: "salah", title: "Importance of Salah", arabic: "وَأَقِيمُوا الصَّلَاةَ", urdu: "اور نماز قائم کرو۔", english: "And establish prayer.", content: "نماز اسلام کی بنیادی عبادات میں سے ہے۔", reference: "Quran 2:43" },
-        { id: 3, category: "patience", title: "Be Patient", arabic: "إِنَّ اللَّهَ مَعَ الصَّابِرِينَ", urdu: "بے شک اللہ صبر کرنے والوں کے ساتھ ہے۔", english: "Indeed, Allah is with those who are patient.", content: "مشکلات کے وقت صبر، دعا اور اللہ پر بھروسہ مسلمان کے لیے بڑی طاقت ہیں۔", reference: "Quran 2:153" },
-        { id: 4, category: "family", title: "Kindness to Parents", arabic: "وَبِالْوَالِدَيْنِ إِحْسَانًا", urdu: "اور والدین کے ساتھ حسن سلوک کرو۔", english: "And show kindness to parents.", content: "اسلام والدین کے ساتھ احترام، نرمی اور حسن سلوک کی تعلیم دیتا ہے۔", reference: "Quran 17:23" },
+        { id: 3, category: "patience", title: "Be Patient", arabic: "إِنَّ اللَّهَ مَعَ الصَّابِرِينَ", urdu: "بے شک اللہ صبر کرنے والوں کے ساتھ ہے۔", english: "Indeed, Allah is with those who are patient.", content: "مشکلات کے وقت صبر اور اللہ پر بھروسہ مسلمان کے لیے بڑی طاقت ہیں۔", reference: "Quran 2:153" },
+        { id: 4, category: "family", title: "Kindness to Parents", arabic: "وَبِالْوَالِدَيْنِ إِحْسَانًا", urdu: "اور والدین کے ساتھ حسن سلوک کرو۔", english: "And show kindness to parents.", content: "اسلام والدین کے ساتھ احترام اور حسن سلوک کی تعلیم دیتا ہے۔", reference: "Quran 17:23" },
         { id: 5, category: "character", title: "Good Character", arabic: "وَقُولُوا لِلنَّاسِ حُسْنًا", urdu: "اور لوگوں سے اچھی بات کہو۔", english: "And speak good words to people.", content: "اچھی گفتگو، نرم رویہ اسلامی اخلاق کا اہم حصہ ہے۔", reference: "Quran 2:83" },
         { id: 6, category: "halal", title: "Eat What Is Halal", arabic: "كُلُوا مِنْ طَيِّبَاتِ مَا رَزَقْنَاكُمْ", urdu: "جو پاکیزہ چیزیں ہم نے تمہیں عطا کی ہیں ان میں سے کھاؤ۔", english: "Eat from the good things We have provided for you.", content: "اسلام حلال اور پاکیزہ رزق اختیار کرنے کی تعلیم دیتا ہے۔", reference: "Quran 2:172" },
         { id: 7, category: "daily", title: "Remember Allah", arabic: "أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ", urdu: "یاد رکھو، اللہ کے ذکر سے دلوں کو اطمینان ملتا ہے۔", english: "Surely, in the remembrance of Allah do hearts find comfort.", content: "اللہ کا ذکر دل کو سکون دیتا ہے۔", reference: "Quran 13:28" },
@@ -674,34 +641,27 @@ const ISLAMIC_DATABASE = {
     /* =====================================================
        HELPER FUNCTIONS
     ===================================================== */
-
-    // Check if a specific Surah is available offline
     hasSurahOffline(surahNumber) {
         return !!this.quranContent[surahNumber];
     },
 
-    // Get Surah content from database
     getSurahOffline(surahNumber) {
         return this.quranContent[surahNumber] || null;
     },
 
-    // Get a Hadith book from database
     getHadithBook(bookKey) {
         return this.hadithBooks[bookKey] || null;
     },
 
-    // Get all duas
     getAllDuas() {
         return this.duas || [];
     },
 
-    // Get duas by category
     getDuasByCategory(category) {
         if (category === "all") return this.duas;
         return this.duas.filter(d => d.category === category);
     },
 
-    // Get all guidance
     getAllGuidance() {
         return this.guidance || [];
     }
@@ -715,11 +675,9 @@ console.log(`[DB] Guidance: ${ISLAMIC_DATABASE.guidance.length} topics offline`)
 
 
 /* =========================================================
-   FULL DATABASE AUTO-DOWNLOAD SYSTEM
-   - Downloads complete Quran (114 Surahs)
-   - Downloads complete Hadith (6 books)
-   - Saves in IndexedDB for offline use
-   - Shows progress bar
+   FULL DATABASE AUTO-DOWNLOAD SYSTEM (FIXED)
+   - Progress bar sirf PEHLI BAAR aayega
+   - Baad mein localStorage + IndexedDB dono check honge
 ========================================================= */
 
 const FullDatabase = {
@@ -884,7 +842,6 @@ const FullDatabase = {
 
             const surahMap = {};
 
-            // Arabic ayahs
             arabicData.quran.forEach((ayah) => {
                 const surah = ayah.chapter;
                 if (!surahMap[surah]) {
@@ -893,7 +850,6 @@ const FullDatabase = {
                 surahMap[surah].arabic.push(ayah.text);
             });
 
-            // Urdu ayahs
             urduData.quran.forEach((ayah) => {
                 const surah = ayah.chapter;
                 if (surahMap[surah]) {
@@ -901,7 +857,6 @@ const FullDatabase = {
                 }
             });
 
-            // Save each surah
             const totalSurahs = Object.keys(surahMap).length;
             let count = 0;
 
@@ -909,12 +864,17 @@ const FullDatabase = {
                 await this.saveQuran(Number(surahNum), content);
                 count++;
 
-                const percent = 35 + (count / totalSurahs) * 15; // 35% → 50%
+                const percent = 35 + (count / totalSurahs) * 15;
                 this.updateProgress(percent, `Saving Surah ${count}/${totalSurahs}...`);
             }
 
             await this.setMeta("quran_downloaded", true);
             await this.setMeta("quran_downloaded_at", Date.now());
+
+            // ✅ localStorage flag
+            try {
+                localStorage.setItem("islamicway_quran_ready", "yes");
+            } catch (e) {}
 
             console.log(`[FullDB] Quran downloaded: ${totalSurahs} surahs ✅`);
             this.updateProgress(50, "Quran downloaded ✅");
@@ -960,7 +920,6 @@ const FullDatabase = {
                 let arabicData = null;
                 let urduData = null;
 
-                // Try each URL
                 for (const baseUrl of HADITH_URLS) {
                     try {
                         if (!arabicData) {
@@ -998,6 +957,11 @@ const FullDatabase = {
         await this.setMeta("hadith_downloaded", true);
         await this.setMeta("hadith_downloaded_at", Date.now());
 
+        // ✅ localStorage flag
+        try {
+            localStorage.setItem("islamicway_hadith_ready", "yes");
+        } catch (e) {}
+
         this.updateProgress(97, "Finalizing database...");
         console.log("[FullDB] Hadith download complete ✅");
         return true;
@@ -1007,13 +971,17 @@ const FullDatabase = {
        CHECK IF ALREADY DOWNLOADED
     --------------------------------------------- */
     async isFullyDownloaded() {
-        const quranDone = await this.getMeta("quran_downloaded");
-        const hadithDone = await this.getMeta("hadith_downloaded");
-        return quranDone && hadithDone;
+        try {
+            const quranDone = await this.getMeta("quran_downloaded");
+            const hadithDone = await this.getMeta("hadith_downloaded");
+            return !!(quranDone && hadithDone);
+        } catch (e) {
+            return false;
+        }
     },
 
     /* ---------------------------------------------
-       MAIN SETUP
+       MAIN SETUP (FIXED)
     --------------------------------------------- */
     async setup() {
 
@@ -1026,22 +994,44 @@ const FullDatabase = {
         try {
             await this.init();
 
+            // ✅ CHECK 1: Meta flags in IndexedDB
             const downloaded = await this.isFullyDownloaded();
 
             if (downloaded) {
-                console.log("[FullDB] Full database already available ✅");
+                console.log("[FullDB] Full database already available (IndexedDB meta) ✅");
                 return true;
             }
 
+            // ✅ CHECK 2: localStorage flag + IndexedDB data verify
+            const localFlag = localStorage.getItem("islamicway_full_db_ready");
+            if (localFlag === "yes") {
+                try {
+                    const quranCheck = await this.getQuran(1);      // Surah Al-Fatihah
+                    const hadithCheck = await this.getHadith("bukhari");
+
+                    if (quranCheck && hadithCheck) {
+                        console.log("[FullDB] Database ready (localStorage + IndexedDB) ✅");
+
+                        // Meta flags bhi reset kar do taake agli baar tez ho
+                        await this.setMeta("quran_downloaded", true);
+                        await this.setMeta("hadith_downloaded", true);
+
+                        return true;
+                    }
+                } catch (e) {
+                    console.warn("[FullDB] Verification failed:", e);
+                }
+            }
+
+            // ❌ Kuch nahi mila — first time download
             console.log("[FullDB] First time — starting download...");
 
-            // Show overlay
             this.updateProgress(1, "Starting download...");
 
             // Download Quran
             await this.downloadFullQuran();
 
-            // Small delay between downloads
+            // Small delay
             await new Promise(r => setTimeout(r, 500));
 
             // Download Hadith
@@ -1049,6 +1039,12 @@ const FullDatabase = {
 
             // Complete
             this.updateProgress(100, "✅ Download Complete!");
+
+            // ✅ Master flag
+            try {
+                localStorage.setItem("islamicway_full_db_ready", "yes");
+            } catch (e) {}
+
             await new Promise(r => setTimeout(r, 1500));
             this.hideProgress();
 
@@ -1071,7 +1067,6 @@ const FullDatabase = {
             if (data) return data;
         } catch (e) {}
 
-        // Fallback to ISLAMIC_DATABASE
         if (typeof ISLAMIC_DATABASE !== "undefined" &&
             ISLAMIC_DATABASE.quranContent &&
             ISLAMIC_DATABASE.quranContent[surahNumber]) {
@@ -1090,7 +1085,6 @@ const FullDatabase = {
             if (data) return data;
         } catch (e) {}
 
-        // Fallback to ISLAMIC_DATABASE
         if (typeof ISLAMIC_DATABASE !== "undefined" &&
             ISLAMIC_DATABASE.hadithBooks &&
             ISLAMIC_DATABASE.hadithBooks[bookKey]) {
@@ -1104,19 +1098,46 @@ const FullDatabase = {
        RESET DATABASE (for testing)
     --------------------------------------------- */
     async reset() {
-        const tx = this.db.transaction(["quran", "hadith", "meta"], "readwrite");
-        tx.objectStore("quran").clear();
-        tx.objectStore("hadith").clear();
-        tx.objectStore("meta").clear();
-        console.log("[FullDB] Database reset ✅");
+        try {
+            const tx = this.db.transaction(["quran", "hadith", "meta"], "readwrite");
+            tx.objectStore("quran").clear();
+            tx.objectStore("hadith").clear();
+            tx.objectStore("meta").clear();
+
+            // ✅ localStorage bhi saaf
+            localStorage.removeItem("islamicway_full_db_ready");
+            localStorage.removeItem("islamicway_quran_ready");
+            localStorage.removeItem("islamicway_hadith_ready");
+
+            console.log("[FullDB] Database reset ✅ (all flags cleared)");
+        } catch (e) {
+            console.warn("[FullDB] Reset error:", e);
+        }
     }
 };
 
 /* =========================================================
-   AUTO-START ON PAGE LOAD
+   AUTO-START ON PAGE LOAD (FIXED)
+   - Pehle localStorage check — agar ready flag hai toh turant skip
+   - Warna IndexedDB check
 ========================================================= */
 window.addEventListener("load", () => {
-    // Wait 2 seconds before starting download
+
+    // ✅ Fast check — agar localStorage mein master flag hai
+    const masterFlag = localStorage.getItem("islamicway_full_db_ready");
+
+    if (masterFlag === "yes") {
+        console.log("[FullDB] Master flag found — skipping progress bar ✅");
+
+        // Optional: Initialize DB in background but don't show progress
+        setTimeout(() => {
+            FullDatabase.init().catch(() => {});
+        }, 1000);
+
+        return;
+    }
+
+    // ❌ Pehli baar — full check karo
     setTimeout(() => {
         FullDatabase.setup().catch(err => {
             console.warn("[FullDB] Setup error:", err);

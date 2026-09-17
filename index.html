@@ -286,23 +286,47 @@
                     <small>Surah Al-Insyirah (94:6)</small>
                 </div>
 
-                <div class="prayer-card">
-                    <div class="prayer-header">
-                        <div>
-                            <h2>Prayer Times</h2>
-                            <p>📍 Kuala Lumpur, Malaysia</p>
-                        </div>
-                        <div class="date-box">📅 <span>Today's Prayer</span></div>
-                    </div>
-                    <div class="prayer-list">
-                        <div class="prayer-row"><span>🌅 Fajr</span><strong>5:52 AM</strong></div>
-                        <div class="prayer-row"><span>☀️ Dhuhr</span><strong>1:08 PM</strong></div>
-                        <div class="prayer-row"><span>🌤️ Asr</span><strong>4:32 PM</strong></div>
-                        <div class="prayer-row"><span>🌇 Maghrib</span><strong>7:15 PM</strong></div>
-                        <div class="prayer-row"><span>🌙 Isha</span><strong>8:31 PM</strong></div>
-                    </div>
-                    <button class="secondary-button" data-page="prayer">View Full Prayer Schedule →</button>
-                </div>
+                <!-- ================= DYNAMIC PRAYER TIMES ================= -->
+<div class="prayer-times-box" id="prayerTimesBox">
+    <div class="prayer-times-header">
+        <div class="prayer-times-icon">🕌</div>
+        <div>
+            <h2>Today's Prayer Times</h2>
+            <p id="prayerLocationText">📍 Detecting your location...</p>
+        </div>
+        <div class="prayer-times-date" id="prayerDateText">--</div>
+    </div>
+
+    <div class="prayer-times-loading" id="prayerTimesLoading">
+        <div class="loading-spinner"></div>
+        <p>Loading prayer times...</p>
+    </div>
+
+    <div class="prayer-times-error" id="prayerTimesError" style="display:none;">
+        <span>⚠️</span>
+        <p>Unable to detect your location. Please allow location access.</p>
+        <button id="retryPrayerLocation">Try Again</button>
+        <button id="manualPrayerLocation">Enter Location Manually</button>
+    </div>
+
+    <div class="prayer-times-grid" id="prayerTimesGrid"></div>
+
+    <div class="prayer-times-footer">
+        <button id="changeLocationBtn">📍 Change Location</button>
+        <span id="prayerMethodText">Method: Auto-detected</span>
+    </div>
+</div>
+
+<!-- Manual Location Input (hidden by default) -->
+<div class="manual-location-box" id="manualLocationBox" style="display:none;">
+    <h3>Enter Your Location</h3>
+    <input type="text" id="manualCityInput" placeholder="City (e.g. Karachi)">
+    <input type="text" id="manualCountryInput" placeholder="Country (e.g. Pakistan)">
+    <div class="manual-location-buttons">
+        <button id="saveManualLocation">Save</button>
+        <button id="cancelManualLocation">Cancel</button>
+    </div>
+</div>
 
                 <div class="inspiration-card">
                     <div class="star">✦</div>
@@ -608,7 +632,35 @@
                 </div>
             </div>
         </section>
+        <!-- ================= ADHAN PLAYER ================= -->
+    <div class="adhan-player-box">
+    <div class="adhan-header">
+        <div class="adhan-icon">🔊</div>
+        <div>
+            <h3>Adhan (Azaan)</h3>
+            <p id="nextAdhanText">Loading next prayer...</p>
+        </div>
+    </div>
 
+    <div class="adhan-controls">
+        <select id="adhanMuezzin">
+            <option value="ar.alafasy">Mishary Alafasy</option>
+            <option value="ar.abdulbasitmurattal">Abdul Basit</option>
+            <option value="ar.husary">Mahmoud Khalil Al-Husary</option>
+            <option value="ar.minshawi">Muhammad Al-Minshawi</option>
+        </select>
+
+        <button id="playAdhanBtn" class="adhan-btn">▶ Play Adhan</button>
+        <button id="stopAdhanBtn" class="adhan-btn stop">⏹ Stop</button>
+        <button id="testAdhanBtn" class="adhan-btn test">🔔 Test</button>
+    </div>
+
+    <audio id="adhanAudio" preload="none"></audio>
+
+    <div class="adhan-status" id="adhanStatus">
+        Adhan will play automatically at prayer time.
+    </div>
+</div>
         <!-- DUAS PAGE -->
         <section class="page duas-page" id="page-duas">
             <div class="duas-header">

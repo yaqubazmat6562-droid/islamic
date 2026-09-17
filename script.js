@@ -2768,4 +2768,781 @@ document.addEventListener("DOMContentLoaded", () => {
     });
     const startPage = window.location.hash.replace("#", "") || "home";
     updateSEO(startPage);
+});/* =========================================================
+   DYNAMIC ADHAN SYSTEM — COMPLETE
+========================================================= */
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const adhanAudio    = document.getElementById("adhanAudio");
+    const playAdhanBtn  = document.getElementById("playAdhanBtn");
+    const stopAdhanBtn  = document.getElementById("stopAdhanBtn");
+    const testAdhanBtn  = document.getElementById("testAdhanBtn");
+    const muezzinSelect = document.getElementById("adhanMuezzin");
+    const adhanStatus   = document.getElementById("adhanStatus");
+    const nextAdhanText = document.getElementById("nextAdhanText");
+
+    if (!adhanAudio) {
+        console.warn("[Adhan] Audio element not found — skipping Adhan system");
+        return;
+    }
+
+    /* ---------------------------------------------
+       CONFIG
+    --------------------------------------------- */
+    const ADHAN_CITY    = "Kuala Lumpur";
+    const ADHAN_COUNTRY = "Malaysia";
+    const ADHAN_METHOD  = 17;
+
+    // Adhan audio sources (multiple fallback)
+    const ADHAN_AUDIO_SOURCES = {
+        "ar.alafasy": [
+            "https://www.islamcan.com/audio/adhan/azan1.mp3",
+            "https://www.islamcan.com/audio/adhan/azan2.mp3"
+        ],
+        "ar.abdulbasitmurattal": [
+            "https://www.islamcan.com/audio/adhan/azan3.mp3",
+            "https://www.islamcan.com/audio/adhan/azan4.mp3"
+        ],
+        "ar.husary": [
+            "https://www.islamcan.com/audio/adhan/azan5.mp3",
+            "https://www.islamcan.com/audio/adhan/azan6.mp3"
+        ],
+        "ar.minshawi": [
+            "https://www.islamcan.com/audio/adhan/azan7.mp3",
+            "https://www.islamcan.com/audio/adhan/azan8.mp3"
+        ]
+    };
+
+    // Prayer times state
+    let prayerTimesToday = {};
+    let nextAdhanTimer   = null;
+    let audioUnlocked    = false;
+
+    /* ---------------------------------------------
+       GET ADHAN AUDIO URL
+    --------------------------------------------- */
+    function getAdhanURL(muezzin) {
+        const sources = ADHAN_AUDIO_SOURCES[muezzin]
+            || ADHAN_AUDIO_SOURCES["ar.alafasy"];
+        return sources[0];
+    }
+
+    function getAdhanFallbackURL(muezzin) {
+        const sources = ADHAN_AUDIO_SOURCES[muezzin]
+            || ADHAN_AUDIO_SOURCES["ar.alafasy"];
+        return sources[1] || sources[0];
+    }
+
+    /* ---------------------------------------------
+       LOAD PRAYER TIMES FROM ALADHAN API
+    --------------------------------------------- */
+    async function loadPrayerTimes() {
+        const today = new Date();
+        const year  = today.getFullYear();
+        const month = today.getMonth() + 1;
+        const day   = today.getDate();
+
+        const url = `https://api.aladhan.com/v1/timingsByCity/${day}-${month}-${year}` +
+                    `?city=${encodeURIComponent(ADHAN_CITY)}` +
+                    `&country=${encodeURIComponent(ADHAN_COUNTRY)}` +
+                    `&method=${ADHAN_METHOD}`;
+
+        try {
+            const res  = await fetch(url);
+            const data = await res.json();
+
+            if (data && data.code === 200 && data.data && data.data.timings) {
+                prayerTimesToday = data.data.timings;
+                scheduleNextAdhan();
+                console.log("[Adhan] Prayer times loaded:", prayerTimesToday);
+            } else {
+                throw new Error("Invalid API response");
+            }
+        } catch (err) {
+            console.warn("[Adhan] Failed to load prayer times:", err);
+            if (nextAdhanText) nextAdhanText.textContent = "⚠️ Unable to load prayer times";
+        }
+    }
+
+    /* ---------------------------------------------
+       SCHEDULE NEXT ADHAN
+    --------------------------------------------- */
+    function scheduleNextAdhan() {
+
+        if (nextAdhanTimer) {
+            clearTimeout(nextAdhanTimer);
+            nextAdhanTimer = null;
+        }
+
+        const now = new Date();
+
+        const prayers = [
+            { name: "Fajr",    time: prayerTimesToday.Fajr },
+            { name: "Dhuhr",   time: prayerTimesToday.Dhuhr },
+            { name: "Asr",     time: prayerTimesToday.Asr },
+            { name: "Maghrib", time: prayerTimesToday.Maghrib },
+            { name: "Isha",    time: prayerTimesToday.Isha }
+        ];
+
+        let nextPrayer = null;
+        let smallestDiff = Infinity;
+
+        prayers.forEach(p => {
+            if (!p.time) return;
+
+            const cleanTime = p.time.split(" ")[0]; // remove timezone if any
+            const [hh, mm] = cleanTime.split(":").map(Number);
+            const prayerDate = new Date();
+            prayerDate.setHours(hh, mm, 0, 0);
+
+            const diff = prayerDate - now;
+
+            if (diff > 0 && diff < smallestDiff) {
+                smallestDiff = diff;
+                nextPrayer = { name: p.name, date: prayerDate };
+            }
+        });
+
+        // If no prayer left today → schedule tomorrow's Fajr
+        if (!nextPrayer && prayerTimesToday.Fajr) {
+            const [hh, mm] = prayerTimesToday.Fajr.split(" ")[0].split(":").map(Number);
+            const tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            tomorrow.setHours(hh, mm, 0, 0);
+            nextPrayer = { name: "Fajr", date: tomorrow };
+            smallestDiff = tomorrow - now;
+        }
+
+        if (nextPrayer) {
+            updateNextAdhanText(nextPrayer.name, smallestDiff);
+
+            // ✅ Schedule Adhan exactly at prayer time
+            nextAdhanTimer = setTimeout(() => {
+                playAdhan(nextPrayer.name);
+                showAdhanNotification(nextPrayer.name);
+                // Reload times for next prayer
+                setTimeout(loadPrayerTimes, 5000);
+            }, smallestDiff);
+
+            console.log(`[Adhan] Next: ${nextPrayer.name} in ${Math.round(smallestDiff/60000)} min`);
+        }
+    }
+
+    /* ---------------------------------------------
+       UPDATE "Next Adhan" TEXT (live countdown)
+    --------------------------------------------- */
+    function updateNextAdhanText(prayerName, diffMs) {
+
+        if (!nextAdhanText) return;
+
+        const totalMinutes = Math.floor(diffMs / 60000);
+        const hours   = Math.floor(totalMinutes / 60);
+        const minutes = totalMinutes % 60;
+
+        let timeStr = "";
+        if (hours > 0) timeStr = `${hours}h ${minutes}m`;
+        else timeStr = `${minutes}m`;
+
+        nextAdhanText.textContent = `Next Adhan: ${prayerName} in ${timeStr}`;
+    }
+
+    /* ---------------------------------------------
+       PLAY ADHAN
+    --------------------------------------------- */
+    function playAdhan(prayerName = "") {
+
+        const muezzin = muezzinSelect ? muezzinSelect.value : "ar.alafasy";
+        const url = getAdhanURL(muezzin);
+
+        adhanAudio.src = url;
+        adhanAudio.volume = 1.0;
+
+        // ✅ Fallback if first URL fails
+        adhanAudio.onerror = function () {
+            console.warn("[Adhan] Primary audio failed, trying fallback...");
+            adhanAudio.src = getAdhanFallbackURL(muezzin);
+            adhanAudio.play().catch(err => {
+                console.warn("[Adhan] Fallback also failed:", err);
+                updateAdhanStatus("⚠️ Adhan audio could not be loaded. Check connection.", false);
+            });
+        };
+
+        adhanAudio.play()
+            .then(() => {
+                audioUnlocked = true;
+                updateAdhanStatus(
+                    `🔊 Adhan playing${prayerName ? " for " + prayerName : ""}...`,
+                    true
+                );
+                console.log("[Adhan] Playing:", prayerName || "manual");
+            })
+            .catch(err => {
+                console.warn("[Adhan] Play failed:", err);
+                updateAdhanStatus(
+                    "⚠️ Tap any button to allow audio (browser autoplay blocked)",
+                    false
+                );
+            });
+    }
+
+    /* ---------------------------------------------
+       STOP ADHAN
+    --------------------------------------------- */
+    function stopAdhan() {
+        adhanAudio.pause();
+        adhanAudio.currentTime = 0;
+        updateAdhanStatus("Adhan stopped.", false);
+    }
+
+    /* ---------------------------------------------
+       UPDATE STATUS
+    --------------------------------------------- */
+    function updateAdhanStatus(text, isPlaying) {
+        if (!adhanStatus) return;
+        adhanStatus.textContent = text;
+        if (isPlaying) adhanStatus.classList.add("playing");
+        else adhanStatus.classList.remove("playing");
+    }
+
+    /* ---------------------------------------------
+       NOTIFICATION
+    --------------------------------------------- */
+    function showAdhanNotification(prayerName) {
+        if (!("Notification" in window)) return;
+        if (Notification.permission !== "granted") return;
+
+        try {
+            new Notification(`🕌 ${prayerName} Adhan`, {
+                body: `It's time for ${prayerName} prayer.`,
+                icon: "IMG 1.png",
+                badge: "IMG 1.png"
+            });
+        } catch (e) {
+            console.warn("[Adhan] Notification failed:", e);
+        }
+    }
+
+    // Request permission once
+    if ("Notification" in window && Notification.permission === "default") {
+        // Ask after user interaction (not immediately, to avoid blocking)
+        const askPermission = () => {
+            Notification.requestPermission().then(perm => {
+                console.log("[Adhan] Notification permission:", perm);
+            });
+            document.removeEventListener("click", askPermission);
+        };
+        document.addEventListener("click", askPermission, { once: true });
+    }
+
+    /* ---------------------------------------------
+       BUTTON EVENTS
+    --------------------------------------------- */
+    if (playAdhanBtn) {
+        playAdhanBtn.addEventListener("click", () => playAdhan(""));
+    }
+
+    if (stopAdhanBtn) {
+        stopAdhanBtn.addEventListener("click", stopAdhan);
+    }
+
+    if (testAdhanBtn) {
+        testAdhanBtn.addEventListener("click", () => {
+            playAdhan("Test");
+        });
+    }
+
+    // When audio ends naturally
+    adhanAudio.addEventListener("ended", () => {
+        updateAdhanStatus("Adhan finished. 🤲", false);
+    });
+
+    /* ---------------------------------------------
+       INIT
+    --------------------------------------------- */
+    loadPrayerTimes();
+
+    // Refresh prayer times every 6 hours
+    setInterval(loadPrayerTimes, 6 * 60 * 60 * 1000);
+
+    console.log("[Adhan] System initialized ✅");
+});/* =========================================================
+   DYNAMIC PRAYER TIMES SYSTEM
+   - Auto-detect user location
+   - Fetch real prayer times from Aladhan API
+   - Display on Home page + Prayer page
+   - Auto-update every minute
+========================================================= */
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    /* ---------------------------------------------
+       CONFIG
+    --------------------------------------------- */
+    const PRAYER_API_BASE = "https://api.aladhan.com/v1";
+
+    // Storage keys
+    const STORAGE_LOCATION = "islamicway_prayer_location";
+    const STORAGE_METHOD   = "islamicway_prayer_method";
+
+    // Default location (fallback if GPS denied)
+    const DEFAULT_LOCATION = {
+        city: "Kuala Lumpur",
+        country: "Malaysia",
+        lat: 3.1390,
+        lng: 101.6869,
+        source: "default"
+    };
+
+    /* ---------------------------------------------
+       STATE
+    --------------------------------------------- */
+    let userLocation = null;
+    let prayerData   = null;
+    let updateTimer  = null;
+
+    /* ---------------------------------------------
+       DOM ELEMENTS
+    --------------------------------------------- */
+    const homeLocationName  = document.getElementById("homeLocationName");
+    const homePrayerDate    = document.getElementById("homePrayerDate");
+    const homePrayerList    = document.getElementById("homePrayerList");
+
+    const prayerTimesBox       = document.getElementById("prayerTimesBox");
+    const prayerLocationText   = document.getElementById("prayerLocationText");
+    const prayerDateText       = document.getElementById("prayerDateText");
+    const prayerTimesLoading   = document.getElementById("prayerTimesLoading");
+    const prayerTimesError     = document.getElementById("prayerTimesError");
+    const prayerTimesGrid      = document.getElementById("prayerTimesGrid");
+    const prayerMethodText     = document.getElementById("prayerMethodText");
+    const retryPrayerLocation  = document.getElementById("retryPrayerLocation");
+    const manualPrayerLocation = document.getElementById("manualPrayerLocation");
+    const changeLocationBtn    = document.getElementById("changeLocationBtn");
+    const manualLocationBox    = document.getElementById("manualLocationBox");
+    const manualCityInput      = document.getElementById("manualCityInput");
+    const manualCountryInput   = document.getElementById("manualCountryInput");
+    const saveManualLocation   = document.getElementById("saveManualLocation");
+    const cancelManualLocation = document.getElementById("cancelManualLocation");
+
+    /* ---------------------------------------------
+       STEP 1: Get User Location
+    --------------------------------------------- */
+
+    // Check if user already saved a location
+    function getSavedLocation() {
+        try {
+            const saved = localStorage.getItem(STORAGE_LOCATION);
+            return saved ? JSON.parse(saved) : null;
+        } catch { return null; }
+    }
+
+    function saveLocation(loc) {
+        try {
+            localStorage.setItem(STORAGE_LOCATION, JSON.stringify(loc));
+        } catch (e) {}
+    }
+
+    // Main function: detect location
+    async function detectLocation() {
+
+        // 1. Check saved location first
+        const saved = getSavedLocation();
+        if (saved && saved.city && saved.country) {
+            console.log("[Prayer] Using saved location:", saved);
+            userLocation = saved;
+            return userLocation;
+        }
+
+        // 2. Try GPS
+        if (navigator.geolocation) {
+            try {
+                const position = await new Promise((resolve, reject) => {
+                    navigator.geolocation.getCurrentPosition(resolve, reject, {
+                        timeout: 10000,
+                        maximumAge: 600000,
+                        enableHighAccuracy: false
+                    });
+                });
+
+                const lat = position.coords.latitude;
+                const lng = position.coords.longitude;
+
+                // Reverse geocode (get city name)
+                const cityInfo = await reverseGeocode(lat, lng);
+
+                userLocation = {
+                    city: cityInfo.city,
+                    country: cityInfo.country,
+                    lat: lat,
+                    lng: lng,
+                    source: "gps"
+                };
+
+                saveLocation(userLocation);
+                console.log("[Prayer] GPS location:", userLocation);
+                return userLocation;
+
+            } catch (err) {
+                console.warn("[Prayer] GPS failed:", err.message);
+            }
+        }
+
+        // 3. Fallback to default
+        console.log("[Prayer] Using default location");
+        userLocation = DEFAULT_LOCATION;
+        return userLocation;
+    }
+
+    // Reverse geocoding using BigDataCloud (free, no API key)
+    async function reverseGeocode(lat, lng) {
+        try {
+            const res = await fetch(
+                `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lng}&localityLanguage=en`
+            );
+            const data = await res.json();
+
+            return {
+                city: data.city || data.locality || data.principalSubdivision || "Unknown",
+                country: data.countryName || "Unknown"
+            };
+        } catch (err) {
+            console.warn("[Prayer] Reverse geocode failed:", err);
+            return { city: "Unknown", country: "Unknown" };
+        }
+    }
+
+    /* ---------------------------------------------
+       STEP 2: Fetch Prayer Times
+    --------------------------------------------- */
+
+    async function fetchPrayerTimes() {
+
+        if (!userLocation) {
+            await detectLocation();
+        }
+
+        showPrayerLoading();
+
+        const today = new Date();
+        const day   = String(today.getDate()).padStart(2, "0");
+        const month = String(today.getMonth() + 1).padStart(2, "0");
+        const year  = today.getFullYear();
+
+        // Auto-select method based on country
+        const method = getMethodForCountry(userLocation.country);
+
+        let url = "";
+
+        // Priority 1: By City (most accurate if city known)
+        if (userLocation.city && userLocation.country &&
+            userLocation.city !== "Unknown") {
+            url = `${PRAYER_API_BASE}/timingsByCity/${day}-${month}-${year}` +
+                  `?city=${encodeURIComponent(userLocation.city)}` +
+                  `&country=${encodeURIComponent(userLocation.country)}` +
+                  `&method=${method}`;
+        } else {
+            // Priority 2: By Coordinates
+            url = `${PRAYER_API_BASE}/timings/${day}-${month}-${year}` +
+                  `?latitude=${userLocation.lat}` +
+                  `&longitude=${userLocation.lng}` +
+                  `&method=${method}`;
+        }
+
+        try {
+            const res = await fetch(url);
+            const data = await res.json();
+
+            if (data && data.code === 200 && data.data) {
+                prayerData = data.data;
+                renderPrayerTimes();
+                hidePrayerLoading();
+                console.log("[Prayer] Loaded:", prayerData.timings);
+            } else {
+                throw new Error("Invalid API response");
+            }
+
+        } catch (err) {
+            console.error("[Prayer] Fetch failed:", err);
+            showPrayerError();
+        }
+    }
+
+    // Auto-select calculation method based on country
+    function getMethodForCountry(country) {
+        const c = (country || "").toLowerCase();
+
+        // Mapping of countries → Aladhan method IDs
+        const methods = {
+            "pakistan": 1,
+            "india": 1,
+            "bangladesh": 1,
+            "afghanistan": 1,
+            "saudi arabia": 4,
+            "uae": 8,
+            "united arab emirates": 8,
+            "kuwait": 9,
+            "qatar": 10,
+            "singapore": 11,
+            "france": 12,
+            "turkey": 13,
+            "russia": 14,
+            "egypt": 5,
+            "malaysia": 17,
+            "indonesia": 20,
+            "jordan": 23,
+            "morocco": 21,
+            "tunisia": 21,
+            "algeria": 21,
+            "usa": 2,
+            "united states": 2,
+            "canada": 2,
+            "uk": 3,
+            "united kingdom": 3,
+            "germany": 3
+        };
+
+        return methods[c] || 2; // Default: ISNA
+    }
+
+    /* ---------------------------------------------
+       STEP 3: Render Prayer Times
+    --------------------------------------------- */
+
+    function renderPrayerTimes() {
+
+        if (!prayerData || !prayerData.timings) return;
+
+        const timings = prayerData.timings;
+        const dateInfo = prayerData.date;
+
+        // -------- Update Home Page --------
+        if (homeLocationName) {
+            homeLocationName.textContent =
+                `${userLocation.city}, ${userLocation.country}`;
+        }
+
+        if (homePrayerDate) {
+            homePrayerDate.textContent = dateInfo.readable || "Today";
+        }
+
+        if (homePrayerList) {
+            homePrayerList.innerHTML = `
+                <div class="prayer-row"><span>🌅 Fajr</span><strong>${formatTime(timings.Fajr)}</strong></div>
+                <div class="prayer-row"><span>☀️ Dhuhr</span><strong>${formatTime(timings.Dhuhr)}</strong></div>
+                <div class="prayer-row"><span>🌤️ Asr</span><strong>${formatTime(timings.Asr)}</strong></div>
+                <div class="prayer-row"><span>🌇 Maghrib</span><strong>${formatTime(timings.Maghrib)}</strong></div>
+                <div class="prayer-row"><span>🌙 Isha</span><strong>${formatTime(timings.Isha)}</strong></div>
+            `;
+        }
+
+        // -------- Update Prayer Page --------
+        if (prayerLocationText) {
+            prayerLocationText.textContent =
+                `📍 ${userLocation.city}, ${userLocation.country}`;
+        }
+
+        if (prayerDateText) {
+            prayerDateText.textContent = dateInfo.readable || "Today";
+        }
+
+        if (prayerMethodText) {
+            const methodName = getMethodName(dateInfo.meta?.method?.id);
+            prayerMethodText.textContent = `Method: ${methodName}`;
+        }
+
+        if (prayerTimesGrid) {
+
+            const prayers = [
+                { name: "Fajr",    icon: "🌅", time: timings.Fajr },
+                { name: "Sunrise", icon: "🌄", time: timings.Sunrise },
+                { name: "Dhuhr",   icon: "☀️", time: timings.Dhuhr },
+                { name: "Asr",     icon: "🌤️", time: timings.Asr },
+                { name: "Maghrib", icon: "🌇", time: timings.Maghrib },
+                { name: "Isha",    icon: "🌙", time: timings.Isha }
+            ];
+
+            // Find next prayer
+            const nextPrayer = findNextPrayer(prayers);
+
+            prayerTimesGrid.innerHTML = prayers.map(p => `
+                <div class="prayer-time-card ${p.name === nextPrayer ? "next-prayer" : ""}">
+                    <span class="prayer-time-icon">${p.icon}</span>
+                    <span class="prayer-time-name">${p.name}</span>
+                    <span class="prayer-time-value">${formatTime(p.time)}</span>
+                </div>
+            `).join("");
+        }
+    }
+
+    /* ---------------------------------------------
+       HELPER: Find Next Prayer
+    --------------------------------------------- */
+    function findNextPrayer(prayers) {
+        const now = new Date();
+        const currentMinutes = now.getHours() * 60 + now.getMinutes();
+
+        for (const p of prayers) {
+            if (!p.time) continue;
+            const [hh, mm] = p.time.split(":").map(Number);
+            const prayerMinutes = hh * 60 + mm;
+            if (prayerMinutes > currentMinutes) {
+                return p.name;
+            }
+        }
+        return "Fajr"; // Next day's Fajr
+    }
+
+    /* ---------------------------------------------
+       HELPER: Format Time (24h → 12h with AM/PM)
+    --------------------------------------------- */
+    function formatTime(time24) {
+        if (!time24) return "--:--";
+        const [hh, mm] = time24.split(":").map(Number);
+        const period = hh >= 12 ? "PM" : "AM";
+        const h12 = hh % 12 || 12;
+        return `${h12}:${String(mm).padStart(2, "0")} ${period}`;
+    }
+
+    /* ---------------------------------------------
+       HELPER: Get Method Name
+    --------------------------------------------- */
+    function getMethodName(id) {
+        const names = {
+            1: "University of Islamic Sciences, Karachi",
+            2: "ISNA (North America)",
+            3: "Muslim World League",
+            4: "Umm Al-Qura, Makkah",
+            5: "Egyptian General Authority",
+            8: "Gulf Region",
+            9: "Kuwait",
+            10: "Qatar",
+            11: "Singapore",
+            12: "France",
+            13: "Turkey",
+            14: "Russia",
+            17: "Malaysia (JAKIM)",
+            20: "KEMENAG Indonesia",
+            21: "Morocco",
+            23: "Jordan"
+        };
+        return names[id] || "Auto-detected";
+    }
+
+    /* ---------------------------------------------
+       UI STATE
+    --------------------------------------------- */
+    function showPrayerLoading() {
+        if (prayerTimesLoading) prayerTimesLoading.style.display = "block";
+        if (prayerTimesError) prayerTimesError.style.display = "none";
+        if (prayerTimesGrid) prayerTimesGrid.style.display = "none";
+    }
+
+    function hidePrayerLoading() {
+        if (prayerTimesLoading) prayerTimesLoading.style.display = "none";
+        if (prayerTimesError) prayerTimesError.style.display = "none";
+        if (prayerTimesGrid) prayerTimesGrid.style.display = "grid";
+    }
+
+    function showPrayerError() {
+        if (prayerTimesLoading) prayerTimesLoading.style.display = "none";
+        if (prayerTimesGrid) prayerTimesGrid.style.display = "none";
+        if (prayerTimesError) prayerTimesError.style.display = "block";
+    }
+
+    /* ---------------------------------------------
+       BUTTON EVENTS
+    --------------------------------------------- */
+
+    if (retryPrayerLocation) {
+        retryPrayerLocation.addEventListener("click", () => {
+            // Clear saved location and retry GPS
+            localStorage.removeItem(STORAGE_LOCATION);
+            userLocation = null;
+            fetchPrayerTimes();
+        });
+    }
+
+    if (manualPrayerLocation) {
+        manualPrayerLocation.addEventListener("click", () => {
+            if (manualLocationBox) manualLocationBox.style.display = "block";
+            if (manualCityInput) manualCityInput.focus();
+        });
+    }
+
+    if (changeLocationBtn) {
+        changeLocationBtn.addEventListener("click", () => {
+            if (manualLocationBox) {
+                manualLocationBox.style.display =
+                    manualLocationBox.style.display === "none" ? "block" : "none";
+            }
+            if (manualCityInput) manualCityInput.focus();
+        });
+    }
+
+    if (saveManualLocation) {
+        saveManualLocation.addEventListener("click", async () => {
+            const city = manualCityInput?.value.trim();
+            const country = manualCountryInput?.value.trim();
+
+            if (!city || !country) {
+                alert("Please enter both city and country.");
+                return;
+            }
+
+            userLocation = {
+                city: city,
+                country: country,
+                lat: null,
+                lng: null,
+                source: "manual"
+            };
+
+            saveLocation(userLocation);
+            if (manualLocationBox) manualLocationBox.style.display = "none";
+
+            await fetchPrayerTimes();
+        });
+    }
+
+    if (cancelManualLocation) {
+        cancelManualLocation.addEventListener("click", () => {
+            if (manualLocationBox) manualLocationBox.style.display = "none";
+        });
+    }
+
+    /* ---------------------------------------------
+       AUTO-UPDATE: Refresh every 5 minutes
+       (to update "next prayer" highlight)
+    --------------------------------------------- */
+    function startAutoUpdate() {
+        if (updateTimer) clearInterval(updateTimer);
+        updateTimer = setInterval(() => {
+            if (prayerData) renderPrayerTimes();
+        }, 5 * 60 * 1000);
+    }
+
+    /* ---------------------------------------------
+       INIT — Load on page start
+    --------------------------------------------- */
+    async function initPrayerTimes() {
+        console.log("[Prayer] Initializing...");
+        await detectLocation();
+        await fetchPrayerTimes();
+        startAutoUpdate();
+    }
+
+    // Load when Prayer page is opened
+    const originalShowPage = window.showPage;
+    if (typeof originalShowPage === "function") {
+        window.showPage = function (pageName, updateUrl = true) {
+            originalShowPage(pageName, updateUrl);
+            if (pageName === "prayer" && !prayerData) {
+                initPrayerTimes();
+            }
+        };
+    }
+
+    // Also load on first visit to Home (for home prayer card)
+    initPrayerTimes();
+
 });

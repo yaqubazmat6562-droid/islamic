@@ -69,6 +69,7 @@
     <link rel="icon" type="image/png" href="IMG 1.png">
     <link rel="apple-touch-icon" href="IMG 1.png">
     <link rel="manifest" href="manifest.json">
+
     <!-- ==================================================
          FONTS
     =================================================== -->
@@ -191,6 +192,25 @@
 
 <body>
 
+<!-- =========================================================
+     DOWNLOAD OVERLAY — YE YAHAN ADD KARNA HAI
+========================================================= -->
+<div id="downloadOverlay" class="download-overlay" style="display:none;">
+    <div class="download-box">
+        <div class="download-icon">📥</div>
+        <h2>Downloading IslamicWay Database</h2>
+        <p id="downloadStatus">Preparing download...</p>
+        <div class="download-progress-bar">
+            <div class="download-progress-fill" id="downloadProgressFill"></div>
+        </div>
+        <div class="download-percent" id="downloadPercent">0%</div>
+        <p class="download-note">
+            This is a one-time download. After this, IslamicWay works offline.
+        </p>
+    </div>
+</div>
+
+
 <div class="website">
 
     <header class="header">
@@ -224,7 +244,9 @@
 
     <main id="mainContent">
 
-        <!-- HOME PAGE -->
+        <!-- =====================================================
+             HOME PAGE
+        ====================================================== -->
         <section class="page active-page" id="page-home">
 
             <section class="hero">
@@ -235,8 +257,6 @@
                     <p>Discover the beauty of Islam, read the Quran, learn authentic Hadith, and find peace in your daily life.</p>
                     <button class="primary-button" data-page="quran">📖 Explore Quran <span>→</span></button>
                 </div>
-                
-                
             </section>
 
             <section class="quick-section">
@@ -258,7 +278,7 @@
                     <p>Never Miss a Salah</p>
                     <span class="arrow">→</span>
                 </div>
-                <div class="quick-card" data-page="duas"><a href="power-of-dua.html" class="nav-link">Power of Dua</a>
+                <div class="quick-card" data-page="duas">
                     <div class="quick-icon">🤲</div>
                     <h3>Duas</h3>
                     <p>Connect with Allah</p>
@@ -279,6 +299,8 @@
             </section>
 
             <section class="information-section">
+
+                <!-- QURAN VERSE CARD -->
                 <div class="verse-card">
                     <span class="card-label">Quran Verse</span>
                     <div class="arabic-text">إِنَّ مَعَ الْعُسْرِ يُسْرًا</div>
@@ -286,53 +308,32 @@
                     <small>Surah Al-Insyirah (94:6)</small>
                 </div>
 
-                <!-- ================= DYNAMIC PRAYER TIMES ================= -->
-<div class="prayer-times-box" id="prayerTimesBox">
-    <div class="prayer-times-header">
-        <div class="prayer-times-icon">🕌</div>
-        <div>
-            <h2>Today's Prayer Times</h2>
-            <p id="prayerLocationText">📍 Detecting your location...</p>
-        </div>
-        <div class="prayer-times-date" id="prayerDateText">--</div>
-    </div>
+                <!-- ✅ HOME PRAYER CARD (SIMPLE) -->
+                <div class="prayer-card">
+                    <div class="prayer-header">
+                        <div>
+                            <h2>Prayer Times</h2>
+                            <p>📍 <span id="homeLocationName">Detecting...</span></p>
+                        </div>
+                        <div class="date-box">📅 <span id="homePrayerDate">Today</span></div>
+                    </div>
+                    <div class="prayer-list" id="homePrayerList">
+                        <div class="prayer-row"><span>🌅 Fajr</span><strong>--:--</strong></div>
+                        <div class="prayer-row"><span>☀️ Dhuhr</span><strong>--:--</strong></div>
+                        <div class="prayer-row"><span>🌤️ Asr</span><strong>--:--</strong></div>
+                        <div class="prayer-row"><span>🌇 Maghrib</span><strong>--:--</strong></div>
+                        <div class="prayer-row"><span>🌙 Isha</span><strong>--:--</strong></div>
+                    </div>
+                    <button class="secondary-button" data-page="prayer">View Full Prayer Schedule →</button>
+                </div>
 
-    <div class="prayer-times-loading" id="prayerTimesLoading">
-        <div class="loading-spinner"></div>
-        <p>Loading prayer times...</p>
-    </div>
-
-    <div class="prayer-times-error" id="prayerTimesError" style="display:none;">
-        <span>⚠️</span>
-        <p>Unable to detect your location. Please allow location access.</p>
-        <button id="retryPrayerLocation">Try Again</button>
-        <button id="manualPrayerLocation">Enter Location Manually</button>
-    </div>
-
-    <div class="prayer-times-grid" id="prayerTimesGrid"></div>
-
-    <div class="prayer-times-footer">
-        <button id="changeLocationBtn">📍 Change Location</button>
-        <span id="prayerMethodText">Method: Auto-detected</span>
-    </div>
-</div>
-
-<!-- Manual Location Input (hidden by default) -->
-<div class="manual-location-box" id="manualLocationBox" style="display:none;">
-    <h3>Enter Your Location</h3>
-    <input type="text" id="manualCityInput" placeholder="City (e.g. Karachi)">
-    <input type="text" id="manualCountryInput" placeholder="Country (e.g. Pakistan)">
-    <div class="manual-location-buttons">
-        <button id="saveManualLocation">Save</button>
-        <button id="cancelManualLocation">Cancel</button>
-    </div>
-</div>
-
+                <!-- INSPIRATION CARD -->
                 <div class="inspiration-card">
                     <div class="star">✦</div>
                     <blockquote>"And whoever fears Allah — He will make for him a way out and provide for him from where he does not expect."</blockquote>
                     <span>— Surah At-Talaq (65:2)</span>
                 </div>
+
             </section>
 
             <section class="articles-section">
@@ -340,39 +341,42 @@
                     <div><span>✦</span><h2>Latest Islamic Articles</h2></div>
                     <button data-page="articles">View All →</button>
                 </div>
-               <div class="article-grid">
-    <article class="article-card" data-page="articles">
-        <div class="article-image">🕌</div>
-        <div class="article-content">
-            <span>Islamic Knowledge</span>
-            <h3>A Step Closer to Allah</h3>
-            <p>Learn simple ways to strengthen your connection with Allah.</p>
-            <button>Read More →</button>
-        </div>
-    </article>
-    <article class="article-card" data-page="articles">
-        <div class="article-image">📖</div>
-        <div class="article-content">
-            <span>Quran</span>
-            <h3>The Beauty of the Quran</h3>
-            <p>Discover the guidance and wisdom of the Holy Quran.</p>
-            <button>Read More →</button>
-        </div>
-    </article>
-    <article class="article-card" data-page="articles">
-        <div class="article-image">🤲</div>
-        <div class="article-content">
-            <span>Dua</span>
-            <h3>Power of Dua</h3>
-            <p>Understand the importance of making Dua.</p>
-            <button>Read More →</button>
-        </div>
-    </article>
-</div>
+                <div class="article-grid">
+                    <article class="article-card" data-page="articles">
+                        <div class="article-image">🕌</div>
+                        <div class="article-content">
+                            <span>Islamic Knowledge</span>
+                            <h3>A Step Closer to Allah</h3>
+                            <p>Learn simple ways to strengthen your connection with Allah.</p>
+                            <button>Read More →</button>
+                        </div>
+                    </article>
+                    <article class="article-card" data-page="articles">
+                        <div class="article-image">📖</div>
+                        <div class="article-content">
+                            <span>Quran</span>
+                            <h3>The Beauty of the Quran</h3>
+                            <p>Discover the guidance and wisdom of the Holy Quran.</p>
+                            <button>Read More →</button>
+                        </div>
+                    </article>
+                    <article class="article-card" data-page="articles">
+                        <div class="article-image">🤲</div>
+                        <div class="article-content">
+                            <span>Dua</span>
+                            <h3>Power of Dua</h3>
+                            <p>Understand the importance of making Dua.</p>
+                            <button>Read More →</button>
+                        </div>
+                    </article>
+                </div>
             </section>
+
         </section>
 
-        <!-- QURAN PAGE -->
+        <!-- =====================================================
+             QURAN PAGE
+        ====================================================== -->
         <section class="page quran-page" id="page-quran">
             <div class="quran-container">
                 <div class="quran-hero">
@@ -439,7 +443,9 @@
             </div>
         </section>
 
-        <!-- HADITH PAGE -->
+        <!-- =====================================================
+             HADITH PAGE
+        ====================================================== -->
         <section class="page hadith-page" id="page-hadith">
             <div class="hadith-container">
                 <div class="hadith-hero">
@@ -458,7 +464,6 @@
 
                     <div class="hadith-books-grid">
 
-                        <!-- BUKHARI -->
                         <div class="hadith-book-card" data-book="bukhari">
                             <div class="book-icon">📗</div>
                             <h3>Sahih Bukhari</h3>
@@ -467,7 +472,6 @@
                             <button>Open Book →</button>
                         </div>
 
-                        <!-- MUSLIM -->
                         <div class="hadith-book-card" data-book="muslim">
                             <div class="book-icon">📘</div>
                             <h3>Sahih Muslim</h3>
@@ -476,7 +480,6 @@
                             <button>Open Book →</button>
                         </div>
 
-                        <!-- ABU DAWUD -->
                         <div class="hadith-book-card" data-book="abudawud">
                             <div class="book-icon">📕</div>
                             <h3>Sunan Abu Dawud</h3>
@@ -485,7 +488,6 @@
                             <button>Open Book →</button>
                         </div>
 
-                        <!-- TIRMIDHI -->
                         <div class="hadith-book-card" data-book="tirmidhi">
                             <div class="book-icon">📙</div>
                             <h3>Jami at-Tirmidhi</h3>
@@ -494,7 +496,6 @@
                             <button>Open Book →</button>
                         </div>
 
-                        <!-- NASAAI -->
                         <div class="hadith-book-card" data-book="nasai">
                             <div class="book-icon">📓</div>
                             <h3>Sunan an-Nasa'i</h3>
@@ -503,7 +504,6 @@
                             <button>Open Book →</button>
                         </div>
 
-                        <!-- MUWATTA MALIK -->
                         <div class="hadith-book-card" data-book="malik">
                             <div class="book-icon">📔</div>
                             <h3>Muwatta Imam Malik</h3>
@@ -552,9 +552,55 @@
             </div>
         </section>
 
-        <!-- PRAYER / CALENDAR PAGE -->
+        <!-- =====================================================
+             PRAYER / CALENDAR PAGE
+        ====================================================== -->
         <section class="page calendar-page" id="page-prayer">
             <div class="calendar-wrapper">
+
+                <!-- ✅ DYNAMIC PRAYER TIMES BOX -->
+                <div class="prayer-times-box" id="prayerTimesBox">
+                    <div class="prayer-times-header">
+                        <div class="prayer-times-icon">🕌</div>
+                        <div>
+                            <h2>Today's Prayer Times</h2>
+                            <p id="prayerLocationText">📍 Detecting your location...</p>
+                        </div>
+                        <div class="prayer-times-date" id="prayerDateText">--</div>
+                    </div>
+
+                    <div class="prayer-times-loading" id="prayerTimesLoading">
+                        <div class="loading-spinner"></div>
+                        <p>Loading prayer times...</p>
+                    </div>
+
+                    <div class="prayer-times-error" id="prayerTimesError" style="display:none;">
+                        <span>⚠️</span>
+                        <p>Unable to detect your location. Please allow location access.</p>
+                        <button id="retryPrayerLocation">Try Again</button>
+                        <button id="manualPrayerLocation">Enter Location Manually</button>
+                    </div>
+
+                    <div class="prayer-times-grid" id="prayerTimesGrid"></div>
+
+                    <div class="prayer-times-footer">
+                        <button id="changeLocationBtn">📍 Change Location</button>
+                        <span id="prayerMethodText">Method: Auto-detected</span>
+                    </div>
+                </div>
+
+                <!-- ✅ MANUAL LOCATION BOX -->
+                <div class="manual-location-box" id="manualLocationBox" style="display:none;">
+                    <h3>Enter Your Location</h3>
+                    <input type="text" id="manualCityInput" placeholder="City (e.g. Karachi)">
+                    <input type="text" id="manualCountryInput" placeholder="Country (e.g. Pakistan)">
+                    <div class="manual-location-buttons">
+                        <button id="saveManualLocation">Save</button>
+                        <button id="cancelManualLocation">Cancel</button>
+                    </div>
+                </div>
+
+                <!-- CALENDAR TOP -->
                 <div class="calendar-top">
                     <div class="calendar-title">
                         <div class="calendar-icon">🌙</div>
@@ -630,38 +676,43 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- ✅ ADHAN PLAYER (CORRECT PLACE - INSIDE PRAYER PAGE) -->
+                <div class="adhan-player-box">
+                    <div class="adhan-header">
+                        <div class="adhan-icon">🔊</div>
+                        <div>
+                            <h3>Adhan (Azaan)</h3>
+                            <p id="nextAdhanText">Loading next prayer...</p>
+                        </div>
+                    </div>
+
+                    <div class="adhan-controls">
+                        <select id="adhanMuezzin">
+                            <option value="ar.alafasy">Mishary Alafasy</option>
+                            <option value="ar.abdulbasitmurattal">Abdul Basit</option>
+                            <option value="ar.husary">Mahmoud Khalil Al-Husary</option>
+                            <option value="ar.minshawi">Muhammad Al-Minshawi</option>
+                        </select>
+
+                        <button id="playAdhanBtn" class="adhan-btn">▶ Play Adhan</button>
+                        <button id="stopAdhanBtn" class="adhan-btn stop">⏹ Stop</button>
+                        <button id="testAdhanBtn" class="adhan-btn test">🔔 Test</button>
+                    </div>
+
+                    <audio id="adhanAudio" preload="none"></audio>
+
+                    <div class="adhan-status" id="adhanStatus">
+                        Adhan will play automatically at prayer time.
+                    </div>
+                </div>
+
             </div>
         </section>
-        <!-- ================= ADHAN PLAYER ================= -->
-    <div class="adhan-player-box">
-    <div class="adhan-header">
-        <div class="adhan-icon">🔊</div>
-        <div>
-            <h3>Adhan (Azaan)</h3>
-            <p id="nextAdhanText">Loading next prayer...</p>
-        </div>
-    </div>
 
-    <div class="adhan-controls">
-        <select id="adhanMuezzin">
-            <option value="ar.alafasy">Mishary Alafasy</option>
-            <option value="ar.abdulbasitmurattal">Abdul Basit</option>
-            <option value="ar.husary">Mahmoud Khalil Al-Husary</option>
-            <option value="ar.minshawi">Muhammad Al-Minshawi</option>
-        </select>
-
-        <button id="playAdhanBtn" class="adhan-btn">▶ Play Adhan</button>
-        <button id="stopAdhanBtn" class="adhan-btn stop">⏹ Stop</button>
-        <button id="testAdhanBtn" class="adhan-btn test">🔔 Test</button>
-    </div>
-
-    <audio id="adhanAudio" preload="none"></audio>
-
-    <div class="adhan-status" id="adhanStatus">
-        Adhan will play automatically at prayer time.
-    </div>
-</div>
-        <!-- DUAS PAGE -->
+        <!-- =====================================================
+             DUAS PAGE
+        ====================================================== -->
         <section class="page duas-page" id="page-duas">
             <div class="duas-header">
                 <div class="duas-header-icon">🤲</div>
@@ -761,7 +812,9 @@
             </div>
         </section>
 
-        <!-- ARTICLES PAGE -->
+        <!-- =====================================================
+             ARTICLES PAGE
+        ====================================================== -->
         <section class="page articles-page" id="page-articles">
             <div class="articles-container">
                 <div class="articles-hero">
@@ -797,7 +850,9 @@
             </div>
         </section>
 
-        <!-- GUIDANCE PAGE -->
+        <!-- =====================================================
+             GUIDANCE PAGE
+        ====================================================== -->
         <section class="page guidance-page" id="page-guidance">
             <div class="guidance-hero">
                 <div class="guidance-hero-icon">🕌</div>
@@ -904,7 +959,9 @@
             </div>
         </section>
 
-        <!-- ABOUT PAGE -->
+        <!-- =====================================================
+             ABOUT PAGE
+        ====================================================== -->
         <section class="page about-page" id="page-about">
             <div class="about-hero">
                 <div class="about-hero-icon">🕌</div>
@@ -996,96 +1053,56 @@
             </div>
         </section>
 
-       <!-- SEARCH PAGE -->
-<section class="page search-page" id="page-search">
-    <div class="search-container">
+        <!-- =====================================================
+             SEARCH PAGE
+        ====================================================== -->
+        <section class="page search-page" id="page-search">
+            <div class="search-container">
 
-        <!-- SEARCH HERO -->
-        <div class="search-hero">
-            <div class="search-hero-icon">🔍</div>
-            <div>
-                <h1>Search IslamicWay</h1>
-                <p>Find Quran, Hadith, Duas, Articles & Guidance</p>
-            </div>
-        </div>
+                <div class="search-hero">
+                    <div class="search-hero-icon">🔍</div>
+                    <div>
+                        <h1>Search IslamicWay</h1>
+                        <p>Find Quran, Hadith, Duas, Articles & Guidance</p>
+                    </div>
+                </div>
 
-        <!-- SEARCH INPUT -->
-        <div class="search-input-wrapper">
-            <div class="search-input-box">
-                <span class="search-input-icon">🔎</span>
-                <input
-                    type="text"
-                    id="globalSearchInput"
-                    placeholder="Search Quran, Hadith, Duas, Articles..."
-                    autocomplete="off"
-                >
-                <button id="globalSearchBtn" type="button">Search</button>
-            </div>
-            <div id="searchSuggestions" class="search-suggestions"></div>
-        </div>
+                <div class="search-input-wrapper">
+                    <div class="search-input-box">
+                        <span class="search-input-icon">🔎</span>
+                        <input
+                            type="text"
+                            id="globalSearchInput"
+                            placeholder="Search Quran, Hadith, Duas, Articles..."
+                            autocomplete="off"
+                        >
+                        <button id="globalSearchBtn" type="button">Search</button>
+                    </div>
+                    <div id="searchSuggestions" class="search-suggestions"></div>
+                </div>
 
-        <!-- FILTER TABS -->
-        <div class="search-filters">
-            <button class="search-filter-tab active" data-filter="all">All</button>
-            <button class="search-filter-tab" data-filter="quran">📖 Quran</button>
-            <button class="search-filter-tab" data-filter="hadith">📚 Hadith</button>
-            <button class="search-filter-tab" data-filter="dua">🤲 Duas</button>
-            <button class="search-filter-tab" data-filter="article">📝 Articles</button>
-            <button class="search-filter-tab" data-filter="guidance">🧭 Guidance</button>
-        </div>
+                <div class="search-filters">
+                    <button class="search-filter-tab active" data-filter="all">All</button>
+                    <button class="search-filter-tab" data-filter="quran">📖 Quran</button>
+                    <button class="search-filter-tab" data-filter="hadith">📚 Hadith</button>
+                    <button class="search-filter-tab" data-filter="dua">🤲 Duas</button>
+                    <button class="search-filter-tab" data-filter="article">📝 Articles</button>
+                    <button class="search-filter-tab" data-filter="guidance">🧭 Guidance</button>
+                </div>
 
-        <!-- POPULAR SEARCHES -->
-        <div class="popular-searches">
-            <span class="popular-label">Popular:</span>
-            <div id="popularSearches" style="display: flex; flex-wrap: wrap; gap: 8px;"></div>
-        </div>
+                <div class="popular-searches">
+                    <span class="popular-label">Popular:</span>
+                    <div id="popularSearches" style="display: flex; flex-wrap: wrap; gap: 8px;"></div>
+                </div>
 
-        <!-- EMPTY STATE -->
-        <div id="searchEmptyState" class="search-empty-state" style="display: none;">
-            <div class="search-empty-icon">🔍</div>
-            <h3>Start typing to search...</h3>
-            <p>Find anything from Quran, Hadith, Duas, Articles and Guidance.</p>
-        </div>
+                <div id="searchEmptyState" class="search-empty-state" style="display: none;">
+                    <div class="search-empty-icon">🔍</div>
+                    <h3>Start typing to search...</h3>
+                    <p>Find anything from Quran, Hadith, Duas, Articles and Guidance.</p>
+                </div>
 
-        <!-- RESULTS -->
-        <div id="searchResults" class="search-results"></div>
+                <div id="searchResults" class="search-results"></div>
 
-    </div>
-</section>
-
-        <!-- ARABIC PAGE -->
-        <section class="page blank-page" id="page-arabic">
-            <div class="page-content">
-                <div class="page-icon">ع</div>
-                <h1>العربية</h1>
-                <p>Arabic version</p>
-            </div>
-        </section>
-
-        <!-- ARTICLE 1 -->
-        <section class="page blank-page" id="page-article1">
-            <div class="page-content">
-                <div class="page-icon">🕌</div>
-                <h1>A Step Closer to Allah</h1>
-                <p>Islamic Article</p>
-            </div>
-        </section>
-
-        <!-- ARTICLE 2 -->
-        <section class="page blank-page" id="page-article2">
-            <div class="page-content">
-                <div class="page-icon">📖</div>
-                <h1>The Beauty of the Quran</h1>
-                <p>Quran Article</p>
-            </div>
-        </section>
-
-        <!-- ARTICLE 3 -->
-        <section class="page blank-page" id="page-article3">
-            <div class="page-content">
-                <div class="page-icon">🤲</div>
-                <h1>Power of Dua</h1>
-                <p>Dua Article</p>
             </div>
         </section>
 
@@ -1093,9 +1110,6 @@
 
     <footer class="footer">
 
-        <!-- ==========================================
-             PWA INSTALL BUTTON
-        =========================================== -->
         <div class="pwa-install-wrapper">
             <button id="pwaInstallBtn" class="pwa-install-btn" type="button">
                 <span class="pwa-install-icon">📲</span>
@@ -1123,7 +1137,7 @@
                 <a href="#" data-page="quran">Quran</a>
                 <a href="#" data-page="hadith">Hadith</a>
                 <a href="#" data-page="prayer">Prayer Times</a>
-                <a href="#" power-of-dua.html" class="nav-link">Power of Dua</a>
+                <a href="power-of-dua.html">Power of Dua</a>
                 <a href="#" data-page="articles">Articles</a>
                 <a href="#" data-page="about">About</a>
             </div>
@@ -1134,6 +1148,7 @@
 
 </div><!-- /.website -->
 
+<script src="database.js"></script>
 <script src="script.js"></script>
 <script src="search.js"></script>
 <script src="pwa-install.js"></script>

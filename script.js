@@ -176,7 +176,6 @@ document.addEventListener("DOMContentLoaded", () => {
         const year = calendarDate.getFullYear();
         const month = calendarDate.getMonth() + 1;
 
-        // ✅ FIXED: calendarMethod=MATHEMATICAL add kiya
         const urls = [
             "https://api.aladhan.com/v1/calendarByCity/" +
                 year + "/" + month +
@@ -461,16 +460,27 @@ async function loadQuranSurahs() {
     showQuranLoading();
 
     try {
+        // ✅ Try API first
         const json = await fetchQuranEndpoint("/surah");
         if (!json.data) throw new Error("Invalid Surah data");
 
         allSurahs = json.data;
         renderSurahList(allSurahs);
         hideQuranLoading();
+        console.log("[Quran] Loaded from API ✅");
 
     } catch (error) {
-        console.error("Quran Error:", error);
-        showQuranError();
+        // ✅ FALLBACK: Use local database
+        console.warn("[Quran] API failed, using local database");
+
+        if (typeof ISLAMIC_DATABASE !== "undefined" && ISLAMIC_DATABASE.quranSurahs) {
+            allSurahs = ISLAMIC_DATABASE.quranSurahs;
+            renderSurahList(allSurahs);
+            hideQuranLoading();
+            console.log("[Quran] Loaded from local database ✅");
+        } else {
+            showQuranError();
+        }
     }
 }
 
@@ -521,6 +531,7 @@ async function openSurah(surahNumber) {
     }
 
     try {
+        // ✅ Try API first
         const arabicJSON = await fetchQuranEndpoint(
             "/surah/" + surahNumber + "/quran-uthmani"
         );
@@ -539,17 +550,74 @@ async function openSurah(surahNumber) {
 
         renderAyahs(arabicData.ayahs, urduData.ayahs);
         loadFullSurahAudio(surahNumber);
+        console.log("[Quran] Loaded from API ✅");
 
         window.scrollTo({ top: 0, behavior: "smooth" });
+        return;
 
     } catch (error) {
-        console.error("Surah loading error:", error);
+        console.warn("[Quran] API failed — trying local database");
+    }
 
+    // ✅ FALLBACK 1: Try FullDatabase (IndexedDB)
+    try {
+        if (typeof FullDatabase !== "undefined" && FullDatabase.db) {
+            const cached = await FullDatabase.getSurahOffline(surahNumber);
+            if (cached && cached.arabic) {
+                const surahInfo = allSurahs.find(s => s.number === surahNumber);
+                if (surahInfo) {
+                    if (readerArabicName) readerArabicName.textContent = surahInfo.name;
+                    if (readerEnglishName) readerEnglishName.textContent = surahInfo.englishName;
+                    if (readerTranslation) readerTranslation.textContent = surahInfo.englishNameTranslation + " — اردو ترجمہ";
+                    if (readerAyahCount) readerAyahCount.textContent = surahInfo.numberOfAyahs + " Ayahs";
+                    if (readerRevelation) readerRevelation.textContent = surahInfo.revelationType;
+                }
+
+                const arabicAyahs = cached.arabic.map((text, i) => ({
+                    numberInSurah: i + 1,
+                    text: text
+                }));
+                const urduAyahs = cached.urdu.map(text => ({ text }));
+
+                renderAyahs(arabicAyahs, urduAyahs);
+                loadFullSurahAudio(surahNumber);
+                console.log("[Quran] Loaded from IndexedDB ✅");
+                window.scrollTo({ top: 0, behavior: "smooth" });
+                return;
+            }
+        }
+    } catch (e) {
+        console.warn("[Quran] IndexedDB failed:", e);
+    }
+
+    // ✅ FALLBACK 2: ISLAMIC_DATABASE (small built-in)
+    const surahInfo = allSurahs.find(s => s.number === surahNumber);
+    const localContent = ISLAMIC_DATABASE?.quranContent?.[surahNumber];
+
+    if (surahInfo && localContent) {
+        if (readerArabicName) readerArabicName.textContent = surahInfo.name;
+        if (readerEnglishName) readerEnglishName.textContent = surahInfo.englishName;
+        if (readerTranslation) readerTranslation.textContent = surahInfo.englishNameTranslation + " — اردو ترجمہ";
+        if (readerAyahCount) readerAyahCount.textContent = surahInfo.numberOfAyahs + " Ayahs";
+        if (readerRevelation) readerRevelation.textContent = surahInfo.revelationType;
+
+        const arabicAyahs = localContent.arabic.map((text, i) => ({
+            numberInSurah: i + 1,
+            text: text
+        }));
+        const urduAyahs = localContent.urdu.map(text => ({ text }));
+
+        renderAyahs(arabicAyahs, urduAyahs);
+        loadFullSurahAudio(surahNumber);
+        console.log("[Quran] Loaded from built-in DB ✅");
+        window.scrollTo({ top: 0, behavior: "smooth" });
+
+    } else {
         if (ayahContainer) {
             ayahContainer.innerHTML = `
                 <div class="quran-error">
-                    <h3>Surah load نہیں ہو سکی</h3>
-                    <p>Internet connection check کریں۔</p>
+                    <h3>سورہ دستیاب نہیں</h3>
+                    <p>Internet connection check کریں یا database download مکمل ہونے کا انتظار کریں۔</p>
                     <button class="quran-retry" onclick="openSurah(${surahNumber})">
                         Retry
                     </button>
@@ -802,6 +870,9 @@ document.addEventListener("DOMContentLoaded", function () {
         throw new Error("All Hadith URLs failed for " + edition);
     }
 
+    /* ---------------------------------------------
+       OPEN HADITH BOOK (YEH FUNCTION GAYAB THA)
+    --------------------------------------------- */
     async function openHadithBook(bookKey) {
 
         currentBook = hadithBooks[bookKey];
@@ -823,6 +894,7 @@ document.addEventListener("DOMContentLoaded", function () {
         showLoading();
 
         try {
+            // ✅ Try API first
             const arabicData = await fetchHadithJSON(currentBook.arabicEdition);
             const urduData = await fetchHadithJSON(currentBook.urduEdition);
 
@@ -836,9 +908,46 @@ document.addEventListener("DOMContentLoaded", function () {
             displayedHadith = allArabicHadith;
             hideLoading();
             renderHadith();
+            console.log("[Hadith] Loaded from API ✅");
 
         } catch (error) {
-            console.error("Hadith Error:", error);
+            // ✅ FALLBACK: Use local database
+            console.warn("[Hadith] API failed, using local database");
+
+            let localBook = null;
+
+            // Try IndexedDB first
+            if (typeof FullDatabase !== "undefined" && FullDatabase.db) {
+                try {
+                    localBook = await FullDatabase.getHadithBookOffline(bookKey);
+                    if (localBook && localBook.length > 0) {
+                        allArabicHadith = localBook.map(h => ({ text: h.arabic }));
+                        allUrduHadith = localBook.map(h => ({ text: h.urdu }));
+                        displayedHadith = allArabicHadith;
+                        hideLoading();
+                        renderHadith();
+                        console.log("[Hadith] Loaded from IndexedDB ✅");
+                        return;
+                    }
+                } catch (e) {}
+            }
+
+            // Try ISLAMIC_DATABASE
+            if (typeof ISLAMIC_DATABASE !== "undefined" &&
+                ISLAMIC_DATABASE.hadithBooks &&
+                ISLAMIC_DATABASE.hadithBooks[bookKey]) {
+
+                const dbBook = ISLAMIC_DATABASE.hadithBooks[bookKey];
+                allArabicHadith = dbBook.hadiths.map(h => ({ text: h.arabic }));
+                allUrduHadith = dbBook.hadiths.map(h => ({ text: h.urdu }));
+                displayedHadith = allArabicHadith;
+                hideLoading();
+                renderHadith();
+                console.log("[Hadith] Loaded from built-in DB ✅");
+                return;
+            }
+
+            // All failed
             hideLoading();
             showError();
         }
@@ -1461,7 +1570,6 @@ document.addEventListener("DOMContentLoaded", function () {
    DUAS SYSTEM — FIXED (LOCAL DATA + API FALLBACK)
 ===================================================== */
 
-// ✅ FIXED: Local Dua data (100+ Duas) - API ki zaroorat nahi
 const LOCAL_DUAS = [
     {
         id: 1,
@@ -1725,13 +1833,11 @@ const favoriteDuaBtn = document.getElementById("favoriteDuaBtn");
 const readerPrevious = document.getElementById("readerPrevious");
 const readerNext = document.getElementById("readerNext");
 
-// ✅ FIXED: Async API ki jagah local data use karein
 async function loadDuas() {
 
     showDuaLoading();
 
     try {
-        // Pehle local data use karein
         if (LOCAL_DUAS.length > 0) {
             allDuas = [...LOCAL_DUAS];
             filteredDuas = [...allDuas];
@@ -1741,7 +1847,6 @@ async function loadDuas() {
             return;
         }
 
-        // Agar local data na ho toh API try karein
         const response = await fetch("https://api.alquran.cloud/v1/dua");
         if (!response.ok) throw new Error("API request failed");
 
@@ -1760,7 +1865,6 @@ async function loadDuas() {
 
     } catch (error) {
         console.error("Duas Error:", error);
-        // Fallback to local data
         allDuas = [...LOCAL_DUAS];
         filteredDuas = [...allDuas];
         renderDuas();
@@ -2163,7 +2267,6 @@ function scrollToDuas() {
     if (page) page.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
-// ✅ FIXED: Load local Duas on startup
 if (duasContainer) loadDuas();
 
 
@@ -2768,7 +2871,10 @@ document.addEventListener("DOMContentLoaded", () => {
     });
     const startPage = window.location.hash.replace("#", "") || "home";
     updateSEO(startPage);
-});/* =========================================================
+});
+
+
+/* =========================================================
    DYNAMIC ADHAN SYSTEM — COMPLETE
 ========================================================= */
 
@@ -2787,14 +2893,10 @@ document.addEventListener("DOMContentLoaded", function () {
         return;
     }
 
-    /* ---------------------------------------------
-       CONFIG
-    --------------------------------------------- */
     const ADHAN_CITY    = "Kuala Lumpur";
     const ADHAN_COUNTRY = "Malaysia";
     const ADHAN_METHOD  = 17;
 
-    // Adhan audio sources (multiple fallback)
     const ADHAN_AUDIO_SOURCES = {
         "ar.alafasy": [
             "https://www.islamcan.com/audio/adhan/azan1.mp3",
@@ -2814,14 +2916,10 @@ document.addEventListener("DOMContentLoaded", function () {
         ]
     };
 
-    // Prayer times state
     let prayerTimesToday = {};
     let nextAdhanTimer   = null;
     let audioUnlocked    = false;
 
-    /* ---------------------------------------------
-       GET ADHAN AUDIO URL
-    --------------------------------------------- */
     function getAdhanURL(muezzin) {
         const sources = ADHAN_AUDIO_SOURCES[muezzin]
             || ADHAN_AUDIO_SOURCES["ar.alafasy"];
@@ -2834,9 +2932,6 @@ document.addEventListener("DOMContentLoaded", function () {
         return sources[1] || sources[0];
     }
 
-    /* ---------------------------------------------
-       LOAD PRAYER TIMES FROM ALADHAN API
-    --------------------------------------------- */
     async function loadPrayerTimes() {
         const today = new Date();
         const year  = today.getFullYear();
@@ -2865,9 +2960,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    /* ---------------------------------------------
-       SCHEDULE NEXT ADHAN
-    --------------------------------------------- */
     function scheduleNextAdhan() {
 
         if (nextAdhanTimer) {
@@ -2891,7 +2983,7 @@ document.addEventListener("DOMContentLoaded", function () {
         prayers.forEach(p => {
             if (!p.time) return;
 
-            const cleanTime = p.time.split(" ")[0]; // remove timezone if any
+            const cleanTime = p.time.split(" ")[0];
             const [hh, mm] = cleanTime.split(":").map(Number);
             const prayerDate = new Date();
             prayerDate.setHours(hh, mm, 0, 0);
@@ -2904,7 +2996,6 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
 
-        // If no prayer left today → schedule tomorrow's Fajr
         if (!nextPrayer && prayerTimesToday.Fajr) {
             const [hh, mm] = prayerTimesToday.Fajr.split(" ")[0].split(":").map(Number);
             const tomorrow = new Date();
@@ -2917,11 +3008,9 @@ document.addEventListener("DOMContentLoaded", function () {
         if (nextPrayer) {
             updateNextAdhanText(nextPrayer.name, smallestDiff);
 
-            // ✅ Schedule Adhan exactly at prayer time
             nextAdhanTimer = setTimeout(() => {
                 playAdhan(nextPrayer.name);
                 showAdhanNotification(nextPrayer.name);
-                // Reload times for next prayer
                 setTimeout(loadPrayerTimes, 5000);
             }, smallestDiff);
 
@@ -2929,9 +3018,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    /* ---------------------------------------------
-       UPDATE "Next Adhan" TEXT (live countdown)
-    --------------------------------------------- */
     function updateNextAdhanText(prayerName, diffMs) {
 
         if (!nextAdhanText) return;
@@ -2947,9 +3033,6 @@ document.addEventListener("DOMContentLoaded", function () {
         nextAdhanText.textContent = `Next Adhan: ${prayerName} in ${timeStr}`;
     }
 
-    /* ---------------------------------------------
-       PLAY ADHAN
-    --------------------------------------------- */
     function playAdhan(prayerName = "") {
 
         const muezzin = muezzinSelect ? muezzinSelect.value : "ar.alafasy";
@@ -2958,7 +3041,6 @@ document.addEventListener("DOMContentLoaded", function () {
         adhanAudio.src = url;
         adhanAudio.volume = 1.0;
 
-        // ✅ Fallback if first URL fails
         adhanAudio.onerror = function () {
             console.warn("[Adhan] Primary audio failed, trying fallback...");
             adhanAudio.src = getAdhanFallbackURL(muezzin);
@@ -2986,18 +3068,12 @@ document.addEventListener("DOMContentLoaded", function () {
             });
     }
 
-    /* ---------------------------------------------
-       STOP ADHAN
-    --------------------------------------------- */
     function stopAdhan() {
         adhanAudio.pause();
         adhanAudio.currentTime = 0;
         updateAdhanStatus("Adhan stopped.", false);
     }
 
-    /* ---------------------------------------------
-       UPDATE STATUS
-    --------------------------------------------- */
     function updateAdhanStatus(text, isPlaying) {
         if (!adhanStatus) return;
         adhanStatus.textContent = text;
@@ -3005,9 +3081,6 @@ document.addEventListener("DOMContentLoaded", function () {
         else adhanStatus.classList.remove("playing");
     }
 
-    /* ---------------------------------------------
-       NOTIFICATION
-    --------------------------------------------- */
     function showAdhanNotification(prayerName) {
         if (!("Notification" in window)) return;
         if (Notification.permission !== "granted") return;
@@ -3023,9 +3096,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    // Request permission once
     if ("Notification" in window && Notification.permission === "default") {
-        // Ask after user interaction (not immediately, to avoid blocking)
         const askPermission = () => {
             Notification.requestPermission().then(perm => {
                 console.log("[Adhan] Notification permission:", perm);
@@ -3035,9 +3106,6 @@ document.addEventListener("DOMContentLoaded", function () {
         document.addEventListener("click", askPermission, { once: true });
     }
 
-    /* ---------------------------------------------
-       BUTTON EVENTS
-    --------------------------------------------- */
     if (playAdhanBtn) {
         playAdhanBtn.addEventListener("click", () => playAdhan(""));
     }
@@ -3052,40 +3120,27 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // When audio ends naturally
     adhanAudio.addEventListener("ended", () => {
         updateAdhanStatus("Adhan finished. 🤲", false);
     });
 
-    /* ---------------------------------------------
-       INIT
-    --------------------------------------------- */
     loadPrayerTimes();
 
-    // Refresh prayer times every 6 hours
     setInterval(loadPrayerTimes, 6 * 60 * 60 * 1000);
 
     console.log("[Adhan] System initialized ✅");
-});/* =========================================================
+});
+
+
+/* =========================================================
    DYNAMIC PRAYER TIMES SYSTEM
-   - Auto-detect user location
-   - Fetch real prayer times from Aladhan API
-   - Display on Home page + Prayer page
-   - Auto-update every minute
 ========================================================= */
 
 document.addEventListener("DOMContentLoaded", function () {
 
-    /* ---------------------------------------------
-       CONFIG
-    --------------------------------------------- */
     const PRAYER_API_BASE = "https://api.aladhan.com/v1";
-
-    // Storage keys
     const STORAGE_LOCATION = "islamicway_prayer_location";
-    const STORAGE_METHOD   = "islamicway_prayer_method";
 
-    // Default location (fallback if GPS denied)
     const DEFAULT_LOCATION = {
         city: "Kuala Lumpur",
         country: "Malaysia",
@@ -3094,16 +3149,10 @@ document.addEventListener("DOMContentLoaded", function () {
         source: "default"
     };
 
-    /* ---------------------------------------------
-       STATE
-    --------------------------------------------- */
     let userLocation = null;
     let prayerData   = null;
     let updateTimer  = null;
 
-    /* ---------------------------------------------
-       DOM ELEMENTS
-    --------------------------------------------- */
     const homeLocationName  = document.getElementById("homeLocationName");
     const homePrayerDate    = document.getElementById("homePrayerDate");
     const homePrayerList    = document.getElementById("homePrayerList");
@@ -3124,11 +3173,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const saveManualLocation   = document.getElementById("saveManualLocation");
     const cancelManualLocation = document.getElementById("cancelManualLocation");
 
-    /* ---------------------------------------------
-       STEP 1: Get User Location
-    --------------------------------------------- */
-
-    // Check if user already saved a location
     function getSavedLocation() {
         try {
             const saved = localStorage.getItem(STORAGE_LOCATION);
@@ -3142,10 +3186,8 @@ document.addEventListener("DOMContentLoaded", function () {
         } catch (e) {}
     }
 
-    // Main function: detect location
     async function detectLocation() {
 
-        // 1. Check saved location first
         const saved = getSavedLocation();
         if (saved && saved.city && saved.country) {
             console.log("[Prayer] Using saved location:", saved);
@@ -3153,7 +3195,6 @@ document.addEventListener("DOMContentLoaded", function () {
             return userLocation;
         }
 
-        // 2. Try GPS
         if (navigator.geolocation) {
             try {
                 const position = await new Promise((resolve, reject) => {
@@ -3167,7 +3208,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 const lat = position.coords.latitude;
                 const lng = position.coords.longitude;
 
-                // Reverse geocode (get city name)
                 const cityInfo = await reverseGeocode(lat, lng);
 
                 userLocation = {
@@ -3187,13 +3227,11 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         }
 
-        // 3. Fallback to default
         console.log("[Prayer] Using default location");
         userLocation = DEFAULT_LOCATION;
         return userLocation;
     }
 
-    // Reverse geocoding using BigDataCloud (free, no API key)
     async function reverseGeocode(lat, lng) {
         try {
             const res = await fetch(
@@ -3211,10 +3249,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    /* ---------------------------------------------
-       STEP 2: Fetch Prayer Times
-    --------------------------------------------- */
-
     async function fetchPrayerTimes() {
 
         if (!userLocation) {
@@ -3228,12 +3262,10 @@ document.addEventListener("DOMContentLoaded", function () {
         const month = String(today.getMonth() + 1).padStart(2, "0");
         const year  = today.getFullYear();
 
-        // Auto-select method based on country
         const method = getMethodForCountry(userLocation.country);
 
         let url = "";
 
-        // Priority 1: By City (most accurate if city known)
         if (userLocation.city && userLocation.country &&
             userLocation.city !== "Unknown") {
             url = `${PRAYER_API_BASE}/timingsByCity/${day}-${month}-${year}` +
@@ -3241,7 +3273,6 @@ document.addEventListener("DOMContentLoaded", function () {
                   `&country=${encodeURIComponent(userLocation.country)}` +
                   `&method=${method}`;
         } else {
-            // Priority 2: By Coordinates
             url = `${PRAYER_API_BASE}/timings/${day}-${month}-${year}` +
                   `?latitude=${userLocation.lat}` +
                   `&longitude=${userLocation.lng}` +
@@ -3256,22 +3287,76 @@ document.addEventListener("DOMContentLoaded", function () {
                 prayerData = data.data;
                 renderPrayerTimes();
                 hidePrayerLoading();
-                console.log("[Prayer] Loaded:", prayerData.timings);
+                console.log("[Prayer] Loaded from API ✅");
+
+                try {
+                    localStorage.setItem("islamicway_prayer_cache", JSON.stringify({
+                        cacheDate: new Date().toDateString(),
+                        data: data.data
+                    }));
+                } catch (e) {
+                    console.warn("[Prayer] Cache save failed:", e);
+                }
+
             } else {
                 throw new Error("Invalid API response");
             }
 
         } catch (err) {
-            console.error("[Prayer] Fetch failed:", err);
-            showPrayerError();
+            console.warn("[Prayer] API failed, using fallback:", err);
+
+            const cached = localStorage.getItem("islamicway_prayer_cache");
+            if (cached) {
+                try {
+                    const parsed = JSON.parse(cached);
+                    const cacheDate = parsed.cacheDate;
+                    const todayStr = today.toDateString();
+
+                    if (cacheDate === todayStr) {
+                        prayerData = parsed.data;
+                        renderPrayerTimes();
+                        hidePrayerLoading();
+                        console.log("[Prayer] Loaded from cache ✅");
+                        return;
+                    }
+                } catch (e) {}
+            }
+
+            if (typeof ISLAMIC_DATABASE !== "undefined") {
+                const fallback = ISLAMIC_DATABASE.getFallbackPrayerTimes();
+
+                prayerData = {
+                    timings: {
+                        Fajr: fallback.Fajr,
+                        Sunrise: fallback.Sunrise,
+                        Dhuhr: fallback.Dhuhr,
+                        Asr: fallback.Asr,
+                        Maghrib: fallback.Maghrib,
+                        Isha: fallback.Isha
+                    },
+                    date: {
+                        readable: today.toDateString(),
+                        hijri: { date: "" }
+                    }
+                };
+
+                renderPrayerTimes();
+                hidePrayerLoading();
+
+                if (prayerMethodText) {
+                    prayerMethodText.textContent = "⚠️ " + fallback.note;
+                }
+
+                console.log("[Prayer] Loaded from local fallback ✅");
+            } else {
+                showPrayerError();
+            }
         }
     }
 
-    // Auto-select calculation method based on country
     function getMethodForCountry(country) {
         const c = (country || "").toLowerCase();
 
-        // Mapping of countries → Aladhan method IDs
         const methods = {
             "pakistan": 1,
             "india": 1,
@@ -3301,12 +3386,8 @@ document.addEventListener("DOMContentLoaded", function () {
             "germany": 3
         };
 
-        return methods[c] || 2; // Default: ISNA
+        return methods[c] || 2;
     }
-
-    /* ---------------------------------------------
-       STEP 3: Render Prayer Times
-    --------------------------------------------- */
 
     function renderPrayerTimes() {
 
@@ -3315,7 +3396,6 @@ document.addEventListener("DOMContentLoaded", function () {
         const timings = prayerData.timings;
         const dateInfo = prayerData.date;
 
-        // -------- Update Home Page --------
         if (homeLocationName) {
             homeLocationName.textContent =
                 `${userLocation.city}, ${userLocation.country}`;
@@ -3335,7 +3415,6 @@ document.addEventListener("DOMContentLoaded", function () {
             `;
         }
 
-        // -------- Update Prayer Page --------
         if (prayerLocationText) {
             prayerLocationText.textContent =
                 `📍 ${userLocation.city}, ${userLocation.country}`;
@@ -3361,7 +3440,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 { name: "Isha",    icon: "🌙", time: timings.Isha }
             ];
 
-            // Find next prayer
             const nextPrayer = findNextPrayer(prayers);
 
             prayerTimesGrid.innerHTML = prayers.map(p => `
@@ -3374,9 +3452,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    /* ---------------------------------------------
-       HELPER: Find Next Prayer
-    --------------------------------------------- */
     function findNextPrayer(prayers) {
         const now = new Date();
         const currentMinutes = now.getHours() * 60 + now.getMinutes();
@@ -3389,12 +3464,9 @@ document.addEventListener("DOMContentLoaded", function () {
                 return p.name;
             }
         }
-        return "Fajr"; // Next day's Fajr
+        return "Fajr";
     }
 
-    /* ---------------------------------------------
-       HELPER: Format Time (24h → 12h with AM/PM)
-    --------------------------------------------- */
     function formatTime(time24) {
         if (!time24) return "--:--";
         const [hh, mm] = time24.split(":").map(Number);
@@ -3403,9 +3475,6 @@ document.addEventListener("DOMContentLoaded", function () {
         return `${h12}:${String(mm).padStart(2, "0")} ${period}`;
     }
 
-    /* ---------------------------------------------
-       HELPER: Get Method Name
-    --------------------------------------------- */
     function getMethodName(id) {
         const names = {
             1: "University of Islamic Sciences, Karachi",
@@ -3428,9 +3497,6 @@ document.addEventListener("DOMContentLoaded", function () {
         return names[id] || "Auto-detected";
     }
 
-    /* ---------------------------------------------
-       UI STATE
-    --------------------------------------------- */
     function showPrayerLoading() {
         if (prayerTimesLoading) prayerTimesLoading.style.display = "block";
         if (prayerTimesError) prayerTimesError.style.display = "none";
@@ -3449,13 +3515,8 @@ document.addEventListener("DOMContentLoaded", function () {
         if (prayerTimesError) prayerTimesError.style.display = "block";
     }
 
-    /* ---------------------------------------------
-       BUTTON EVENTS
-    --------------------------------------------- */
-
     if (retryPrayerLocation) {
         retryPrayerLocation.addEventListener("click", () => {
-            // Clear saved location and retry GPS
             localStorage.removeItem(STORAGE_LOCATION);
             userLocation = null;
             fetchPrayerTimes();
@@ -3510,10 +3571,6 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    /* ---------------------------------------------
-       AUTO-UPDATE: Refresh every 5 minutes
-       (to update "next prayer" highlight)
-    --------------------------------------------- */
     function startAutoUpdate() {
         if (updateTimer) clearInterval(updateTimer);
         updateTimer = setInterval(() => {
@@ -3521,9 +3578,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }, 5 * 60 * 1000);
     }
 
-    /* ---------------------------------------------
-       INIT — Load on page start
-    --------------------------------------------- */
     async function initPrayerTimes() {
         console.log("[Prayer] Initializing...");
         await detectLocation();
@@ -3531,7 +3585,6 @@ document.addEventListener("DOMContentLoaded", function () {
         startAutoUpdate();
     }
 
-    // Load when Prayer page is opened
     const originalShowPage = window.showPage;
     if (typeof originalShowPage === "function") {
         window.showPage = function (pageName, updateUrl = true) {
@@ -3542,7 +3595,6 @@ document.addEventListener("DOMContentLoaded", function () {
         };
     }
 
-    // Also load on first visit to Home (for home prayer card)
     initPrayerTimes();
 
 });

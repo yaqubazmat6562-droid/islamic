@@ -714,3 +714,72 @@ const FullDatabase = {
 };
 
 console.log("[FullDB] Auto-download DISABLED — website will never show progress bar ✅");
+/* =========================================================
+   FULL QURAN DATABASE — AUTO LOAD FROM CDN
+   Saari 114 Surahs ka Arabic + Urdu data
+========================================================= */
+
+const FullQuranDatabase = {
+
+    baseURL: "https://cdn.jsdelivr.net/gh/fawazahmed0/quran-api@1/editions/",
+    cache: {},
+
+    /* ---------- SURAH LIST LOAD KARO ---------- */
+    async loadSurahList() {
+        try {
+            const res = await fetch(this.baseURL + "ara-quranuthmani.json");
+            const data = await res.json();
+            return data.chapters || [];
+        } catch (e) {
+            console.warn("[FullQuran] Surah list load failed", e);
+            return null;
+        }
+    },
+
+    /* ---------- POORI SURAH LOAD KARO (Arabic + Urdu) ---------- */
+    async loadSurah(surahNumber) {
+
+        // Check cache pehle
+        if (this.cache[surahNumber]) {
+            console.log("[FullQuran] Surah " + surahNumber + " loaded from cache ✅");
+            return this.cache[surahNumber];
+        }
+
+        try {
+            // Arabic (Uthmani)
+            const arabicRes = await fetch(
+                this.baseURL + "ara-quranuthmani/" + surahNumber + ".json"
+            );
+            const arabicData = await arabicRes.json();
+
+            // Urdu (Jalandhry)
+            const urduRes = await fetch(
+                this.baseURL + "urd-quranjalandhry/" + surahNumber + ".json"
+            );
+            const urduData = await urduRes.json();
+
+            const result = {
+                arabic: arabicData.chapter.map(a => a.text),
+                urdu: urduData.chapter.map(u => u.text)
+            };
+
+            // Cache mein save karo
+            this.cache[surahNumber] = result;
+
+            console.log("[FullQuran] Surah " + surahNumber + " loaded from API ✅");
+            return result;
+
+        } catch (e) {
+            console.warn("[FullQuran] Surah " + surahNumber + " load failed", e);
+            return null;
+        }
+    },
+
+    /* ---------- CHECK KARO KE SURAH AVAILABLE HAI YA NAHI ---------- */
+    async hasSurah(surahNumber) {
+        const data = await this.loadSurah(surahNumber);
+        return data !== null;
+    }
+};
+
+console.log("[FullQuran] Auto-load system ready ✅");

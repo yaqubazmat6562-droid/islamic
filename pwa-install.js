@@ -137,3 +137,69 @@
     }
 
 })();
+/* =========================================================
+   PWA UPDATE NOTIFICATION
+   Naya version available hone par user ko bataye
+========================================================= */
+
+if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+        navigator.serviceWorker.register("./sw.js").then((reg) => {
+            console.log("[PWA] Service Worker registered:", reg.scope);
+
+            /* ---------------------------------------------
+               UPDATE CHECK KARO
+            --------------------------------------------- */
+            reg.addEventListener("updatefound", () => {
+                const newWorker = reg.installing;
+
+                newWorker.addEventListener("statechange", () => {
+                    if (newWorker.state === "installed" && navigator.serviceWorker.controller) {
+                        // Naya version available hai!
+                        showUpdateNotification(reg);
+                    }
+                });
+            });
+        });
+
+        /* ---------------------------------------------
+           JAB NAYA SW ACTIVE HO, PAGE RELOAD KARO
+        --------------------------------------------- */
+        let refreshing = false;
+        navigator.serviceWorker.addEventListener("controllerchange", () => {
+            if (!refreshing) {
+                refreshing = true;
+                window.location.reload();
+            }
+        });
+    });
+}
+
+/* ---------------------------------------------
+   UPDATE NOTIFICATION UI
+--------------------------------------------- */
+function showUpdateNotification(reg) {
+    const oldBanner = document.querySelector(".pwa-update-banner");
+    if (oldBanner) oldBanner.remove();
+
+    const banner = document.createElement("div");
+    banner.className = "pwa-update-banner";
+    banner.innerHTML = `
+        <span class="pwa-update-icon">🔄</span>
+        <span class="pwa-update-text">
+            <strong>Naya version available hai!</strong>
+            <small>Behtareen tajurba ke liye update karein</small>
+        </span>
+        <button class="pwa-update-btn">Update</button>
+    `;
+
+    document.body.appendChild(banner);
+
+    banner.querySelector(".pwa-update-btn").addEventListener("click", () => {
+        // Naye SW ko activate karo
+        if (reg.waiting) {
+            reg.waiting.postMessage({ type: "SKIP_WAITING" });
+        }
+        banner.remove();
+    });
+}

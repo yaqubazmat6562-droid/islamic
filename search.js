@@ -1,123 +1,173 @@
 /* =========================================================
-   ISLAMICWAY — FULLY DYNAMIC SEARCH ENGINE
-   Searches: Quran, Hadith, Duas, Articles, Guidance
-   ========================================================= */
+   ISLAMICWAY — DYNAMIC SEARCH ENGINE v4.0
+   ✅ Quran: Surah number, name, ayah
+   ✅ Hadith: #15, 15, keywords
+   ✅ Duas: title, text, category
+   ✅ Guidance + Articles
+========================================================= */
 
 const SearchEngine = {
 
-    /* =====================================================
-       SEARCH DATABASE
-    ===================================================== */
+    index: [],
+    isBuilt: false,
 
-    database: [
+    buildIndex() {
+        if (this.isBuilt) return;
+        this.index = [];
 
-        /* ---------- QURAN SURAHS ---------- */
-        { type: "quran", icon: "📖", title: "Surah Al-Fatihah", subtitle: "The Opening - 7 Ayahs", page: "quran", keywords: "fatiha fatihah opening first surah quran" },
-        { type: "quran", icon: "📖", title: "Surah Al-Baqarah", subtitle: "The Cow - 286 Ayahs", page: "quran", keywords: "baqarah cow longest surah quran" },
-        { type: "quran", icon: "📖", title: "Surah Yasin", subtitle: "Yaseen - 83 Ayahs", page: "quran", keywords: "yasin yaseen heart of quran" },
-        { type: "quran", icon: "📖", title: "Surah Ar-Rahman", subtitle: "The Most Merciful - 78 Ayahs", page: "quran", keywords: "rahman merciful blessing quran" },
-        { type: "quran", icon: "📖", title: "Surah Al-Mulk", subtitle: "The Sovereignty - 30 Ayahs", page: "quran", keywords: "mulk sovereignty protection quran" },
-        { type: "quran", icon: "📖", title: "Surah Al-Kahf", subtitle: "The Cave - 110 Ayahs", page: "quran", keywords: "kahf cave friday light quran" },
-
-        /* ---------- HADITH BOOKS ---------- */
-        { type: "hadith", icon: "📚", title: "Sahih Bukhari", subtitle: "Imam Muhammad al-Bukhari", page: "hadith", keywords: "bukhari sahih most authentic hadith" },
-        { type: "hadith", icon: "📚", title: "Sahih Muslim", subtitle: "Imam Muslim ibn al-Hajjaj", page: "hadith", keywords: "muslim sahih hadith collection" },
-        { type: "hadith", icon: "📚", title: "Sunan Abu Dawud", subtitle: "Imam Abu Dawud", page: "hadith", keywords: "abu dawud sunan hadith" },
-        { type: "hadith", icon: "📚", title: "Jami at-Tirmidhi", subtitle: "Imam al-Tirmidhi", page: "hadith", keywords: "tirmidhi jami hadith sunan" },
-        { type: "hadith", icon: "📚", title: "Sunan an-Nasa'i", subtitle: "Imam an-Nasa'i", page: "hadith", keywords: "nasai sunan hadith" },
-        { type: "hadith", icon: "📚", title: "Muwatta Imam Malik", subtitle: "Imam Malik ibn Anas", page: "hadith", keywords: "malik muwatta hadith" },
-
-        /* ---------- DUAS ---------- */
-        { type: "dua", icon: "🤲", title: "Morning Dua", subtitle: "Dua for starting the day", page: "duas", keywords: "morning subah fajr dua start day" },
-        { type: "dua", icon: "🤲", title: "Evening Dua", subtitle: "Dua for evening protection", page: "duas", keywords: "evening shaam maghrib dua protection" },
-        { type: "dua", icon: "🤲", title: "Dua for Forgiveness", subtitle: "Seek Allah's mercy", page: "duas", keywords: "forgiveness maghfirat istighfar tawbah mercy" },
-        { type: "dua", icon: "🤲", title: "Dua for Protection", subtitle: "Protection from evil", page: "duas", keywords: "protection hifazat evil nazar bad" },
-        { type: "dua", icon: "🤲", title: "Dua for Travel", subtitle: "Safety during journeys", page: "duas", keywords: "travel safar journey safety" },
-        { type: "dua", icon: "🤲", title: "Dua Before Eating", subtitle: "Bismillah", page: "duas", keywords: "eating food khana bismillah" },
-        { type: "dua", icon: "🤲", title: "Dua Before Sleeping", subtitle: "Sleep with Allah's name", page: "duas", keywords: "sleeping sleep sone raat night dua" },
-        { type: "dua", icon: "🤲", title: "Dua for Family", subtitle: "Blessings for family", page: "duas", keywords: "family ahl ghar blessings" },
-
-        /* ---------- ARTICLES ---------- */
-        { type: "article", icon: "📝", title: "A Step Closer to Allah", subtitle: "Strengthen your connection", page: "articles", keywords: "closer to allah connection journey relationship" },
-        { type: "article", icon: "📝", title: "The Beauty of the Quran", subtitle: "Discover Quranic guidance", page: "articles", keywords: "beauty quran holy book guidance" },
-        { type: "article", icon: "📝", title: "Power of Dua", subtitle: "Understanding Dua's importance", page: "articles", keywords: "power dua supplication prayer importance" },
-        { type: "article", icon: "📝", title: "Patience and Trust in Allah", subtitle: "Sabr and Tawakkul", page: "articles", keywords: "patience sabr tawakkul trust allah" },
-        { type: "article", icon: "📝", title: "The Beauty of Good Character", subtitle: "Akhlaq in Islam", page: "articles", keywords: "character akhlaq good manners kindness" },
-
-        /* ---------- GUIDANCE ---------- */
-        { type: "guidance", icon: "🧭", title: "Guidance from the Quran", subtitle: "Quran 17:9", page: "guidance", keywords: "guidance quran hidayah" },
-        { type: "guidance", icon: "🧭", title: "Importance of Salah", subtitle: "Quran 2:43", page: "guidance", keywords: "salah prayer namaz importance worship" },
-        { type: "guidance", icon: "🧭", title: "Be Patient", subtitle: "Quran 2:153", page: "guidance", keywords: "patience sabr hardship" },
-        { type: "guidance", icon: "🧭", title: "Kindness to Parents", subtitle: "Quran 17:23", page: "guidance", keywords: "parents walidain kindness respect family" },
-        { type: "guidance", icon: "🧭", title: "Good Character", subtitle: "Quran 2:83", page: "guidance", keywords: "character akhlaq good speak" },
-        { type: "guidance", icon: "🧭", title: "Eat What Is Halal", subtitle: "Quran 2:172", page: "guidance", keywords: "halal haram food eat tayyib" },
-        { type: "guidance", icon: "🧭", title: "Remember Allah", subtitle: "Quran 13:28", page: "guidance", keywords: "dhikr remember allah peace heart" },
-        { type: "guidance", icon: "🧭", title: "Trust in Allah", subtitle: "Quran 5:23", page: "guidance", keywords: "trust tawakkul allah believers" },
-        { type: "guidance", icon: "🧭", title: "Purpose of Fasting", subtitle: "Quran 2:183", page: "guidance", keywords: "fasting roza ramadan taqwa" },
-        { type: "guidance", icon: "🧭", title: "Forgive Others", subtitle: "Quran 24:22", page: "guidance", keywords: "forgive pardon overlook mercy" },
-        { type: "guidance", icon: "🧭", title: "Be Thankful", subtitle: "Quran 14:7", page: "guidance", keywords: "thankful shukr gratitude blessings" },
-        { type: "guidance", icon: "🧭", title: "Hope in Allah", subtitle: "Quran 39:53", page: "guidance", keywords: "hope rahmah mercy despair" }
-    ],
-
-    /* =====================================================
-       SEARCH FUNCTION
-    ===================================================== */
-
-    search(query) {
-
-        if (!query || query.trim().length < 2) {
-            return [];
+        /* ---------- QURAN ---------- */
+        if (typeof ISLAMIC_DATABASE !== "undefined" && ISLAMIC_DATABASE.quranSurahs) {
+            ISLAMIC_DATABASE.quranSurahs.forEach(surah => {
+                this.index.push({
+                    type: "quran",
+                    icon: "📖",
+                    title: `Surah ${surah.englishName}`,
+                    subtitle: `${surah.englishNameTranslation} • ${surah.numberOfAyahs} Ayahs • Surah #${surah.number}`,
+                    page: "quran",
+                    surahNumber: surah.number,
+                    keywords: `${surah.englishName} ${surah.name} ${surah.englishNameTranslation} surah ${surah.number} quran ${surah.revelationType}`.toLowerCase()
+                });
+            });
         }
 
-        const q = query.toLowerCase().trim();
+        /* ---------- HADITH ---------- */
+        if (typeof ISLAMIC_DATABASE !== "undefined" && ISLAMIC_DATABASE.hadithBooks) {
+            Object.entries(ISLAMIC_DATABASE.hadithBooks).forEach(([bookKey, book]) => {
 
-        return this.database.filter(item => {
+                // Book itself
+                this.index.push({
+                    type: "hadith",
+                    icon: "📚",
+                    title: book.title,
+                    subtitle: `${book.author} • ${book.hadiths.length} Hadiths`,
+                    page: "hadith",
+                    bookKey: bookKey,
+                    keywords: `${book.title} ${book.arabic} ${book.author} ${bookKey} hadith book collection`.toLowerCase()
+                });
 
-            return (
-                item.title.toLowerCase().includes(q) ||
-                item.subtitle.toLowerCase().includes(q) ||
-                item.keywords.toLowerCase().includes(q) ||
-                item.type.toLowerCase().includes(q)
-            );
+                // Individual hadiths (searchable by number)
+                book.hadiths.forEach((hadith, idx) => {
+                    const hadithNum = idx + 1;
+                    this.index.push({
+                        type: "hadith",
+                        icon: "📜",
+                        title: `${book.title} — Hadith #${hadithNum}`,
+                        subtitle: hadith.urdu ? hadith.urdu.substring(0, 90) + "..." : hadith.arabic.substring(0, 70) + "...",
+                        page: "hadith",
+                        bookKey: bookKey,
+                        hadithNumber: hadithNum,
+                        keywords: `${book.title} hadith ${hadithNum} #${hadithNum} number ${hadithNum} ${bookKey} ${hadith.urdu || ""} ${hadith.arabic || ""}`.toLowerCase()
+                    });
+                });
+            });
+        }
 
+        /* ---------- DUAS ---------- */
+        if (typeof ISLAMIC_DATABASE !== "undefined" && ISLAMIC_DATABASE.duas) {
+            ISLAMIC_DATABASE.duas.forEach(dua => {
+                this.index.push({
+                    type: "dua",
+                    icon: "🤲",
+                    title: dua.title,
+                    subtitle: dua.urdu ? dua.urdu.substring(0, 80) : dua.english.substring(0, 80),
+                    page: "duas",
+                    duaId: dua.id,
+                    keywords: `${dua.title} ${dua.arabic} ${dua.urdu} ${dua.english} ${dua.category} ${dua.reference} dua ${dua.id}`.toLowerCase()
+                });
+            });
+        }
+
+        /* ---------- GUIDANCE ---------- */
+        if (typeof ISLAMIC_DATABASE !== "undefined" && ISLAMIC_DATABASE.guidance) {
+            ISLAMIC_DATABASE.guidance.forEach(item => {
+                this.index.push({
+                    type: "guidance",
+                    icon: "🧭",
+                    title: item.title,
+                    subtitle: item.english ? item.english.substring(0, 80) : item.urdu.substring(0, 80),
+                    page: "guidance",
+                    guidanceId: item.id,
+                    keywords: `${item.title} ${item.arabic} ${item.urdu} ${item.english} ${item.content} ${item.category} ${item.reference} guidance ${item.id}`.toLowerCase()
+                });
+            });
+        }
+
+        /* ---------- ARTICLES ---------- */
+        const articlesList = [
+            { id: 1, icon: "🕌", title: "A Step Closer to Allah", subtitle: "Strengthen your connection with Allah", keywords: "step closer allah connection journey relationship near" },
+            { id: 2, icon: "❤️", title: "Patience and Trust in Allah", subtitle: "Sabr and Tawakkul in Islam", keywords: "patience sabr tawakkul trust allah hardship" },
+            { id: 3, icon: "🌙", title: "The Beauty of Good Character", subtitle: "Akhlaq in Islam", keywords: "character akhlaq good manners kindness beauty" }
+        ];
+
+        articlesList.forEach(art => {
+            this.index.push({
+                type: "article",
+                icon: "📝",
+                title: art.title,
+                subtitle: art.subtitle,
+                page: "articles",
+                articleId: art.id,
+                keywords: `${art.title} ${art.keywords} article`.toLowerCase()
+            });
         });
 
+        this.isBuilt = true;
+        console.log(`[SearchEngine] Index built: ${this.index.length} items ✅`);
     },
 
-    /* =====================================================
-       GET POPULAR SUGGESTIONS
-    ===================================================== */
+    search(query) {
+        if (!this.isBuilt) this.buildIndex();
+        if (!query || query.trim().length < 1) return [];
+
+        const q = query.toLowerCase().trim();
+        const results = [];
+
+        this.index.forEach(item => {
+            let score = 0;
+
+            // Exact #number
+            const numberMatch = q.match(/^#?(\d+)$/);
+            if (numberMatch) {
+                const num = parseInt(numberMatch[1], 10);
+                if (item.type === "hadith" && item.hadithNumber === num) score += 100;
+                if (item.type === "quran" && item.surahNumber === num) score += 100;
+                if (item.type === "dua" && item.duaId === num) score += 80;
+                if (item.type === "guidance" && item.guidanceId === num) score += 80;
+            }
+
+            if (item.title.toLowerCase() === q) score += 50;
+            if (item.title.toLowerCase().includes(q)) score += 30;
+            if (item.subtitle && item.subtitle.toLowerCase().includes(q)) score += 15;
+            if (item.keywords && item.keywords.includes(q)) score += 10;
+
+            const words = q.split(/\s+/).filter(w => w.length > 1);
+            if (words.length > 1) {
+                const matchedWords = words.filter(w => item.keywords && item.keywords.includes(w));
+                score += matchedWords.length * 5;
+            }
+
+            if (score > 0) results.push({ ...item, score });
+        });
+
+        results.sort((a, b) => b.score - a.score);
+        return results.slice(0, 50);
+    },
 
     getPopular() {
-        return [
-            "Quran", "Hadith", "Dua", "Salah",
-            "Patience", "Forgiveness", "Ramadan", "Parents",
-            "Morning Dua", "Surah Yasin", "Sahih Bukhari",
-            "Guidance", "Halal", "Character", "Trust in Allah"
-        ];
+        return ["Surah Yasin", "Sahih Bukhari", "Morning Dua", "Patience", "Forgiveness", "Ramadan", "Parents", "#15", "#100", "#300"];
     },
-
-    /* =====================================================
-       GET CATEGORY FILTER
-    ===================================================== */
 
     filterByType(results, type) {
         if (type === "all") return results;
         return results.filter(r => r.type === type);
     }
-
 };
 
-
 /* =========================================================
-   SEARCH PAGE UI — INITIALIZE
+   SEARCH PAGE UI
 ========================================================= */
 
 document.addEventListener("DOMContentLoaded", () => {
-
-    /* ============================================
-       DOM ELEMENTS
-    ============================================ */
 
     const searchInput = document.getElementById("globalSearchInput");
     const searchBtn = document.getElementById("globalSearchBtn");
@@ -127,81 +177,54 @@ document.addEventListener("DOMContentLoaded", () => {
     const emptyState = document.getElementById("searchEmptyState");
     const suggestionBox = document.getElementById("searchSuggestions");
 
-
-    /* ============================================
-       STATE
-    ============================================ */
-
     let currentQuery = "";
     let currentFilter = "all";
-    let currentResults = [];
 
+    function initSearchIndex() {
+        if (typeof ISLAMIC_DATABASE !== "undefined") {
+            SearchEngine.buildIndex();
+            renderPopularSearches();
+        } else {
+            setTimeout(initSearchIndex, 200);
+        }
+    }
+    initSearchIndex();
 
-    /* ============================================
-       POPULAR SEARCHES — RENDER
-    ============================================ */
-
-    if (popularContainer) {
-
-        const popular = SearchEngine.getPopular();
-
-        popularContainer.innerHTML = popular.map(p =>
+    function renderPopularSearches() {
+        if (!popularContainer) return;
+        popularContainer.innerHTML = SearchEngine.getPopular().map(p =>
             `<button class="popular-chip" data-query="${p}">${p}</button>`
         ).join("");
-
         popularContainer.querySelectorAll(".popular-chip").forEach(chip => {
             chip.addEventListener("click", () => {
                 const q = chip.dataset.query;
                 if (searchInput) searchInput.value = q;
                 performSearch(q);
+                hideSuggestions();
             });
         });
     }
 
-
-    /* ============================================
-       LIVE SEARCH — AS USER TYPES
-    ============================================ */
-
     if (searchInput) {
-
         let debounceTimer;
-
         searchInput.addEventListener("input", function () {
-
             const value = this.value.trim();
-
-            // Live suggestions
             showSuggestions(value);
-
             clearTimeout(debounceTimer);
             debounceTimer = setTimeout(() => {
-                if (value.length >= 2) {
-                    performSearch(value);
-                } else if (value.length === 0) {
-                    clearResults();
-                }
+                if (value.length >= 1) performSearch(value);
+                else clearResults();
             }, 250);
-
         });
-
         searchInput.addEventListener("keydown", function (event) {
             if (event.key === "Enter") {
                 event.preventDefault();
                 performSearch(this.value.trim());
                 hideSuggestions();
             }
-            if (event.key === "Escape") {
-                hideSuggestions();
-            }
+            if (event.key === "Escape") hideSuggestions();
         });
-
     }
-
-
-    /* ============================================
-       SEARCH BUTTON
-    ============================================ */
 
     if (searchBtn) {
         searchBtn.addEventListener("click", () => {
@@ -212,140 +235,136 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-
-    /* ============================================
-       FILTER TABS
-    ============================================ */
-
     filterTabs.forEach(tab => {
-
         tab.addEventListener("click", () => {
-
             filterTabs.forEach(t => t.classList.remove("active"));
             tab.classList.add("active");
-
             currentFilter = tab.dataset.filter;
-
-            if (currentQuery) {
-                performSearch(currentQuery);
-            }
+            if (currentQuery) performSearch(currentQuery);
         });
     });
 
-
-    /* ============================================
-       PERFORM SEARCH
-    ============================================ */
-
     function performSearch(query) {
-
         currentQuery = query;
-
-        if (!query || query.length < 2) {
-            clearResults();
-            return;
-        }
-
-        // Search the database
+        if (!query || query.length < 1) { clearResults(); return; }
         let results = SearchEngine.search(query);
-
-        // Apply type filter
         results = SearchEngine.filterByType(results, currentFilter);
-
-        currentResults = results;
-
         renderResults(results, query);
-
     }
 
-
-    /* ============================================
-       RENDER RESULTS
-    ============================================ */
-
     function renderResults(results, query) {
-
         if (!resultsContainer) return;
-
-        // Hide empty state
         if (emptyState) emptyState.style.display = "none";
 
         if (results.length === 0) {
-
             resultsContainer.innerHTML = "";
-
             if (emptyState) {
                 emptyState.style.display = "block";
                 emptyState.innerHTML = `
                     <div class="search-empty-icon">🔍</div>
-                    <h3>No results found for "${escapeHtml(query)}"</h3>
-                    <p>Try different keywords or browse popular searches above.</p>
+                    <h3>No results for "${escapeHtml(query)}"</h3>
+                    <p>Try: <strong>Surah Yasin</strong>, <strong>Sahih Bukhari</strong>, <strong>#15</strong>, or <strong>Morning Dua</strong></p>
                 `;
             }
             return;
         }
 
-        resultsContainer.innerHTML = results.map(item => `
-            <div class="search-result-card" data-page="${item.page}" data-type="${item.type}">
+        resultsContainer.innerHTML = results.map((item, idx) => `
+            <div class="search-result-card"
+                 data-page="${item.page}"
+                 data-type="${item.type}"
+                 data-surah="${item.surahNumber || ''}"
+                 data-book="${item.bookKey || ''}"
+                 data-hadith="${item.hadithNumber || ''}"
+                 data-dua="${item.duaId || ''}"
+                 data-guidance="${item.guidanceId || ''}"
+                 data-article="${item.articleId || ''}"
+                 data-index="${idx}">
                 <div class="search-result-icon">${item.icon}</div>
                 <div class="search-result-content">
                     <div class="search-result-type">${getTypeLabel(item.type)}</div>
-                    <h3>${escapeHtml(item.title)}</h3>
+                    <h3>${highlight(item.title, query)}</h3>
                     <p>${escapeHtml(item.subtitle)}</p>
                 </div>
                 <div class="search-result-arrow">→</div>
             </div>
         `).join("");
 
-        // Attach click handlers
         resultsContainer.querySelectorAll(".search-result-card").forEach(card => {
-            card.addEventListener("click", () => {
-                const page = card.dataset.page;
-                if (page && typeof showPage === "function") {
-                    showPage(page);
-                } else if (page) {
-                    window.location.hash = page;
-                }
-            });
+            card.addEventListener("click", () => handleResultClick(card));
         });
     }
 
+    function handleResultClick(card) {
+        const page = card.dataset.page;
+        const type = card.dataset.type;
+        const surahNum = card.dataset.surah;
+        const bookKey = card.dataset.book;
+        const hadithNum = card.dataset.hadith;
+        const duaId = card.dataset.dua;
+        const guidanceId = card.dataset.guidance;
+        const articleId = card.dataset.article;
 
-    /* ============================================
-       CLEAR RESULTS
-    ============================================ */
+        hideSuggestions();
+
+        if (typeof showPage === "function") showPage(page);
+
+        setTimeout(() => {
+            // QURAN
+            if (type === "quran" && surahNum) {
+                if (typeof openSurah === "function") openSurah(parseInt(surahNum, 10));
+            }
+            // HADITH
+            if (type === "hadith" && bookKey) {
+                if (typeof window.openHadithBookBySearch === "function") {
+                    window.openHadithBookBySearch(bookKey, hadithNum ? parseInt(hadithNum, 10) : null);
+                }
+            }
+            // DUA
+            if (type === "dua" && duaId) {
+                if (typeof openDuaReader === "function") {
+                    const idx = (ISLAMIC_DATABASE?.duas || []).findIndex(d => d.id === parseInt(duaId, 10));
+                    if (idx !== -1) openDuaReader(idx);
+                }
+            }
+            // GUIDANCE
+            if (type === "guidance" && guidanceId) {
+                if (typeof openGuidanceReader === "function") {
+                    const idx = (ISLAMIC_DATABASE?.guidance || []).findIndex(g => g.id === parseInt(guidanceId, 10));
+                    if (idx !== -1) openGuidanceReader(idx);
+                }
+            }
+            // ARTICLE
+            if (type === "article" && articleId) {
+                if (typeof openArticle === "function") openArticle(parseInt(articleId, 10));
+            }
+        }, 350);
+    }
 
     function clearResults() {
-
         if (resultsContainer) resultsContainer.innerHTML = "";
         if (emptyState) emptyState.style.display = "none";
     }
 
-
-    /* ============================================
-       LIVE SUGGESTIONS
-    ============================================ */
-
     function showSuggestions(query) {
-
         if (!suggestionBox) return;
+        if (!query || query.length < 1) { hideSuggestions(); return; }
 
-        if (!query || query.length < 2) {
-            hideSuggestions();
-            return;
-        }
-
-        const matches = SearchEngine.search(query).slice(0, 6);
-
-        if (matches.length === 0) {
-            hideSuggestions();
-            return;
-        }
+        const matches = SearchEngine.search(query).slice(0, 7);
+        if (matches.length === 0) { hideSuggestions(); return; }
 
         suggestionBox.innerHTML = matches.map(item => `
-            <div class="suggestion-item" data-query="${escapeHtml(item.title)}">
+            <div class="suggestion-item"
+                 data-page="${item.page}"
+                 data-type="${item.type}"
+                 data-surah="${item.surahNumber || ''}"
+                 data-book="${item.bookKey || ''}"
+                 data-hadith="${item.hadithNumber || ''}"
+                 data-dua="${item.duaId || ''}"
+                 data-guidance="${item.guidanceId || ''}"
+                 data-article="${item.articleId || ''}">
                 <span class="suggestion-icon">${item.icon}</span>
-                <span class="suggestion-text">${highlightMatch(item.title, query)}</span>
+                <span class="suggestion-text">${highlight(item.title, query)}</span>
                 <span class="suggestion-type">${getTypeLabel(item.type)}</span>
             </div>
         `).join("");
@@ -354,56 +373,47 @@ document.addEventListener("DOMContentLoaded", () => {
 
         suggestionBox.querySelectorAll(".suggestion-item").forEach(item => {
             item.addEventListener("click", () => {
-                const q = item.dataset.query;
-                if (searchInput) searchInput.value = q;
-                performSearch(q);
-                hideSuggestions();
+                const titleText = item.querySelector(".suggestion-text").textContent;
+                if (searchInput) searchInput.value = titleText;
+                handleResultClick(item);
             });
         });
     }
-
 
     function hideSuggestions() {
         if (suggestionBox) suggestionBox.style.display = "none";
     }
 
-
-    /* ============================================
-       HIGHLIGHT MATCH
-    ============================================ */
-
-    function highlightMatch(text, query) {
-
-        const safeText = escapeHtml(text);
-        const safeQuery = escapeHtml(query);
-
-        const regex = new RegExp(`(${safeQuery})`, "gi");
-
-        return safeText.replace(regex, `<mark>$1</mark>`);
-    }
-
-
-    /* ============================================
-       GET TYPE LABEL
-    ============================================ */
-
     function getTypeLabel(type) {
-
-        const labels = {
+        return {
             quran: "Quran",
             hadith: "Hadith",
             dua: "Dua",
             article: "Article",
             guidance: "Guidance"
-        };
-
-        return labels[type] || "Result";
+        }[type] || "Result";
     }
 
+    function highlight(text, query) {
+        const safeText = escapeHtml(text);
+        if (!query) return safeText;
 
-    /* ============================================
-       ESCAPE HTML
-    ============================================ */
+        const numMatch = query.match(/^#?(\d+)$/);
+        if (numMatch) {
+            const regex = new RegExp(`(#?${numMatch[1]})`, "gi");
+            return safeText.replace(regex, `<mark>$1</mark>`);
+        }
+
+        const words = query.split(/\s+/).filter(w => w.length > 1);
+        if (words.length === 0) return safeText;
+
+        const regex = new RegExp(`(${words.map(escapeRegex).join("|")})`, "gi");
+        return safeText.replace(regex, `<mark>$1</mark>`);
+    }
+
+    function escapeRegex(str) {
+        return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    }
 
     function escapeHtml(text) {
         return String(text ?? "")
@@ -414,59 +424,30 @@ document.addEventListener("DOMContentLoaded", () => {
             .replace(/'/g, "&#039;");
     }
 
-
-    /* ============================================
-       CLICK OUTSIDE → HIDE SUGGESTIONS
-    ============================================ */
-
     document.addEventListener("click", (event) => {
-
         if (!suggestionBox) return;
-
-        const searchWrapper = document.querySelector(".search-input-wrapper");
-
-        if (searchWrapper && !searchWrapper.contains(event.target)) {
+        const wrapper = document.querySelector(".search-input-wrapper");
+        if (wrapper && !wrapper.contains(event.target)) {
             hideSuggestions();
         }
     });
 
-
-    /* ============================================
-       KEYBOARD SHORTCUT: "/" FOCUS SEARCH
-    ============================================ */
-
     document.addEventListener("keydown", (event) => {
-
         if (
             event.key === "/" &&
             document.activeElement.tagName !== "INPUT" &&
             document.activeElement.tagName !== "TEXTAREA"
         ) {
             event.preventDefault();
-
             const page = document.getElementById("page-search");
-
             if (page && !page.classList.contains("active-page")) {
-
-                if (typeof showPage === "function") {
-                    showPage("search");
-                }
-
-                setTimeout(() => {
-                    if (searchInput) searchInput.focus();
-                }, 200);
-
+                if (typeof showPage === "function") showPage("search");
+                setTimeout(() => searchInput && searchInput.focus(), 200);
             } else if (searchInput) {
                 searchInput.focus();
             }
         }
     });
 
-
-    /* ============================================
-       INITIAL STATE
-    ============================================ */
-
     if (emptyState) emptyState.style.display = "none";
-
 });

@@ -1,6 +1,10 @@
 /* =========================================================
-   ISLAMICWAY - COMPLETE JAVASCRIPT (FIXED)
-   ========================================================= */
+   ISLAMICWAY - COMPLETE JAVASCRIPT (FIXED v4.0)
+   ✅ Hadith search: #15, #300, keywords
+   ✅ Quran dynamic
+   ✅ Duas, Guidance, Articles
+   ✅ No duplicates
+========================================================= */
 
 /* =====================================================
    DARK / LIGHT THEME TOGGLE
@@ -32,8 +36,8 @@ applyTheme(savedTheme);
 
 
 /* =========================================================
-   1. PAGE NAVIGATION
-   ========================================================= */
+   1. PAGE NAVIGATION + CALENDAR
+========================================================= */
 
 document.addEventListener("DOMContentLoaded", () => {
 
@@ -132,7 +136,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     /* =====================================================
-       DYNAMIC ISLAMIC CALENDAR — FIXED
+       DYNAMIC ISLAMIC CALENDAR
     ===================================================== */
 
     let calendarDate = new Date();
@@ -402,8 +406,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 /* =========================================================
-   DYNAMIC QURAN — FIXED (MULTIPLE API FALLBACK)
-   ========================================================= */
+   DYNAMIC QURAN
+========================================================= */
 
 const QURAN_APIS = [
     "https://api.alquran.cloud/v1",
@@ -460,7 +464,6 @@ async function loadQuranSurahs() {
     showQuranLoading();
 
     try {
-        // ✅ Try API first
         const json = await fetchQuranEndpoint("/surah");
         if (!json.data) throw new Error("Invalid Surah data");
 
@@ -470,7 +473,6 @@ async function loadQuranSurahs() {
         console.log("[Quran] Loaded from API ✅");
 
     } catch (error) {
-        // ✅ FALLBACK: Use local database
         console.warn("[Quran] API failed, using local database");
 
         if (typeof ISLAMIC_DATABASE !== "undefined" && ISLAMIC_DATABASE.quranSurahs) {
@@ -531,7 +533,6 @@ async function openSurah(surahNumber) {
     }
 
     try {
-        // ✅ Try API first
         const arabicJSON = await fetchQuranEndpoint(
             "/surah/" + surahNumber + "/quran-uthmani"
         );
@@ -559,40 +560,17 @@ async function openSurah(surahNumber) {
         console.warn("[Quran] API failed — trying local database");
     }
 
-    // ✅ FALLBACK 1: Try FullDatabase (IndexedDB)
-    try {
-        if (typeof FullDatabase !== "undefined" && FullDatabase.db) {
-            const cached = await FullDatabase.getSurahOffline(surahNumber);
-            if (cached && cached.arabic) {
-                const surahInfo = allSurahs.find(s => s.number === surahNumber);
-                if (surahInfo) {
-                    if (readerArabicName) readerArabicName.textContent = surahInfo.name;
-                    if (readerEnglishName) readerEnglishName.textContent = surahInfo.englishName;
-                    if (readerTranslation) readerTranslation.textContent = surahInfo.englishNameTranslation + " — اردو ترجمہ";
-                    if (readerAyahCount) readerAyahCount.textContent = surahInfo.numberOfAyahs + " Ayahs";
-                    if (readerRevelation) readerRevelation.textContent = surahInfo.revelationType;
-                }
-
-                const arabicAyahs = cached.arabic.map((text, i) => ({
-                    numberInSurah: i + 1,
-                    text: text
-                }));
-                const urduAyahs = cached.urdu.map(text => ({ text }));
-
-                renderAyahs(arabicAyahs, urduAyahs);
-                loadFullSurahAudio(surahNumber);
-                console.log("[Quran] Loaded from IndexedDB ✅");
-                window.scrollTo({ top: 0, behavior: "smooth" });
-                return;
-            }
-        }
-    } catch (e) {
-        console.warn("[Quran] IndexedDB failed:", e);
-    }
-
-    // ✅ FALLBACK 2: ISLAMIC_DATABASE (small built-in)
     const surahInfo = allSurahs.find(s => s.number === surahNumber);
-    const localContent = ISLAMIC_DATABASE?.quranContent?.[surahNumber];
+
+// Pehle local database check karo
+let localContent = ISLAMIC_DATABASE?.quranContent?.[surahNumber];
+
+// Agar local mein nahi hai, to FullQuranDatabase se load karo (saari 114 Surahs)
+if (!localContent && typeof FullQuranDatabase !== "undefined") {
+    console.log("[Quran] Local mein nahi — FullQuranDatabase se load kar raha hoon...");
+    localContent = await FullQuranDatabase.loadSurah(surahNumber);
+    console.log("[Quran] FullQuranDatabase se load ho gaya ✅");
+}
 
     if (surahInfo && localContent) {
         if (readerArabicName) readerArabicName.textContent = surahInfo.name;
@@ -617,7 +595,7 @@ async function openSurah(surahNumber) {
             ayahContainer.innerHTML = `
                 <div class="quran-error">
                     <h3>سورہ دستیاب نہیں</h3>
-                    <p>Internet connection check کریں یا database download مکمل ہونے کا انتظار کریں۔</p>
+                    <p>Internet connection check کریں۔</p>
                     <button class="quran-retry" onclick="openSurah(${surahNumber})">
                         Retry
                     </button>
@@ -664,7 +642,6 @@ function loadFullSurahAudio(surahNumber) {
     fullSurahAudio.currentTime = 0;
     fullSurahAudio.src = audioURL;
 
-    // Fallback on error
     fullSurahAudio.onerror = function () {
         console.warn("Primary audio failed, trying fallback...");
         fullSurahAudio.src = AUDIO_BASES[1] + String(surahNumber).padStart(3, "0") + ".mp3";
@@ -773,7 +750,8 @@ if (surahList) {
 
 
 /* =====================================================
-   HADITH SYSTEM — FIXED (MULTIPLE URL FALLBACK)
+   HADITH SYSTEM — SINGLE CLEAN VERSION
+   ✅ Search: #15, 15, keywords, Arabic, Urdu
 ===================================================== */
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -784,48 +762,12 @@ document.addEventListener("DOMContentLoaded", function () {
     ];
 
     const hadithBooks = {
-        bukhari: {
-            title: "Sahih Bukhari",
-            arabic: "صحيح البخاري",
-            author: "Imam Muhammad al-Bukhari",
-            arabicEdition: "ara-bukhari",
-            urduEdition: "urd-bukhari"
-        },
-        muslim: {
-            title: "Sahih Muslim",
-            arabic: "صحيح مسلم",
-            author: "Imam Muslim ibn al-Hajjaj",
-            arabicEdition: "ara-muslim",
-            urduEdition: "urd-muslim"
-        },
-        abudawud: {
-            title: "Sunan Abu Dawud",
-            arabic: "سنن أبي داود",
-            author: "Imam Abu Dawud",
-            arabicEdition: "ara-abudawud",
-            urduEdition: "urd-abudawud"
-        },
-        tirmidhi: {
-            title: "Jami at-Tirmidhi",
-            arabic: "جامع الترمذي",
-            author: "Imam al-Tirmidhi",
-            arabicEdition: "ara-tirmidhi",
-            urduEdition: "urd-tirmidhi"
-        },
-        nasai: {
-            title: "Sunan an-Nasa'i",
-            arabic: "سنن النسائي",
-            author: "Imam an-Nasa'i",
-            arabicEdition: "ara-nasai",
-            urduEdition: "urd-nasai"
-        },
-        malik: {
-            title: "Muwatta Imam Malik",
-            arabic: "موطأ الإمام مالك",
-            author: "Imam Malik ibn Anas",
-            arabicEdition: "ara-malik",
-            urduEdition: "urd-malik"
-        }
+        bukhari:  { title: "Sahih Bukhari",       arabic: "صحيح البخاري",      author: "Imam Muhammad al-Bukhari",  arabicEdition: "ara-bukhari",  urduEdition: "urd-bukhari"  },
+        muslim:   { title: "Sahih Muslim",        arabic: "صحيح مسلم",         author: "Imam Muslim ibn al-Hajjaj", arabicEdition: "ara-muslim",   urduEdition: "urd-muslim"   },
+        abudawud: { title: "Sunan Abu Dawud",     arabic: "سنن أبي داود",      author: "Imam Abu Dawud",            arabicEdition: "ara-abudawud", urduEdition: "urd-abudawud" },
+        tirmidhi: { title: "Jami at-Tirmidhi",    arabic: "جامع الترمذي",      author: "Imam al-Tirmidhi",          arabicEdition: "ara-tirmidhi", urduEdition: "urd-tirmidhi" },
+        nasai:    { title: "Sunan an-Nasa'i",     arabic: "سنن النسائي",       author: "Imam an-Nasa'i",            arabicEdition: "ara-nasai",    urduEdition: "urd-nasai"    },
+        malik:    { title: "Muwatta Imam Malik",  arabic: "موطأ الإمام مالك",  author: "Imam Malik ibn Anas",       arabicEdition: "ara-malik",    urduEdition: "urd-malik"    }
     };
 
     const booksScreen = document.getElementById("hadithBooksScreen");
@@ -846,13 +788,15 @@ document.addEventListener("DOMContentLoaded", function () {
     let allArabicHadith = [];
     let allUrduHadith = [];
     let displayedHadith = [];
+    let highlightHadithNumber = null;
 
-    // ✅ FIXED: Multiple URL fallback
+    const ITEMS_PER_PAGE = 20;
+
+    /* =====================================================
+       FETCH HADITH FROM API
+    ===================================================== */
     async function fetchHadithJSON(edition) {
-        const paths = [
-            edition + ".min.json",
-            edition + ".json"
-        ];
+        const paths = [edition + ".min.json", edition + ".json"];
 
         for (const baseUrl of HADITH_URLS) {
             for (const path of paths) {
@@ -870,14 +814,16 @@ document.addEventListener("DOMContentLoaded", function () {
         throw new Error("All Hadith URLs failed for " + edition);
     }
 
-    /* ---------------------------------------------
-       OPEN HADITH BOOK (YEH FUNCTION GAYAB THA)
-    --------------------------------------------- */
-    async function openHadithBook(bookKey) {
+    /* =====================================================
+       OPEN HADITH BOOK
+    ===================================================== */
+    async function openHadithBook(bookKey, highlightNumber = null) {
 
         currentBook = hadithBooks[bookKey];
         currentBookKey = bookKey;
         if (!currentBook) return;
+
+        highlightHadithNumber = highlightNumber;
 
         booksScreen.style.display = "none";
         readerScreen.style.display = "block";
@@ -894,45 +840,27 @@ document.addEventListener("DOMContentLoaded", function () {
         showLoading();
 
         try {
-            // ✅ Try API first
             const arabicData = await fetchHadithJSON(currentBook.arabicEdition);
             const urduData = await fetchHadithJSON(currentBook.urduEdition);
 
             allArabicHadith = arabicData.hadiths || [];
             allUrduHadith = urduData.hadiths || [];
 
-            if (allArabicHadith.length === 0) {
-                throw new Error("No Hadith found");
-            }
+            if (allArabicHadith.length === 0) throw new Error("No Hadith found");
 
             displayedHadith = allArabicHadith;
             hideLoading();
+
+            if (highlightHadithNumber && highlightHadithNumber > 0) {
+                currentPage = Math.ceil(highlightHadithNumber / ITEMS_PER_PAGE);
+            }
+
             renderHadith();
             console.log("[Hadith] Loaded from API ✅");
 
         } catch (error) {
-            // ✅ FALLBACK: Use local database
             console.warn("[Hadith] API failed, using local database");
 
-            let localBook = null;
-
-            // Try IndexedDB first
-            if (typeof FullDatabase !== "undefined" && FullDatabase.db) {
-                try {
-                    localBook = await FullDatabase.getHadithBookOffline(bookKey);
-                    if (localBook && localBook.length > 0) {
-                        allArabicHadith = localBook.map(h => ({ text: h.arabic }));
-                        allUrduHadith = localBook.map(h => ({ text: h.urdu }));
-                        displayedHadith = allArabicHadith;
-                        hideLoading();
-                        renderHadith();
-                        console.log("[Hadith] Loaded from IndexedDB ✅");
-                        return;
-                    }
-                } catch (e) {}
-            }
-
-            // Try ISLAMIC_DATABASE
             if (typeof ISLAMIC_DATABASE !== "undefined" &&
                 ISLAMIC_DATABASE.hadithBooks &&
                 ISLAMIC_DATABASE.hadithBooks[bookKey]) {
@@ -942,42 +870,57 @@ document.addEventListener("DOMContentLoaded", function () {
                 allUrduHadith = dbBook.hadiths.map(h => ({ text: h.urdu }));
                 displayedHadith = allArabicHadith;
                 hideLoading();
+
+                if (highlightHadithNumber && highlightHadithNumber > 0) {
+                    currentPage = Math.ceil(highlightHadithNumber / ITEMS_PER_PAGE);
+                }
+
                 renderHadith();
                 console.log("[Hadith] Loaded from built-in DB ✅");
                 return;
             }
 
-            // All failed
             hideLoading();
             showError();
         }
     }
 
+    /* =====================================================
+       RENDER HADITH
+    ===================================================== */
     function renderHadith() {
 
         hadithList.innerHTML = "";
 
-        const ITEMS_PER_PAGE = 20;
         const start = (currentPage - 1) * ITEMS_PER_PAGE;
         const end = start + ITEMS_PER_PAGE;
         const pageItems = displayedHadith.slice(start, end);
+
+        if (pageItems.length === 0) {
+            hadithList.innerHTML = `<div style="text-align:center;padding:40px;color:#8ed8a8;">No Hadith Found</div>`;
+            updatePagination();
+            return;
+        }
 
         pageItems.forEach(function (hadith, index) {
 
             const actualIndex = start + index;
             const arabicText = hadith.text || hadith.arabic || "";
             let urduText = "";
+            if (allUrduHadith[actualIndex]) urduText = allUrduHadith[actualIndex].text || "";
 
-            if (allUrduHadith[actualIndex]) {
-                urduText = allUrduHadith[actualIndex].text || "";
-            }
-
+            const hadithNum = actualIndex + 1;
             const card = document.createElement("div");
             card.className = "hadith-card";
+            card.setAttribute("data-hadith-num", hadithNum);
+
+            if (highlightHadithNumber && hadithNum === highlightHadithNumber) {
+                card.classList.add("highlight-hadith");
+            }
 
             card.innerHTML = `
                 <div class="hadith-card-top">
-                    <span class="hadith-number">Hadith #${actualIndex + 1}</span>
+                    <span class="hadith-number">Hadith #${hadithNum}</span>
                     <span class="hadith-reference">${currentBook.title}</span>
                 </div>
                 <div class="hadith-arabic">${escapeHTML(arabicText)}</div>
@@ -991,30 +934,74 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 
         updatePagination();
+
+        if (highlightHadithNumber && highlightHadithNumber > 0) {
+            setTimeout(() => {
+                const target = hadithList.querySelector(".highlight-hadith");
+                if (target) {
+                    target.scrollIntoView({ behavior: "smooth", block: "center" });
+                }
+                highlightHadithNumber = null;
+            }, 400);
+        }
     }
 
+    /* =====================================================
+       SEARCH HADITH — #15, 15, TEXT, ARABIC, URDU
+    ===================================================== */
     function searchHadith() {
 
         const query = searchInput.value.trim().toLowerCase();
 
+        // Empty → show all
         if (!query) {
             displayedHadith = allArabicHadith;
             currentPage = 1;
+            highlightHadithNumber = null;
             renderHadith();
             return;
         }
 
-        displayedHadith = allArabicHadith.filter(function (hadith) {
-            const text = (hadith.text || "").toLowerCase();
-            return text.includes(query);
+        // NUMBER SEARCH (#15 ya 15)
+        const numMatch = query.match(/^#?(\d+)$/);
+        if (numMatch) {
+            const targetNum = parseInt(numMatch[1], 10);
+
+            if (targetNum >= 1 && targetNum <= allArabicHadith.length) {
+                // Sirf uss hadith ko dikhao
+                displayedHadith = [allArabicHadith[targetNum - 1]];
+                currentPage = 1;
+
+                // ⭐ Original number highlight karo — NOT 1
+                highlightHadithNumber = targetNum;
+
+                renderHadith();
+                return;
+            } else {
+                displayedHadith = [];
+                currentPage = 1;
+                renderHadith();
+                return;
+            }
+        }
+
+        // TEXT SEARCH — Arabic + Urdu
+        displayedHadith = allArabicHadith.filter(function (hadith, idx) {
+            const arabicText = (hadith.text || "").toLowerCase();
+            const urduText = (allUrduHadith[idx]?.text || "").toLowerCase();
+            return arabicText.includes(query) || urduText.includes(query);
         });
 
         currentPage = 1;
+        highlightHadithNumber = null;
         renderHadith();
     }
 
+    /* =====================================================
+       PAGINATION
+    ===================================================== */
     function updatePagination() {
-        const totalPages = Math.ceil(displayedHadith.length / 20);
+        const totalPages = Math.ceil(displayedHadith.length / ITEMS_PER_PAGE) || 1;
         pageNumber.textContent = "Page " + currentPage + " / " + totalPages;
         previousButton.disabled = currentPage <= 1;
         nextButton.disabled = currentPage >= totalPages;
@@ -1024,6 +1011,7 @@ document.addEventListener("DOMContentLoaded", function () {
         previousButton.addEventListener("click", function () {
             if (currentPage > 1) {
                 currentPage--;
+                highlightHadithNumber = null;
                 renderHadith();
                 window.scrollTo({ top: 0, behavior: "smooth" });
             }
@@ -1032,15 +1020,19 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (nextButton) {
         nextButton.addEventListener("click", function () {
-            const totalPages = Math.ceil(displayedHadith.length / 20);
+            const totalPages = Math.ceil(displayedHadith.length / ITEMS_PER_PAGE);
             if (currentPage < totalPages) {
                 currentPage++;
+                highlightHadithNumber = null;
                 renderHadith();
                 window.scrollTo({ top: 0, behavior: "smooth" });
             }
         });
     }
 
+    /* =====================================================
+       EVENT LISTENERS
+    ===================================================== */
     const hadithSearchBtn = document.getElementById("hadithSearchBtn");
     if (hadithSearchBtn) hadithSearchBtn.addEventListener("click", searchHadith);
 
@@ -1056,6 +1048,7 @@ document.addEventListener("DOMContentLoaded", function () {
             searchInput.value = "";
             displayedHadith = allArabicHadith;
             currentPage = 1;
+            highlightHadithNumber = null;
             renderHadith();
         });
     }
@@ -1073,6 +1066,7 @@ document.addEventListener("DOMContentLoaded", function () {
             readerScreen.style.display = "none";
             booksScreen.style.display = "block";
             hadithList.innerHTML = "";
+            highlightHadithNumber = null;
         });
     }
 
@@ -1083,19 +1077,26 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
+    /* =====================================================
+       EXPOSE FOR GLOBAL SEARCH
+    ===================================================== */
+    window.openHadithBookBySearch = function (bookKey, hadithNumber) {
+        if (typeof showPage === "function") showPage("hadith");
+        setTimeout(() => {
+            openHadithBook(bookKey, hadithNumber || null);
+        }, 200);
+    };
+
+    /* =====================================================
+       HELPERS
+    ===================================================== */
     function showLoading() {
         if (loading) loading.style.display = "block";
         if (errorBox) errorBox.style.display = "none";
         if (hadithList) hadithList.innerHTML = "";
     }
-
-    function hideLoading() {
-        if (loading) loading.style.display = "none";
-    }
-
-    function showError() {
-        if (errorBox) errorBox.style.display = "block";
-    }
+    function hideLoading() { if (loading) loading.style.display = "none"; }
+    function showError()   { if (errorBox) errorBox.style.display = "block"; }
 
     function escapeHTML(text) {
         return String(text)
@@ -1302,14 +1303,6 @@ document.addEventListener("DOMContentLoaded", function () {
                         كل روح في رحلة. بعضهم يسير ببطء، وبعضهم يركض — لكن الوجهة واحدة:
                         <strong>القرب من الله</strong>.
                     </p>
-                    <div class="article-arabic">وَأَنِ اسْتَغْفِرُوا رَبَّكُمْ ثُمَّ تُوبُوا إِلَيْهِ</div>
-                    <p class="article-translation">
-                        "وَأَنِ اسْتَغْفِرُوا رَبَّكُمْ ثُمَّ تُوبُوا إِلَيْهِ"
-                        <span>— سورة هود 11:3</span>
-                    </p>
-                    <h2>🌱 لماذا نشعر بالبعد عن الله؟</h2>
-                    <p>أحيانًا نصلي ولا نشعر بشيء.</p>
-                    <h2>🌿 سبع خطوات عملية للقرب من الله</h2>
                     <div class="article-source">📖 صحيح البخاري، سنن الترمذي</div>
                 `
             }
@@ -1334,17 +1327,11 @@ document.addEventListener("DOMContentLoaded", function () {
                 ur: `
                     <h1>صبر اور اللہ پر بھروسہ</h1>
                     <p>زندگی میں خوشی کے ساتھ مشکلات بھی آتی ہیں۔</p>
-                    <h2>صبر کی طاقت</h2>
-                    <p>صبر کا مطلب ہمت ہارنا نہیں بلکہ ثابت قدم رہنا ہے۔</p>
                     <div class="article-arabic">إِنَّ اللَّهَ مَعَ الصَّابِرِينَ</div>
                     <div class="article-source">ماخذ: قرآن مجید، سورۃ البقرہ 2:153</div>
                 `,
                 ar: `
                     <h1>الصبر والتوكل على الله</h1>
-                    <p>تحتوي الحياة على الفرح والصعوبات.</p>
-                    <h2>قوة الصبر</h2>
-                    <p>الصبر لا يعني الاستسلام.</p>
-                    <div class="article-arabic">إِنَّ اللَّهَ مَعَ الصَّابِرِينَ</div>
                     <div class="article-source">المصدر: سورة البقرة 2:153</div>
                 `
             }
@@ -1361,23 +1348,16 @@ document.addEventListener("DOMContentLoaded", function () {
                 en: `
                     <h1>The Beauty of Good Character</h1>
                     <p>Good character is one of the greatest qualities a Muslim can develop.</p>
-                    <h2>Kindness to Others</h2>
-                    <p>A Muslim should treat parents, family, neighbors and other people with kindness and respect.</p>
                     <div class="article-arabic">وَقُولُوا لِلنَّاسِ حُسْنًا</div>
                     <div class="article-source">Source: Quran, Surah Al-Baqarah 2:83</div>
                 `,
                 ur: `
                     <h1>اچھے اخلاق کی خوبصورتی</h1>
-                    <p>اچھے اخلاق ایک مسلمان کی بہترین صفات میں سے ہیں۔</p>
-                    <h2>دوسروں کے ساتھ حسن سلوک</h2>
-                    <p>مسلمان کو چاہیے کہ والدین کے ساتھ نرمی سے پیش آئے۔</p>
                     <div class="article-arabic">وَقُولُوا لِلنَّاسِ حُسْنًا</div>
                     <div class="article-source">ماخذ: سورۃ البقرہ 2:83</div>
                 `,
                 ar: `
                     <h1>جمال الأخلاق الحسنة</h1>
-                    <p>الأخلاق الحسنة من أعظم الصفات.</p>
-                    <div class="article-arabic">وَقُولُوا لِلنَّاسِ حُسْنًا</div>
                     <div class="article-source">المصدر: سورة البقرة 2:83</div>
                 `
             }
@@ -1391,10 +1371,9 @@ document.addEventListener("DOMContentLoaded", function () {
     const articleList = document.getElementById("articleList");
     const articleReader = document.getElementById("articleReader");
     const articleContent = document.getElementById("articleContent");
-    const searchInput = document.getElementById("articleSearch");
+    const articleSearch = document.getElementById("articleSearch");
 
     function renderArticles(list = filteredArticles) {
-
         if (!articleList) return;
         articleList.innerHTML = "";
 
@@ -1417,7 +1396,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    function getShortDescription(article) {
+    function getShortDescription() {
         if (currentLanguage === "ur") return "اسلامی تعلیمات اور روزمرہ زندگی کے لیے مفید مضمون۔";
         if (currentLanguage === "ar") return "مقال إسلامي مفيد للتعلم وتطبيق تعاليم الإسلام في الحياة.";
         return "A beneficial Islamic article for learning and daily life.";
@@ -1430,11 +1409,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function openArticle(id) {
-
-        const index = articles.findIndex(function (article) {
-            return article.id === id;
-        });
-
+        const index = articles.findIndex(a => a.id === id);
         if (index === -1) return;
 
         currentArticle = index;
@@ -1475,13 +1450,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     document.querySelectorAll(".article-lang-btn").forEach(function (button) {
         button.addEventListener("click", function () {
-
             currentLanguage = button.dataset.language;
-
-            document.querySelectorAll(".article-lang-btn").forEach(function (btn) {
-                btn.classList.remove("active");
-            });
-
+            document.querySelectorAll(".article-lang-btn").forEach(btn => btn.classList.remove("active"));
             button.classList.add("active");
 
             if (articleReader && articleReader.style.display !== "none") {
@@ -1500,8 +1470,8 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     function searchArticles() {
-        if (!searchInput) return;
-        const query = searchInput.value.trim().toLowerCase();
+        if (!articleSearch) return;
+        const query = articleSearch.value.trim().toLowerCase();
 
         if (!query) {
             filteredArticles = [...articles];
@@ -1520,8 +1490,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const articleSearchBtn = document.getElementById("articleSearchBtn");
     if (articleSearchBtn) articleSearchBtn.addEventListener("click", searchArticles);
 
-    if (searchInput) {
-        searchInput.addEventListener("keyup", function (event) {
+    if (articleSearch) {
+        articleSearch.addEventListener("keyup", function (event) {
             if (event.key === "Enter") searchArticles();
         });
     }
@@ -1563,239 +1533,40 @@ document.addEventListener("DOMContentLoaded", function () {
 
     renderArticles();
 
+    window.openArticle = openArticle;
 });
 
 
 /* =====================================================
-   DUAS SYSTEM — FIXED (LOCAL DATA + API FALLBACK)
+   DUAS SYSTEM
 ===================================================== */
 
 const LOCAL_DUAS = [
-    {
-        id: 1,
-        title: "Dua Before Eating",
-        arabic: "بِسْمِ اللَّهِ",
-        urdu: "اللہ کے نام سے (شروع کرتا ہوں)",
-        english: "In the name of Allah.",
-        category: "food",
-        reference: "Sunan Abu Dawud"
-    },
-    {
-        id: 2,
-        title: "Dua After Eating",
-        arabic: "الْحَمْدُ لِلَّهِ الَّذِي أَطْعَمَنَا وَسَقَانَا",
-        urdu: "تمام تعریفیں اللہ کے لیے ہیں جس نے ہمیں کھلایا اور پلایا",
-        english: "All praise is for Allah who fed us and gave us drink.",
-        category: "food",
-        reference: "Sunan Abu Dawud"
-    },
-    {
-        id: 3,
-        title: "Morning Dua",
-        arabic: "اللَّهُمَّ بِكَ أَصْبَحْنَا وَبِكَ أَمْسَيْنَا",
-        urdu: "اے اللہ! تیری مدد سے ہم نے صبح کی",
-        english: "O Allah, by You we enter the morning and by You we enter the evening.",
-        category: "morning",
-        reference: "Sunan Abu Dawud"
-    },
-    {
-        id: 4,
-        title: "Evening Dua",
-        arabic: "اللَّهُمَّ بِكَ أَمْسَيْنَا وَبِكَ أَصْبَحْنَا",
-        urdu: "اے اللہ! تیری مدد سے ہم نے شام کی",
-        english: "O Allah, by You we enter the evening and by You we enter the morning.",
-        category: "evening",
-        reference: "Sunan Abu Dawud"
-    },
-    {
-        id: 5,
-        title: "Dua Before Sleeping",
-        arabic: "بِاسْمِكَ اللَّهُمَّ أَمُوتُ وَأَحْيَا",
-        urdu: "اے اللہ! تیرے نام سے میں مرتا اور جیتا ہوں",
-        english: "In Your name, O Allah, I die and I live.",
-        category: "sleep",
-        reference: "Sahih Bukhari"
-    },
-    {
-        id: 6,
-        title: "Dua After Waking Up",
-        arabic: "الْحَمْدُ لِلَّهِ الَّذِي أَحْيَانَا بَعْدَ مَا أَمَاتَنَا",
-        urdu: "تمام تعریفیں اللہ کے لیے ہیں جس نے ہمیں موت کے بعد زندگی بخشی",
-        english: "All praise is for Allah who gave us life after death.",
-        category: "sleep",
-        reference: "Sahih Bukhari"
-    },
-    {
-        id: 7,
-        title: "Dua for Forgiveness",
-        arabic: "رَبِّ اغْفِرْ لِي وَتُبْ عَلَيَّ إِنَّكَ أَنْتَ التَّوَّابُ الرَّحِيمُ",
-        urdu: "اے میرے رب! مجھے معاف کر اور میری توبہ قبول کر",
-        english: "My Lord, forgive me and accept my repentance. You are the Most Forgiving, Most Merciful.",
-        category: "forgiveness",
-        reference: "Sunan at-Tirmidhi"
-    },
-    {
-        id: 8,
-        title: "Dua for Protection",
-        arabic: "أَعُوذُ بِكَلِمَاتِ اللَّهِ التَّامَّاتِ مِنْ شَرِّ مَا خَلَقَ",
-        urdu: "میں اللہ کے مکمل کلمات کی پناہ مانگتا ہوں ہر اس چیز کے شر سے جو اس نے پیدا کی",
-        english: "I seek refuge in the perfect words of Allah from the evil of what He has created.",
-        category: "protection",
-        reference: "Sahih Muslim"
-    },
-    {
-        id: 9,
-        title: "Dua for Travel",
-        arabic: "سُبْحَانَ الَّذِي سَخَّرَ لَنَا هَذَا وَمَا كُنَّا لَهُ مُقْرِنِينَ",
-        urdu: "پاک ہے وہ ذات جس نے اس سواری کو ہمارے تابع کیا",
-        english: "Glory be to Him who has subjected this to us, and we could not have done it ourselves.",
-        category: "travel",
-        reference: "Surah Az-Zukhruf 43:13"
-    },
-    {
-        id: 10,
-        title: "Dua for Family",
-        arabic: "رَبَّنَا هَبْ لَنَا مِنْ أَزْوَاجِنَا وَذُرِّيَّاتِنَا قُرَّةَ أَعْيُنٍ",
-        urdu: "اے ہمارے رب! ہمیں اپنی بیویوں اور اولاد سے آنکھوں کی ٹھنڈک عطا فرما",
-        english: "Our Lord, grant us from among our spouses and offspring comfort to our eyes.",
-        category: "family",
-        reference: "Surah Al-Furqan 25:74"
-    },
-    {
-        id: 11,
-        title: "Dua for Guidance",
-        arabic: "اهْدِنَا الصِّرَاطَ الْمُسْتَقِيمَ",
-        urdu: "ہمیں سیدھے راستے کی ہدایت فرما",
-        english: "Guide us to the straight path.",
-        category: "prayer",
-        reference: "Surah Al-Fatihah 1:6"
-    },
-    {
-        id: 12,
-        title: "Dua for Patience",
-        arabic: "رَبَّنَا أَفْرِغْ عَلَيْنَا صَبْرًا",
-        urdu: "اے ہمارے رب! ہم پر صبر انڈیل دے",
-        english: "Our Lord, pour upon us patience.",
-        category: "prayer",
-        reference: "Surah Al-Baqarah 2:250"
-    },
-    {
-        id: 13,
-        title: "Dua for Knowledge",
-        arabic: "رَبِّ زِدْنِي عِلْمًا",
-        urdu: "اے میرے رب! میرے علم میں اضافہ فرما",
-        english: "My Lord, increase me in knowledge.",
-        category: "general",
-        reference: "Surah Ta-Ha 20:114"
-    },
-    {
-        id: 14,
-        title: "Dua for Mercy",
-        arabic: "رَبِّ اغْفِرْ وَارْحَمْ وَأَنْتَ خَيْرُ الرَّاحِمِينَ",
-        urdu: "اے میرے رب! معاف کر اور رحم فرما",
-        english: "My Lord, forgive and have mercy, and You are the best of those who show mercy.",
-        category: "forgiveness",
-        reference: "Surah Al-Mu'minun 23:118"
-    },
-    {
-        id: 15,
-        title: "Dua for Ease",
-        arabic: "رَبِّ اشْرَحْ لِي صَدْرِي وَيَسِّرْ لِي أَمْرِي",
-        urdu: "اے میرے رب! میرا سینہ کھول دے اور میرا کام آسان کر دے",
-        english: "My Lord, expand for me my chest and ease for me my task.",
-        category: "general",
-        reference: "Surah Ta-Ha 20:25-26"
-    },
-    {
-        id: 16,
-        title: "Dua for Anxiety",
-        arabic: "اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الْهَمِّ وَالْحَزَنِ",
-        urdu: "اے اللہ! میں غم اور پریشانی سے تیری پناہ مانگتا ہوں",
-        english: "O Allah, I seek refuge in You from worry and grief.",
-        category: "protection",
-        reference: "Sahih Bukhari"
-    },
-    {
-        id: 17,
-        title: "Dua for Parents",
-        arabic: "رَبِّ ارْحَمْهُمَا كَمَا رَبَّيَانِي صَغِيرًا",
-        urdu: "اے میرے رب! میرے والدین پر رحم فرما جیسے انہوں نے مجھے بچپن میں پالا",
-        english: "My Lord, have mercy upon them as they brought me up when I was small.",
-        category: "family",
-        reference: "Surah Al-Isra 17:24"
-    },
-    {
-        id: 18,
-        title: "Dua for Steadfastness",
-        arabic: "يَا مُقَلِّبَ الْقُلُوبِ ثَبِّتْ قَلْبِي عَلَى دِينِكَ",
-        urdu: "اے دلوں کو پھیرنے والے! میرے دل کو اپنے دین پر ثابت رکھ",
-        english: "O Turner of hearts, keep my heart firm upon Your religion.",
-        category: "prayer",
-        reference: "Sunan at-Tirmidhi"
-    },
-    {
-        id: 19,
-        title: "Dua for Protection from Evil Eye",
-        arabic: "أَعُوذُ بِكَلِمَاتِ اللَّهِ التَّامَّةِ مِنْ كُلِّ شَيْطَانٍ وَهَامَّةٍ",
-        urdu: "میں اللہ کے مکمل کلمات سے ہر شیطان اور زہریلے جانور سے پناہ مانگتا ہوں",
-        english: "I seek refuge in the perfect words of Allah from every devil and poisonous creature.",
-        category: "protection",
-        reference: "Sahih Bukhari"
-    },
-    {
-        id: 20,
-        title: "Dua for Acceptance",
-        arabic: "رَبَّنَا تَقَبَّلْ مِنَّا إِنَّكَ أَنْتَ السَّمِيعُ الْعَلِيمُ",
-        urdu: "اے ہمارے رب! ہم سے قبول فرما، بے شک تو سننے والا جاننے والا ہے",
-        english: "Our Lord, accept from us. Indeed, You are the Hearing, the Knowing.",
-        category: "prayer",
-        reference: "Surah Al-Baqarah 2:127"
-    },
-    {
-        id: 21,
-        title: "Dua for Barakah",
-        arabic: "اللَّهُمَّ بَارِكْ لَنَا فِيمَا رَزَقْتَنَا",
-        urdu: "اے اللہ! جو رزق تو نے دیا ہے اس میں برکت دے",
-        english: "O Allah, bless us in what You have provided us.",
-        category: "general",
-        reference: "Sunan Ibn Majah"
-    },
-    {
-        id: 22,
-        title: "Dua for Health",
-        arabic: "اللَّهُمَّ عَافِنِي فِي بَدَنِي",
-        urdu: "اے اللہ! میرے جسم کو صحت عطا فرما",
-        english: "O Allah, grant health to my body.",
-        category: "general",
-        reference: "Sunan Abu Dawud"
-    },
-    {
-        id: 23,
-        title: "Dua for Entering Home",
-        arabic: "اللَّهُمَّ إِنِّي أَسْأَلُكَ خَيْرَ الْمَوْلَجِ",
-        urdu: "اے اللہ! میں تجھ سے گھر میں داخل ہونے کی خیر مانگتا ہوں",
-        english: "O Allah, I ask You for the best of entering.",
-        category: "general",
-        reference: "Sunan Abu Dawud"
-    },
-    {
-        id: 24,
-        title: "Dua for Leaving Home",
-        arabic: "بِسْمِ اللَّهِ تَوَكَّلْتُ عَلَى اللَّهِ",
-        urdu: "اللہ کے نام سے، میں اللہ پر بھروسہ کرتا ہوں",
-        english: "In the name of Allah, I place my trust in Allah.",
-        category: "general",
-        reference: "Sunan Abu Dawud"
-    },
-    {
-        id: 25,
-        title: "Dua for Rain",
-        arabic: "اللَّهُمَّ صَيِّبًا نَافِعًا",
-        urdu: "اے اللہ! نفع بخش بارش برسا",
-        english: "O Allah, send beneficial rain.",
-        category: "general",
-        reference: "Sahih Bukhari"
-    }
+    { id: 1, title: "Dua Before Eating", arabic: "بِسْمِ اللَّهِ", urdu: "اللہ کے نام سے (شروع کرتا ہوں)", english: "In the name of Allah.", category: "food", reference: "Sunan Abu Dawud" },
+    { id: 2, title: "Dua After Eating", arabic: "الْحَمْدُ لِلَّهِ الَّذِي أَطْعَمَنَا وَسَقَانَا", urdu: "تمام تعریفیں اللہ کے لیے ہیں جس نے ہمیں کھلایا اور پلایا", english: "All praise is for Allah who fed us and gave us drink.", category: "food", reference: "Sunan Abu Dawud" },
+    { id: 3, title: "Morning Dua", arabic: "اللَّهُمَّ بِكَ أَصْبَحْنَا وَبِكَ أَمْسَيْنَا", urdu: "اے اللہ! تیری مدد سے ہم نے صبح کی", english: "O Allah, by You we enter the morning and by You we enter the evening.", category: "morning", reference: "Sunan Abu Dawud" },
+    { id: 4, title: "Evening Dua", arabic: "اللَّهُمَّ بِكَ أَمْسَيْنَا وَبِكَ أَصْبَحْنَا", urdu: "اے اللہ! تیری مدد سے ہم نے شام کی", english: "O Allah, by You we enter the evening and by You we enter the morning.", category: "evening", reference: "Sunan Abu Dawud" },
+    { id: 5, title: "Dua Before Sleeping", arabic: "بِاسْمِكَ اللَّهُمَّ أَمُوتُ وَأَحْيَا", urdu: "اے اللہ! تیرے نام سے میں مرتا اور جیتا ہوں", english: "In Your name, O Allah, I die and I live.", category: "sleep", reference: "Sahih Bukhari" },
+    { id: 6, title: "Dua After Waking Up", arabic: "الْحَمْدُ لِلَّهِ الَّذِي أَحْيَانَا بَعْدَ مَا أَمَاتَنَا", urdu: "تمام تعریفیں اللہ کے لیے ہیں جس نے ہمیں موت کے بعد زندگی بخشی", english: "All praise is for Allah who gave us life after death.", category: "sleep", reference: "Sahih Bukhari" },
+    { id: 7, title: "Dua for Forgiveness", arabic: "رَبِّ اغْفِرْ لِي وَتُبْ عَلَيَّ إِنَّكَ أَنْتَ التَّوَّابُ الرَّحِيمُ", urdu: "اے میرے رب! مجھے معاف کر اور میری توبہ قبول کر", english: "My Lord, forgive me and accept my repentance.", category: "forgiveness", reference: "Sunan at-Tirmidhi" },
+    { id: 8, title: "Dua for Protection", arabic: "أَعُوذُ بِكَلِمَاتِ اللَّهِ التَّامَّاتِ مِنْ شَرِّ مَا خَلَقَ", urdu: "میں اللہ کے مکمل کلمات کی پناہ مانگتا ہوں", english: "I seek refuge in the perfect words of Allah.", category: "protection", reference: "Sahih Muslim" },
+    { id: 9, title: "Dua for Travel", arabic: "سُبْحَانَ الَّذِي سَخَّرَ لَنَا هَذَا", urdu: "پاک ہے وہ ذات جس نے اس سواری کو ہمارے تابع کیا", english: "Glory be to Him who has subjected this to us.", category: "travel", reference: "Surah Az-Zukhruf 43:13" },
+    { id: 10, title: "Dua for Family", arabic: "رَبَّنَا هَبْ لَنَا مِنْ أَزْوَاجِنَا وَذُرِّيَّاتِنَا قُرَّةَ أَعْيُنٍ", urdu: "اے ہمارے رب! ہمیں اپنی بیویوں اور اولاد سے آنکھوں کی ٹھنڈک عطا فرما", english: "Our Lord, grant us comfort to our eyes.", category: "family", reference: "Surah Al-Furqan 25:74" },
+    { id: 11, title: "Dua for Guidance", arabic: "اهْدِنَا الصِّرَاطَ الْمُسْتَقِيمَ", urdu: "ہمیں سیدھے راستے کی ہدایت فرما", english: "Guide us to the straight path.", category: "prayer", reference: "Surah Al-Fatihah 1:6" },
+    { id: 12, title: "Dua for Patience", arabic: "رَبَّنَا أَفْرِغْ عَلَيْنَا صَبْرًا", urdu: "اے ہمارے رب! ہم پر صبر انڈیل دے", english: "Our Lord, pour upon us patience.", category: "prayer", reference: "Surah Al-Baqarah 2:250" },
+    { id: 13, title: "Dua for Knowledge", arabic: "رَبِّ زِدْنِي عِلْمًا", urdu: "اے میرے رب! میرے علم میں اضافہ فرما", english: "My Lord, increase me in knowledge.", category: "general", reference: "Surah Ta-Ha 20:114" },
+    { id: 14, title: "Dua for Mercy", arabic: "رَبِّ اغْفِرْ وَارْحَمْ وَأَنْتَ خَيْرُ الرَّاحِمِينَ", urdu: "اے میرے رب! معاف کر اور رحم فرما", english: "My Lord, forgive and have mercy.", category: "forgiveness", reference: "Surah Al-Mu'minun 23:118" },
+    { id: 15, title: "Dua for Ease", arabic: "رَبِّ اشْرَحْ لِي صَدْرِي وَيَسِّرْ لِي أَمْرِي", urdu: "اے میرے رب! میرا سینہ کھول دے اور میرا کام آسان کر دے", english: "My Lord, expand for me my chest and ease for me my task.", category: "general", reference: "Surah Ta-Ha 20:25-26" },
+    { id: 16, title: "Dua for Anxiety", arabic: "اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الْهَمِّ وَالْحَزَنِ", urdu: "اے اللہ! میں غم اور پریشانی سے تیری پناہ مانگتا ہوں", english: "O Allah, I seek refuge in You from worry and grief.", category: "protection", reference: "Sahih Bukhari" },
+    { id: 17, title: "Dua for Parents", arabic: "رَبِّ ارْحَمْهُمَا كَمَا رَبَّيَانِي صَغِيرًا", urdu: "اے میرے رب! میرے والدین پر رحم فرما", english: "My Lord, have mercy upon them.", category: "family", reference: "Surah Al-Isra 17:24" },
+    { id: 18, title: "Dua for Steadfastness", arabic: "يَا مُقَلِّبَ الْقُلُوبِ ثَبِّتْ قَلْبِي عَلَى دِينِكَ", urdu: "اے دلوں کو پھیرنے والے! میرے دل کو اپنے دین پر ثابت رکھ", english: "O Turner of hearts, keep my heart firm.", category: "prayer", reference: "Sunan at-Tirmidhi" },
+    { id: 19, title: "Dua for Protection from Evil Eye", arabic: "أَعُوذُ بِكَلِمَاتِ اللَّهِ التَّامَّةِ مِنْ كُلِّ شَيْطَانٍ", urdu: "میں اللہ کے مکمل کلمات سے ہر شیطان سے پناہ مانگتا ہوں", english: "I seek refuge in the perfect words of Allah.", category: "protection", reference: "Sahih Bukhari" },
+    { id: 20, title: "Dua for Acceptance", arabic: "رَبَّنَا تَقَبَّلْ مِنَّا إِنَّكَ أَنْتَ السَّمِيعُ الْعَلِيمُ", urdu: "اے ہمارے رب! ہم سے قبول فرما", english: "Our Lord, accept from us.", category: "prayer", reference: "Surah Al-Baqarah 2:127" },
+    { id: 21, title: "Dua for Barakah", arabic: "اللَّهُمَّ بَارِكْ لَنَا فِيمَا رَزَقْتَنَا", urdu: "اے اللہ! جو رزق تو نے دیا ہے اس میں برکت دے", english: "O Allah, bless us in what You have provided us.", category: "general", reference: "Sunan Ibn Majah" },
+    { id: 22, title: "Dua for Health", arabic: "اللَّهُمَّ عَافِنِي فِي بَدَنِي", urdu: "اے اللہ! میرے جسم کو صحت عطا فرما", english: "O Allah, grant health to my body.", category: "general", reference: "Sunan Abu Dawud" },
+    { id: 23, title: "Dua for Entering Home", arabic: "اللَّهُمَّ إِنِّي أَسْأَلُكَ خَيْرَ الْمَوْلَجِ", urdu: "اے اللہ! میں تجھ سے گھر میں داخل ہونے کی خیر مانگتا ہوں", english: "O Allah, I ask You for the best of entering.", category: "general", reference: "Sunan Abu Dawud" },
+    { id: 24, title: "Dua for Leaving Home", arabic: "بِسْمِ اللَّهِ تَوَكَّلْتُ عَلَى اللَّهِ", urdu: "اللہ کے نام سے، میں اللہ پر بھروسہ کرتا ہوں", english: "In the name of Allah, I place my trust in Allah.", category: "general", reference: "Sunan Abu Dawud" },
+    { id: 25, title: "Dua for Rain", arabic: "اللَّهُمَّ صَيِّبًا نَافِعًا", urdu: "اے اللہ! نفع بخش بارش برسا", english: "O Allah, send beneficial rain.", category: "general", reference: "Sahih Bukhari" }
 ];
 
 let allDuas = [...LOCAL_DUAS];
@@ -1834,43 +1605,12 @@ const readerPrevious = document.getElementById("readerPrevious");
 const readerNext = document.getElementById("readerNext");
 
 async function loadDuas() {
-
     showDuaLoading();
-
-    try {
-        if (LOCAL_DUAS.length > 0) {
-            allDuas = [...LOCAL_DUAS];
-            filteredDuas = [...allDuas];
-            currentDuaPage = 1;
-            renderDuas();
-            hideDuaLoading();
-            return;
-        }
-
-        const response = await fetch("https://api.alquran.cloud/v1/dua");
-        if (!response.ok) throw new Error("API request failed");
-
-        const data = await response.json();
-        let duas = [];
-
-        if (Array.isArray(data)) duas = data;
-        else if (data.data && Array.isArray(data.data)) duas = data.data;
-
-        if (!duas.length) throw new Error("No duas found");
-
-        allDuas = duas.slice(0, 100);
-        filteredDuas = [...allDuas];
-        currentDuaPage = 1;
-        renderDuas();
-
-    } catch (error) {
-        console.error("Duas Error:", error);
-        allDuas = [...LOCAL_DUAS];
-        filteredDuas = [...allDuas];
-        renderDuas();
-    } finally {
-        hideDuaLoading();
-    }
+    allDuas = [...LOCAL_DUAS];
+    filteredDuas = [...allDuas];
+    currentDuaPage = 1;
+    renderDuas();
+    hideDuaLoading();
 }
 
 function normalizeDua(dua, index) {
@@ -1890,7 +1630,6 @@ function getDua(index) {
 }
 
 function renderDuas() {
-
     if (!duasContainer) return;
     duasContainer.innerHTML = "";
     if (noDuasFound) noDuasFound.style.display = "none";
@@ -1910,7 +1649,6 @@ function renderDuas() {
     const pageDuas = filteredDuas.slice(start, end);
 
     pageDuas.forEach((duaData) => {
-
         const originalIndex = allDuas.indexOf(duaData);
         const dua = normalizeDua(duaData, originalIndex);
 
@@ -1954,7 +1692,6 @@ function renderDuas() {
 }
 
 function attachCardEvents() {
-
     document.querySelectorAll(".open-dua").forEach(button => {
         button.addEventListener("click", () => {
             openDuaReader(Number(button.dataset.index));
@@ -1975,7 +1712,6 @@ function attachCardEvents() {
 }
 
 function renderPagination(totalPages) {
-
     if (!duasPagination) return;
     duasPagination.style.display = totalPages > 1 ? "flex" : "none";
     if (duaPrevious) duaPrevious.disabled = currentDuaPage === 1;
@@ -2019,21 +1755,15 @@ if (duaNext) {
 }
 
 function searchDuas() {
-
     if (!duaSearch || !duaCategory) return;
     const search = duaSearch.value.trim().toLowerCase();
     const category = duaCategory.value.toLowerCase();
 
     filteredDuas = allDuas.filter((duaData, index) => {
         const dua = normalizeDua(duaData, index);
-        const searchableText = `
-            ${dua.title} ${dua.arabic} ${dua.urdu}
-            ${dua.english} ${dua.category} ${dua.reference}
-        `.toLowerCase();
-
+        const searchableText = `${dua.title} ${dua.arabic} ${dua.urdu} ${dua.english} ${dua.category} ${dua.reference}`.toLowerCase();
         const matchesSearch = !search || searchableText.includes(search);
         const matchesCategory = category === "all" || dua.category.toLowerCase().includes(category);
-
         return matchesSearch && matchesCategory;
     });
 
@@ -2048,11 +1778,9 @@ if (duaCategory) duaCategory.addEventListener("change", searchDuas);
 if (duaLanguage) {
     duaLanguage.addEventListener("change", () => {
         const language = duaLanguage.value;
-
         document.querySelectorAll(".dua-arabic, .dua-urdu, .dua-english").forEach(element => {
             element.style.display = "";
         });
-
         if (language === "arabic") {
             document.querySelectorAll(".dua-urdu, .dua-english").forEach(el => el.style.display = "none");
         }
@@ -2074,7 +1802,6 @@ if (randomDuaBtn) {
 }
 
 function openDuaReader(index) {
-
     if (!allDuas[index]) return;
 
     currentReaderIndex = index;
@@ -2134,17 +1861,8 @@ function updateReaderButtons() {
 }
 
 async function copyDua(index) {
-
     const dua = getDua(index);
-
-    const text = `
-${dua.title}
-${dua.arabic}
-${dua.urdu}
-${dua.english}
-Reference: ${dua.reference}
-IslamicWay
-    `.trim();
+    const text = `${dua.title}\n${dua.arabic}\n${dua.urdu}\n${dua.english}\nReference: ${dua.reference}\nIslamicWay`.trim();
 
     try {
         await navigator.clipboard.writeText(text);
@@ -2159,13 +1877,7 @@ if (copyDuaBtn) copyDuaBtn.addEventListener("click", () => copyDua(currentReader
 if (shareDuaBtn) {
     shareDuaBtn.addEventListener("click", async () => {
         const dua = getDua(currentReaderIndex);
-        const shareText = `
-${dua.title}
-${dua.arabic}
-${dua.urdu}
-${dua.english}
-${dua.reference}
-        `.trim();
+        const shareText = `${dua.title}\n${dua.arabic}\n${dua.urdu}\n${dua.english}\n${dua.reference}`.trim();
 
         if (navigator.share) {
             try {
@@ -2189,7 +1901,6 @@ function saveFavorites(favorites) {
 }
 
 function toggleFavorite(index, button) {
-
     let favorites = getFavorites();
 
     if (favorites.includes(index)) {
@@ -2230,14 +1941,6 @@ function hideDuaLoading() {
     if (duasLoading) duasLoading.style.display = "none";
 }
 
-function showDuaError() {
-    if (duasError) duasError.style.display = "block";
-}
-
-function hideDuaError() {
-    if (duasError) duasError.style.display = "none";
-}
-
 if (retryDuas) retryDuas.addEventListener("click", loadDuas);
 
 function showDuaMessage(message) {
@@ -2269,108 +1972,26 @@ function scrollToDuas() {
 
 if (duasContainer) loadDuas();
 
+window.openDuaReader = openDuaReader;
+
 
 /* =====================================================
-   ISLAMIC GUIDANCE — FIXED
+   ISLAMIC GUIDANCE
 ===================================================== */
 
 const guidanceData = [
-    {
-        id: 1, category: "quran", title: "Guidance from the Quran",
-        arabic: "إِنَّ هَٰذَا الْقُرْآنَ يَهْدِي لِلَّتِي هِيَ أَقْوَمُ",
-        urdu: "بے شک یہ قرآن اس راستے کی رہنمائی کرتا ہے جو سب سے سیدھا ہے۔",
-        english: "Indeed, this Quran guides to the way that is most upright.",
-        content: "قرآن مجید مسلمان کی زندگی کے لیے بنیادی رہنمائی فراہم کرتا ہے۔",
-        reference: "Quran 17:9"
-    },
-    {
-        id: 2, category: "salah", title: "Importance of Salah",
-        arabic: "وَأَقِيمُوا الصَّلَاةَ",
-        urdu: "اور نماز قائم کرو۔",
-        english: "And establish prayer.",
-        content: "نماز اسلام کی بنیادی عبادات میں سے ہے۔",
-        reference: "Quran 2:43"
-    },
-    {
-        id: 3, category: "patience", title: "Be Patient",
-        arabic: "إِنَّ اللَّهَ مَعَ الصَّابِرِينَ",
-        urdu: "بے شک اللہ صبر کرنے والوں کے ساتھ ہے۔",
-        english: "Indeed, Allah is with those who are patient.",
-        content: "مشکلات کے وقت صبر، دعا اور اللہ پر بھروسہ مسلمان کے لیے بڑی طاقت ہیں۔",
-        reference: "Quran 2:153"
-    },
-    {
-        id: 4, category: "family", title: "Kindness to Parents",
-        arabic: "وَبِالْوَالِدَيْنِ إِحْسَانًا",
-        urdu: "اور والدین کے ساتھ حسن سلوک کرو۔",
-        english: "And show kindness to parents.",
-        content: "اسلام والدین کے ساتھ احترام، نرمی اور حسن سلوک کی تعلیم دیتا ہے۔",
-        reference: "Quran 17:23"
-    },
-    {
-        id: 5, category: "character", title: "Good Character",
-        arabic: "وَقُولُوا لِلنَّاسِ حُسْنًا",
-        urdu: "اور لوگوں سے اچھی بات کہو۔",
-        english: "And speak good words to people.",
-        content: "اچھی گفتگو، نرم رویہ اسلامی اخلاق کا اہم حصہ ہے۔",
-        reference: "Quran 2:83"
-    },
-    {
-        id: 6, category: "halal", title: "Eat What Is Halal",
-        arabic: "كُلُوا مِنْ طَيِّبَاتِ مَا رَزَقْنَاكُمْ",
-        urdu: "جو پاکیزہ چیزیں ہم نے تمہیں عطا کی ہیں ان میں سے کھاؤ۔",
-        english: "Eat from the good things We have provided for you.",
-        content: "اسلام حلال اور پاکیزہ رزق اختیار کرنے کی تعلیم دیتا ہے۔",
-        reference: "Quran 2:172"
-    },
-    {
-        id: 7, category: "daily", title: "Remember Allah",
-        arabic: "أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ",
-        urdu: "یاد رکھو، اللہ کے ذکر سے دلوں کو اطمینان ملتا ہے۔",
-        english: "Surely, in the remembrance of Allah do hearts find comfort.",
-        content: "اللہ کا ذکر دل کو سکون دیتا ہے۔",
-        reference: "Quran 13:28"
-    },
-    {
-        id: 8, category: "quran", title: "Trust in Allah",
-        arabic: "وَعَلَى اللَّهِ فَتَوَكَّلُوا إِنْ كُنْتُمْ مُؤْمِنِينَ",
-        urdu: "اور اگر تم مومن ہو تو اللہ ہی پر بھروسہ کرو۔",
-        english: "And upon Allah rely, if you are believers.",
-        content: "مسلمان کو اللہ تعالیٰ پر بھروسہ رکھنا چاہیے۔",
-        reference: "Quran 5:23"
-    },
-    {
-        id: 9, category: "ramadan", title: "Purpose of Fasting",
-        arabic: "لَعَلَّكُمْ تَتَّقُونَ",
-        urdu: "تاکہ تم تقویٰ اختیار کرو۔",
-        english: "So that you may attain Taqwa.",
-        content: "روزہ تقویٰ، صبر اور نفس کی تربیت کا ذریعہ ہے۔",
-        reference: "Quran 2:183"
-    },
-    {
-        id: 10, category: "character", title: "Forgive Others",
-        arabic: "وَلْيَعْفُوا وَلْيَصْفَحُوا",
-        urdu: "انہیں معاف کر دینا چاہیے اور درگزر کرنا چاہیے۔",
-        english: "Let them pardon and overlook.",
-        content: "اسلام معافی اور درگزر کی حوصلہ افزائی کرتا ہے۔",
-        reference: "Quran 24:22"
-    },
-    {
-        id: 11, category: "daily", title: "Be Thankful",
-        arabic: "لَئِنْ شَكَرْتُمْ لَأَزِيدَنَّكُمْ",
-        urdu: "اگر تم شکر کرو گے تو میں تمہیں ضرور زیادہ دوں گا۔",
-        english: "If you are grateful, I will surely increase you.",
-        content: "اللہ تعالیٰ کی نعمتوں پر شکر ادا کرنا ایمان کا حصہ ہے۔",
-        reference: "Quran 14:7"
-    },
-    {
-        id: 12, category: "patience", title: "Hope in Allah",
-        arabic: "لَا تَقْنَطُوا مِنْ رَحْمَةِ اللَّهِ",
-        urdu: "اللہ کی رحمت سے ناامید نہ ہو۔",
-        english: "Do not despair of the mercy of Allah.",
-        content: "اللہ کی رحمت سے مایوس نہیں ہونا چاہیے۔",
-        reference: "Quran 39:53"
-    }
+    { id: 1, category: "quran", title: "Guidance from the Quran", arabic: "إِنَّ هَٰذَا الْقُرْآنَ يَهْدِي لِلَّتِي هِيَ أَقْوَمُ", urdu: "بے شک یہ قرآن اس راستے کی رہنمائی کرتا ہے جو سب سے سیدھا ہے۔", english: "Indeed, this Quran guides to the way that is most upright.", content: "قرآن مجید مسلمان کی زندگی کے لیے بنیادی رہنمائی فراہم کرتا ہے۔", reference: "Quran 17:9" },
+    { id: 2, category: "salah", title: "Importance of Salah", arabic: "وَأَقِيمُوا الصَّلَاةَ", urdu: "اور نماز قائم کرو۔", english: "And establish prayer.", content: "نماز اسلام کی بنیادی عبادات میں سے ہے۔", reference: "Quran 2:43" },
+    { id: 3, category: "patience", title: "Be Patient", arabic: "إِنَّ اللَّهَ مَعَ الصَّابِرِينَ", urdu: "بے شک اللہ صبر کرنے والوں کے ساتھ ہے۔", english: "Indeed, Allah is with those who are patient.", content: "مشکلات کے وقت صبر اور اللہ پر بھروسہ مسلمان کے لیے بڑی طاقت ہیں۔", reference: "Quran 2:153" },
+    { id: 4, category: "family", title: "Kindness to Parents", arabic: "وَبِالْوَالِدَيْنِ إِحْسَانًا", urdu: "اور والدین کے ساتھ حسن سلوک کرو۔", english: "And show kindness to parents.", content: "اسلام والدین کے ساتھ احترام اور حسن سلوک کی تعلیم دیتا ہے۔", reference: "Quran 17:23" },
+    { id: 5, category: "character", title: "Good Character", arabic: "وَقُولُوا لِلنَّاسِ حُسْنًا", urdu: "اور لوگوں سے اچھی بات کہو۔", english: "And speak good words to people.", content: "اچھی گفتگو اسلامی اخلاق کا اہم حصہ ہے۔", reference: "Quran 2:83" },
+    { id: 6, category: "halal", title: "Eat What Is Halal", arabic: "كُلُوا مِنْ طَيِّبَاتِ مَا رَزَقْنَاكُمْ", urdu: "جو پاکیزہ چیزیں ہم نے تمہیں عطا کی ہیں ان میں سے کھاؤ۔", english: "Eat from the good things We have provided for you.", content: "اسلام حلال اور پاکیزہ رزق اختیار کرنے کی تعلیم دیتا ہے۔", reference: "Quran 2:172" },
+    { id: 7, category: "daily", title: "Remember Allah", arabic: "أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ", urdu: "یاد رکھو، اللہ کے ذکر سے دلوں کو اطمینان ملتا ہے۔", english: "Surely, in the remembrance of Allah do hearts find comfort.", content: "اللہ کا ذکر دل کو سکون دیتا ہے۔", reference: "Quran 13:28" },
+    { id: 8, category: "quran", title: "Trust in Allah", arabic: "وَعَلَى اللَّهِ فَتَوَكَّلُوا إِنْ كُنْتُمْ مُؤْمِنِينَ", urdu: "اور اگر تم مومن ہو تو اللہ ہی پر بھروسہ کرو۔", english: "And upon Allah rely, if you are believers.", content: "مسلمان کو اللہ تعالیٰ پر بھروسہ رکھنا چاہیے۔", reference: "Quran 5:23" },
+    { id: 9, category: "ramadan", title: "Purpose of Fasting", arabic: "لَعَلَّكُمْ تَتَّقُونَ", urdu: "تاکہ تم تقویٰ اختیار کرو۔", english: "So that you may attain Taqwa.", content: "روزہ تقویٰ اور نفس کی تربیت کا ذریعہ ہے۔", reference: "Quran 2:183" },
+    { id: 10, category: "character", title: "Forgive Others", arabic: "وَلْيَعْفُوا وَلْيَصْفَحُوا", urdu: "انہیں معاف کر دینا چاہیے اور درگزر کرنا چاہیے۔", english: "Let them pardon and overlook.", content: "اسلام معافی اور درگزر کی حوصلہ افزائی کرتا ہے۔", reference: "Quran 24:22" },
+    { id: 11, category: "daily", title: "Be Thankful", arabic: "لَئِنْ شَكَرْتُمْ لَأَزِيدَنَّكُمْ", urdu: "اگر تم شکر کرو گے تو میں تمہیں ضرور زیادہ دوں گا۔", english: "If you are grateful, I will surely increase you.", content: "اللہ تعالیٰ کی نعمتوں پر شکر ادا کرنا ایمان کا حصہ ہے۔", reference: "Quran 14:7" },
+    { id: 12, category: "patience", title: "Hope in Allah", arabic: "لَا تَقْنَطُوا مِنْ رَحْمَةِ اللَّهِ", urdu: "اللہ کی رحمت سے ناامید نہ ہو۔", english: "Do not despair of the mercy of Allah.", content: "اللہ کی رحمت سے مایوس نہیں ہونا چاہیے۔", reference: "Quran 39:53" }
 ];
 
 let filteredGuidance = [...guidanceData];
@@ -2408,7 +2029,6 @@ const readerGuidancePrevious = document.getElementById("readerGuidancePrevious")
 const readerGuidanceNext = document.getElementById("readerGuidanceNext");
 
 function renderGuidance() {
-
     if (!guidanceContainer) return;
     guidanceContainer.innerHTML = "";
     if (noGuidanceFound) noGuidanceFound.style.display = "none";
@@ -2428,7 +2048,6 @@ function renderGuidance() {
     const pageItems = filteredGuidance.slice(start, end);
 
     pageItems.forEach((item) => {
-
         const originalIndex = guidanceData.indexOf(item);
 
         const card = document.createElement("article");
@@ -2472,50 +2091,34 @@ function renderGuidance() {
 
 function formatCategory(category) {
     const names = {
-        quran: "Quranic Guidance",
-        salah: "Salah & Worship",
-        family: "Family",
-        character: "Good Character",
-        patience: "Patience",
-        halal: "Halal & Haram",
-        ramadan: "Ramadan",
-        daily: "Daily Islamic Life"
+        quran: "Quranic Guidance", salah: "Salah & Worship", family: "Family",
+        character: "Good Character", patience: "Patience", halal: "Halal & Haram",
+        ramadan: "Ramadan", daily: "Daily Islamic Life"
     };
     return names[category] || "Islamic Guidance";
 }
 
 function attachGuidanceEvents() {
-
     document.querySelectorAll(".open-guidance").forEach(button => {
-        button.addEventListener("click", () => {
-            openGuidanceReader(Number(button.dataset.index));
-        });
+        button.addEventListener("click", () => openGuidanceReader(Number(button.dataset.index)));
     });
-
     document.querySelectorAll(".copy-guidance").forEach(button => {
         button.addEventListener("click", () => copyGuidance(Number(button.dataset.index)));
     });
-
     document.querySelectorAll(".favorite-guidance").forEach(button => {
         button.addEventListener("click", () => toggleGuidanceFavorite(Number(button.dataset.index), button));
     });
 }
 
 function filterGuidance() {
-
     if (!guidanceSearch || !guidanceCategory) return;
     const search = guidanceSearch.value.trim().toLowerCase();
     const category = guidanceCategory.value;
 
     filteredGuidance = guidanceData.filter(item => {
-        const searchableText = `
-            ${item.title} ${item.arabic} ${item.urdu}
-            ${item.english} ${item.content} ${item.reference}
-        `.toLowerCase();
-
+        const searchableText = `${item.title} ${item.arabic} ${item.urdu} ${item.english} ${item.content} ${item.reference}`.toLowerCase();
         const searchMatch = !search || searchableText.includes(search);
         const categoryMatch = category === "all" || item.category === category;
-
         return searchMatch && categoryMatch;
     });
 
@@ -2530,7 +2133,6 @@ if (guidanceCategory) guidanceCategory.addEventListener("change", filterGuidance
 if (guidanceLanguage) {
     guidanceLanguage.addEventListener("change", () => {
         const language = guidanceLanguage.value;
-
         document.querySelectorAll(".guidance-card-arabic").forEach(el => {
             el.style.display = (language === "urdu" || language === "english") ? "none" : "";
         });
@@ -2544,7 +2146,6 @@ if (guidanceLanguage) {
 }
 
 function renderGuidancePagination(totalPages) {
-
     if (!guidancePagination) return;
     guidancePagination.style.display = totalPages > 1 ? "flex" : "none";
     if (guidancePrevious) guidancePrevious.disabled = currentGuidancePage === 1;
@@ -2596,7 +2197,6 @@ if (randomGuidanceBtn) {
 }
 
 function openGuidanceReader(index) {
-
     if (!guidanceData[index]) return;
 
     currentGuidanceIndex = index;
@@ -2657,18 +2257,8 @@ function updateGuidanceReaderButtons() {
 }
 
 async function copyGuidance(index) {
-
     const item = guidanceData[index];
-
-    const text = `
-${item.title}
-Arabic: ${item.arabic}
-Urdu: ${item.urdu}
-English: ${item.english}
-Guidance: ${item.content}
-Reference: ${item.reference}
-IslamicWay
-    `.trim();
+    const text = `${item.title}\nArabic: ${item.arabic}\nUrdu: ${item.urdu}\nEnglish: ${item.english}\nGuidance: ${item.content}\nReference: ${item.reference}\nIslamicWay`.trim();
 
     try {
         await navigator.clipboard.writeText(text);
@@ -2681,13 +2271,7 @@ if (copyGuidanceBtn) copyGuidanceBtn.addEventListener("click", () => copyGuidanc
 if (shareGuidanceBtn) {
     shareGuidanceBtn.addEventListener("click", async () => {
         const item = guidanceData[currentGuidanceIndex];
-        const text = `
-${item.title}
-${item.arabic}
-${item.urdu}
-${item.english}
-${item.reference}
-        `.trim();
+        const text = `${item.title}\n${item.arabic}\n${item.urdu}\n${item.english}\n${item.reference}`.trim();
 
         if (navigator.share) {
             try { await navigator.share({ title: item.title, text: text }); }
@@ -2709,7 +2293,6 @@ function saveGuidanceFavorites(favorites) {
 }
 
 function toggleGuidanceFavorite(index, button) {
-
     let favorites = getGuidanceFavorites();
 
     if (favorites.includes(index)) {
@@ -2778,6 +2361,8 @@ function scrollGuidance() {
 
 if (guidanceContainer) renderGuidance();
 
+window.openGuidanceReader = openGuidanceReader;
+
 
 /* =====================================================
    ABOUT US
@@ -2809,43 +2394,18 @@ document.addEventListener("DOMContentLoaded", function () {
 ===================================================== */
 
 const SEO_DATA = {
-    home: {
-        title: "IslamicWay | Quran, Hadith, Duas, Prayer Times & Islamic Knowledge",
-        description: "IslamicWay — Read Quran with Urdu translation, authentic Hadith, daily Duas, Prayer Times and Islamic Guidance."
-    },
-    quran: {
-        title: "Read Holy Quran Online | Urdu Translation & Audio | IslamicWay",
-        description: "Read all 114 Surahs of the Holy Quran with Urdu translation and full Surah audio."
-    },
-    hadith: {
-        title: "Authentic Hadith Collections | Bukhari, Muslim | IslamicWay",
-        description: "Read authentic Hadith from Sahih Bukhari, Sahih Muslim, Sunan Abu Dawud with Urdu translation."
-    },
-    prayer: {
-        title: "Prayer Times & Islamic Hijri Calendar | IslamicWay",
-        description: "Check today's Prayer Times and view the Islamic Hijri Calendar."
-    },
-    duas: {
-        title: "Daily Islamic Duas in Arabic, Urdu & English | IslamicWay",
-        description: "Read 100+ daily Duas from Quran and Sunnah with translations."
-    },
-    articles: {
-        title: "Islamic Articles & Reminders | IslamicWay",
-        description: "Read Islamic articles on faith, patience, character and daily life."
-    },
-    guidance: {
-        title: "Islamic Guidance from Quran & Sunnah | IslamicWay",
-        description: "Explore Islamic guidance on worship, family, character and daily life."
-    },
-    about: {
-        title: "About IslamicWay | Islamic Knowledge Platform",
-        description: "Learn about IslamicWay — a modern platform for Islamic knowledge."
-    }
+    home: { title: "IslamicWay | Quran, Hadith, Duas, Prayer Times & Islamic Knowledge", description: "IslamicWay — Read Quran with Urdu translation, authentic Hadith, daily Duas, Prayer Times and Islamic Guidance." },
+    quran: { title: "Read Holy Quran Online | Urdu Translation & Audio | IslamicWay", description: "Read all 114 Surahs of the Holy Quran with Urdu translation and full Surah audio." },
+    hadith: { title: "Authentic Hadith Collections | Bukhari, Muslim | IslamicWay", description: "Read authentic Hadith from Sahih Bukhari, Sahih Muslim, Sunan Abu Dawud with Urdu translation." },
+    prayer: { title: "Prayer Times & Islamic Hijri Calendar | IslamicWay", description: "Check today's Prayer Times and view the Islamic Hijri Calendar." },
+    duas: { title: "Daily Islamic Duas in Arabic, Urdu & English | IslamicWay", description: "Read 100+ daily Duas from Quran and Sunnah with translations." },
+    articles: { title: "Islamic Articles & Reminders | IslamicWay", description: "Read Islamic articles on faith, patience, character and daily life." },
+    guidance: { title: "Islamic Guidance from Quran & Sunnah | IslamicWay", description: "Explore Islamic guidance on worship, family, character and daily life." },
+    about: { title: "About IslamicWay | Islamic Knowledge Platform", description: "Learn about IslamicWay — a modern platform for Islamic knowledge." }
 };
 
 function updateSEO(pageName) {
     const data = SEO_DATA[pageName] || SEO_DATA.home;
-
     document.title = data.title;
 
     const metaDescription = document.querySelector('meta[name="description"]');
@@ -2875,7 +2435,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 /* =========================================================
-   DYNAMIC ADHAN SYSTEM — COMPLETE
+   ADHAN SYSTEM
 ========================================================= */
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -2888,48 +2448,38 @@ document.addEventListener("DOMContentLoaded", function () {
     const adhanStatus   = document.getElementById("adhanStatus");
     const nextAdhanText = document.getElementById("nextAdhanText");
 
-    if (!adhanAudio) {
-        console.warn("[Adhan] Audio element not found — skipping Adhan system");
-        return;
-    }
+    if (!adhanAudio) return;
 
     const ADHAN_CITY    = "Kuala Lumpur";
     const ADHAN_COUNTRY = "Malaysia";
     const ADHAN_METHOD  = 17;
 
+       /* =====================================================
+       ADHAN AUDIO SOURCES — LOCAL FILES (FAST & RELIABLE)
+       Audio files project ke "audio/" folder mein honi chahiye
+    ===================================================== */
     const ADHAN_AUDIO_SOURCES = {
-        "ar.alafasy": [
-            "https://www.islamcan.com/audio/adhan/azan1.mp3",
-            "https://www.islamcan.com/audio/adhan/azan2.mp3"
-        ],
-        "ar.abdulbasitmurattal": [
-            "https://www.islamcan.com/audio/adhan/azan3.mp3",
-            "https://www.islamcan.com/audio/adhan/azan4.mp3"
-        ],
-        "ar.husary": [
-            "https://www.islamcan.com/audio/adhan/azan5.mp3",
-            "https://www.islamcan.com/audio/adhan/azan6.mp3"
-        ],
-        "ar.minshawi": [
-            "https://www.islamcan.com/audio/adhan/azan7.mp3",
-            "https://www.islamcan.com/audio/adhan/azan8.mp3"
-        ]
+        "ar.alafasy":            "audio/adhan-alafasy.mp3",
+        "ar.abdulbasitmurattal": "audio/adhan-basit.mp3",
+        "ar.husary":             "audio/adhan-husary.mp3",
+        "ar.minshawi":           "audio/adhan-minshawi.mp3"
     };
 
     let prayerTimesToday = {};
     let nextAdhanTimer   = null;
-    let audioUnlocked    = false;
-
     function getAdhanURL(muezzin) {
-        const sources = ADHAN_AUDIO_SOURCES[muezzin]
-            || ADHAN_AUDIO_SOURCES["ar.alafasy"];
-        return sources[0];
+        return ADHAN_AUDIO_SOURCES[muezzin] || ADHAN_AUDIO_SOURCES["ar.alafasy"];
     }
 
+    /* Fallback: Agar local file na mile to online se try karo */
     function getAdhanFallbackURL(muezzin) {
-        const sources = ADHAN_AUDIO_SOURCES[muezzin]
-            || ADHAN_AUDIO_SOURCES["ar.alafasy"];
-        return sources[1] || sources[0];
+        const fallbacks = {
+            "ar.alafasy":            "https://www.islamcan.com/audio/adhan/azan1.mp3",
+            "ar.abdulbasitmurattal": "https://www.islamcan.com/audio/adhan/azan3.mp3",
+            "ar.husary":             "https://www.islamcan.com/audio/adhan/azan5.mp3",
+            "ar.minshawi":           "https://www.islamcan.com/audio/adhan/azan7.mp3"
+        };
+        return fallbacks[muezzin] || fallbacks["ar.alafasy"];
     }
 
     async function loadPrayerTimes() {
@@ -2938,10 +2488,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const month = today.getMonth() + 1;
         const day   = today.getDate();
 
-        const url = `https://api.aladhan.com/v1/timingsByCity/${day}-${month}-${year}` +
-                    `?city=${encodeURIComponent(ADHAN_CITY)}` +
-                    `&country=${encodeURIComponent(ADHAN_COUNTRY)}` +
-                    `&method=${ADHAN_METHOD}`;
+        const url = `https://api.aladhan.com/v1/timingsByCity/${day}-${month}-${year}?city=${encodeURIComponent(ADHAN_CITY)}&country=${encodeURIComponent(ADHAN_COUNTRY)}&method=${ADHAN_METHOD}`;
 
         try {
             const res  = await fetch(url);
@@ -2950,9 +2497,7 @@ document.addEventListener("DOMContentLoaded", function () {
             if (data && data.code === 200 && data.data && data.data.timings) {
                 prayerTimesToday = data.data.timings;
                 scheduleNextAdhan();
-                console.log("[Adhan] Prayer times loaded:", prayerTimesToday);
-            } else {
-                throw new Error("Invalid API response");
+                console.log("[Adhan] Prayer times loaded");
             }
         } catch (err) {
             console.warn("[Adhan] Failed to load prayer times:", err);
@@ -2961,20 +2506,15 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function scheduleNextAdhan() {
-
-        if (nextAdhanTimer) {
-            clearTimeout(nextAdhanTimer);
-            nextAdhanTimer = null;
-        }
+        if (nextAdhanTimer) clearTimeout(nextAdhanTimer);
 
         const now = new Date();
-
         const prayers = [
-            { name: "Fajr",    time: prayerTimesToday.Fajr },
-            { name: "Dhuhr",   time: prayerTimesToday.Dhuhr },
-            { name: "Asr",     time: prayerTimesToday.Asr },
+            { name: "Fajr", time: prayerTimesToday.Fajr },
+            { name: "Dhuhr", time: prayerTimesToday.Dhuhr },
+            { name: "Asr", time: prayerTimesToday.Asr },
             { name: "Maghrib", time: prayerTimesToday.Maghrib },
-            { name: "Isha",    time: prayerTimesToday.Isha }
+            { name: "Isha", time: prayerTimesToday.Isha }
         ];
 
         let nextPrayer = null;
@@ -2982,14 +2522,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
         prayers.forEach(p => {
             if (!p.time) return;
-
             const cleanTime = p.time.split(" ")[0];
             const [hh, mm] = cleanTime.split(":").map(Number);
             const prayerDate = new Date();
             prayerDate.setHours(hh, mm, 0, 0);
-
             const diff = prayerDate - now;
-
             if (diff > 0 && diff < smallestDiff) {
                 smallestDiff = diff;
                 nextPrayer = { name: p.name, date: prayerDate };
@@ -3007,64 +2544,55 @@ document.addEventListener("DOMContentLoaded", function () {
 
         if (nextPrayer) {
             updateNextAdhanText(nextPrayer.name, smallestDiff);
-
             nextAdhanTimer = setTimeout(() => {
                 playAdhan(nextPrayer.name);
-                showAdhanNotification(nextPrayer.name);
                 setTimeout(loadPrayerTimes, 5000);
             }, smallestDiff);
-
-            console.log(`[Adhan] Next: ${nextPrayer.name} in ${Math.round(smallestDiff/60000)} min`);
         }
     }
 
     function updateNextAdhanText(prayerName, diffMs) {
-
         if (!nextAdhanText) return;
-
         const totalMinutes = Math.floor(diffMs / 60000);
-        const hours   = Math.floor(totalMinutes / 60);
+        const hours = Math.floor(totalMinutes / 60);
         const minutes = totalMinutes % 60;
-
-        let timeStr = "";
-        if (hours > 0) timeStr = `${hours}h ${minutes}m`;
-        else timeStr = `${minutes}m`;
-
+        const timeStr = hours > 0 ? `${hours}h ${minutes}m` : `${minutes}m`;
         nextAdhanText.textContent = `Next Adhan: ${prayerName} in ${timeStr}`;
     }
 
-    function playAdhan(prayerName = "") {
-
+       function playAdhan(prayerName = "") {
         const muezzin = muezzinSelect ? muezzinSelect.value : "ar.alafasy";
         const url = getAdhanURL(muezzin);
+
+        console.log("[Adhan] Loading audio:", url);
 
         adhanAudio.src = url;
         adhanAudio.volume = 1.0;
 
+        /* ---------- Error Handler: Fallback to online ---------- */
         adhanAudio.onerror = function () {
-            console.warn("[Adhan] Primary audio failed, trying fallback...");
-            adhanAudio.src = getAdhanFallbackURL(muezzin);
-            adhanAudio.play().catch(err => {
-                console.warn("[Adhan] Fallback also failed:", err);
-                updateAdhanStatus("⚠️ Adhan audio could not be loaded. Check connection.", false);
-            });
+            console.warn("[Adhan] Local audio failed, trying online fallback...");
+            const fallbackURL = getAdhanFallbackURL(muezzin);
+            adhanAudio.src = fallbackURL;
+
+            adhanAudio.play()
+                .then(() => {
+                    updateAdhanStatus(`🔊 Adhan playing (online fallback)${prayerName ? " — " + prayerName : ""}...`, true);
+                })
+                .catch(() => {
+                    updateAdhanStatus("⚠️ Adhan audio could not be loaded. Please check your connection.", false);
+                });
         };
 
+        /* ---------- Play Audio ---------- */
         adhanAudio.play()
             .then(() => {
-                audioUnlocked = true;
-                updateAdhanStatus(
-                    `🔊 Adhan playing${prayerName ? " for " + prayerName : ""}...`,
-                    true
-                );
-                console.log("[Adhan] Playing:", prayerName || "manual");
+                updateAdhanStatus(`🔊 Adhan playing${prayerName ? " for " + prayerName : ""}...`, true);
+                console.log("[Adhan] ✅ Playing:", muezzin);
             })
-            .catch(err => {
+            .catch((err) => {
                 console.warn("[Adhan] Play failed:", err);
-                updateAdhanStatus(
-                    "⚠️ Tap any button to allow audio (browser autoplay blocked)",
-                    false
-                );
+                updateAdhanStatus("⚠️ Tap any button to allow audio", false);
             });
     }
 
@@ -3081,59 +2609,21 @@ document.addEventListener("DOMContentLoaded", function () {
         else adhanStatus.classList.remove("playing");
     }
 
-    function showAdhanNotification(prayerName) {
-        if (!("Notification" in window)) return;
-        if (Notification.permission !== "granted") return;
-
-        try {
-            new Notification(`🕌 ${prayerName} Adhan`, {
-                body: `It's time for ${prayerName} prayer.`,
-                icon: "IMG 1.png",
-                badge: "IMG 1.png"
-            });
-        } catch (e) {
-            console.warn("[Adhan] Notification failed:", e);
-        }
-    }
-
-    if ("Notification" in window && Notification.permission === "default") {
-        const askPermission = () => {
-            Notification.requestPermission().then(perm => {
-                console.log("[Adhan] Notification permission:", perm);
-            });
-            document.removeEventListener("click", askPermission);
-        };
-        document.addEventListener("click", askPermission, { once: true });
-    }
-
-    if (playAdhanBtn) {
-        playAdhanBtn.addEventListener("click", () => playAdhan(""));
-    }
-
-    if (stopAdhanBtn) {
-        stopAdhanBtn.addEventListener("click", stopAdhan);
-    }
-
-    if (testAdhanBtn) {
-        testAdhanBtn.addEventListener("click", () => {
-            playAdhan("Test");
-        });
-    }
+    if (playAdhanBtn) playAdhanBtn.addEventListener("click", () => playAdhan(""));
+    if (stopAdhanBtn) stopAdhanBtn.addEventListener("click", stopAdhan);
+    if (testAdhanBtn) testAdhanBtn.addEventListener("click", () => playAdhan("Test"));
 
     adhanAudio.addEventListener("ended", () => {
         updateAdhanStatus("Adhan finished. 🤲", false);
     });
 
     loadPrayerTimes();
-
     setInterval(loadPrayerTimes, 6 * 60 * 60 * 1000);
-
-    console.log("[Adhan] System initialized ✅");
 });
 
 
 /* =========================================================
-   DYNAMIC PRAYER TIMES SYSTEM
+   PRAYER TIMES SYSTEM
 ========================================================= */
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -3142,11 +2632,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const STORAGE_LOCATION = "islamicway_prayer_location";
 
     const DEFAULT_LOCATION = {
-        city: "Kuala Lumpur",
-        country: "Malaysia",
-        lat: 3.1390,
-        lng: 101.6869,
-        source: "default"
+        city: "Kuala Lumpur", country: "Malaysia",
+        lat: 3.1390, lng: 101.6869, source: "default"
     };
 
     let userLocation = null;
@@ -3156,8 +2643,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const homeLocationName  = document.getElementById("homeLocationName");
     const homePrayerDate    = document.getElementById("homePrayerDate");
     const homePrayerList    = document.getElementById("homePrayerList");
-
-    const prayerTimesBox       = document.getElementById("prayerTimesBox");
     const prayerLocationText   = document.getElementById("prayerLocationText");
     const prayerDateText       = document.getElementById("prayerDateText");
     const prayerTimesLoading   = document.getElementById("prayerTimesLoading");
@@ -3181,16 +2666,12 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function saveLocation(loc) {
-        try {
-            localStorage.setItem(STORAGE_LOCATION, JSON.stringify(loc));
-        } catch (e) {}
+        try { localStorage.setItem(STORAGE_LOCATION, JSON.stringify(loc)); } catch (e) {}
     }
 
     async function detectLocation() {
-
         const saved = getSavedLocation();
         if (saved && saved.city && saved.country) {
-            console.log("[Prayer] Using saved location:", saved);
             userLocation = saved;
             return userLocation;
         }
@@ -3199,84 +2680,58 @@ document.addEventListener("DOMContentLoaded", function () {
             try {
                 const position = await new Promise((resolve, reject) => {
                     navigator.geolocation.getCurrentPosition(resolve, reject, {
-                        timeout: 10000,
-                        maximumAge: 600000,
-                        enableHighAccuracy: false
+                        timeout: 10000, maximumAge: 600000, enableHighAccuracy: false
                     });
                 });
 
                 const lat = position.coords.latitude;
                 const lng = position.coords.longitude;
-
                 const cityInfo = await reverseGeocode(lat, lng);
 
                 userLocation = {
-                    city: cityInfo.city,
-                    country: cityInfo.country,
-                    lat: lat,
-                    lng: lng,
-                    source: "gps"
+                    city: cityInfo.city, country: cityInfo.country,
+                    lat: lat, lng: lng, source: "gps"
                 };
 
                 saveLocation(userLocation);
-                console.log("[Prayer] GPS location:", userLocation);
                 return userLocation;
-
             } catch (err) {
                 console.warn("[Prayer] GPS failed:", err.message);
             }
         }
 
-        console.log("[Prayer] Using default location");
         userLocation = DEFAULT_LOCATION;
         return userLocation;
     }
 
     async function reverseGeocode(lat, lng) {
         try {
-            const res = await fetch(
-                `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lng}&localityLanguage=en`
-            );
+            const res = await fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lng}&localityLanguage=en`);
             const data = await res.json();
-
             return {
                 city: data.city || data.locality || data.principalSubdivision || "Unknown",
                 country: data.countryName || "Unknown"
             };
-        } catch (err) {
-            console.warn("[Prayer] Reverse geocode failed:", err);
+        } catch {
             return { city: "Unknown", country: "Unknown" };
         }
     }
 
     async function fetchPrayerTimes() {
-
-        if (!userLocation) {
-            await detectLocation();
-        }
-
+        if (!userLocation) await detectLocation();
         showPrayerLoading();
 
         const today = new Date();
         const day   = String(today.getDate()).padStart(2, "0");
         const month = String(today.getMonth() + 1).padStart(2, "0");
         const year  = today.getFullYear();
-
         const method = getMethodForCountry(userLocation.country);
 
         let url = "";
-
-        if (userLocation.city && userLocation.country &&
-            userLocation.city !== "Unknown") {
-            url = `${PRAYER_API_BASE}/timingsByCity/${day}-${month}-${year}` +
-                  `?city=${encodeURIComponent(userLocation.city)}` +
-                  `&country=${encodeURIComponent(userLocation.country)}` +
-                  `&method=${method}`;
+        if (userLocation.city && userLocation.country && userLocation.city !== "Unknown") {
+            url = `${PRAYER_API_BASE}/timingsByCity/${day}-${month}-${year}?city=${encodeURIComponent(userLocation.city)}&country=${encodeURIComponent(userLocation.country)}&method=${method}`;
         } else {
-            url = `${PRAYER_API_BASE}/timings/${day}-${month}-${year}` +
-                  `?latitude=${userLocation.lat}` +
-                  `&longitude=${userLocation.lng}` +
-                  `&method=${method}`;
+            url = `${PRAYER_API_BASE}/timings/${day}-${month}-${year}?latitude=${userLocation.lat}&longitude=${userLocation.lng}&method=${method}`;
         }
 
         try {
@@ -3287,36 +2742,26 @@ document.addEventListener("DOMContentLoaded", function () {
                 prayerData = data.data;
                 renderPrayerTimes();
                 hidePrayerLoading();
-                console.log("[Prayer] Loaded from API ✅");
 
                 try {
                     localStorage.setItem("islamicway_prayer_cache", JSON.stringify({
-                        cacheDate: new Date().toDateString(),
-                        data: data.data
+                        cacheDate: new Date().toDateString(), data: data.data
                     }));
-                } catch (e) {
-                    console.warn("[Prayer] Cache save failed:", e);
-                }
-
+                } catch (e) {}
             } else {
                 throw new Error("Invalid API response");
             }
-
         } catch (err) {
-            console.warn("[Prayer] API failed, using fallback:", err);
+            console.warn("[Prayer] API failed:", err);
 
             const cached = localStorage.getItem("islamicway_prayer_cache");
             if (cached) {
                 try {
                     const parsed = JSON.parse(cached);
-                    const cacheDate = parsed.cacheDate;
-                    const todayStr = today.toDateString();
-
-                    if (cacheDate === todayStr) {
+                    if (parsed.cacheDate === today.toDateString()) {
                         prayerData = parsed.data;
                         renderPrayerTimes();
                         hidePrayerLoading();
-                        console.log("[Prayer] Loaded from cache ✅");
                         return;
                     }
                 } catch (e) {}
@@ -3324,30 +2769,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
             if (typeof ISLAMIC_DATABASE !== "undefined") {
                 const fallback = ISLAMIC_DATABASE.getFallbackPrayerTimes();
-
                 prayerData = {
-                    timings: {
-                        Fajr: fallback.Fajr,
-                        Sunrise: fallback.Sunrise,
-                        Dhuhr: fallback.Dhuhr,
-                        Asr: fallback.Asr,
-                        Maghrib: fallback.Maghrib,
-                        Isha: fallback.Isha
-                    },
-                    date: {
-                        readable: today.toDateString(),
-                        hijri: { date: "" }
-                    }
+                    timings: fallback,
+                    date: { readable: today.toDateString(), hijri: { date: "" } }
                 };
-
                 renderPrayerTimes();
                 hidePrayerLoading();
-
-                if (prayerMethodText) {
-                    prayerMethodText.textContent = "⚠️ " + fallback.note;
-                }
-
-                console.log("[Prayer] Loaded from local fallback ✅");
             } else {
                 showPrayerError();
             }
@@ -3356,54 +2783,26 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function getMethodForCountry(country) {
         const c = (country || "").toLowerCase();
-
         const methods = {
-            "pakistan": 1,
-            "india": 1,
-            "bangladesh": 1,
-            "afghanistan": 1,
-            "saudi arabia": 4,
-            "uae": 8,
-            "united arab emirates": 8,
-            "kuwait": 9,
-            "qatar": 10,
-            "singapore": 11,
-            "france": 12,
-            "turkey": 13,
-            "russia": 14,
-            "egypt": 5,
-            "malaysia": 17,
-            "indonesia": 20,
-            "jordan": 23,
-            "morocco": 21,
-            "tunisia": 21,
-            "algeria": 21,
-            "usa": 2,
-            "united states": 2,
-            "canada": 2,
-            "uk": 3,
-            "united kingdom": 3,
-            "germany": 3
+            "pakistan": 1, "india": 1, "bangladesh": 1, "afghanistan": 1,
+            "saudi arabia": 4, "uae": 8, "united arab emirates": 8,
+            "kuwait": 9, "qatar": 10, "singapore": 11, "france": 12,
+            "turkey": 13, "russia": 14, "egypt": 5, "malaysia": 17,
+            "indonesia": 20, "jordan": 23, "morocco": 21, "tunisia": 21,
+            "algeria": 21, "usa": 2, "united states": 2, "canada": 2,
+            "uk": 3, "united kingdom": 3, "germany": 3
         };
-
         return methods[c] || 2;
     }
 
     function renderPrayerTimes() {
-
         if (!prayerData || !prayerData.timings) return;
 
         const timings = prayerData.timings;
         const dateInfo = prayerData.date;
 
-        if (homeLocationName) {
-            homeLocationName.textContent =
-                `${userLocation.city}, ${userLocation.country}`;
-        }
-
-        if (homePrayerDate) {
-            homePrayerDate.textContent = dateInfo.readable || "Today";
-        }
+        if (homeLocationName) homeLocationName.textContent = `${userLocation.city}, ${userLocation.country}`;
+        if (homePrayerDate) homePrayerDate.textContent = dateInfo.readable || "Today";
 
         if (homePrayerList) {
             homePrayerList.innerHTML = `
@@ -3415,14 +2814,8 @@ document.addEventListener("DOMContentLoaded", function () {
             `;
         }
 
-        if (prayerLocationText) {
-            prayerLocationText.textContent =
-                `📍 ${userLocation.city}, ${userLocation.country}`;
-        }
-
-        if (prayerDateText) {
-            prayerDateText.textContent = dateInfo.readable || "Today";
-        }
+        if (prayerLocationText) prayerLocationText.textContent = `📍 ${userLocation.city}, ${userLocation.country}`;
+        if (prayerDateText) prayerDateText.textContent = dateInfo.readable || "Today";
 
         if (prayerMethodText) {
             const methodName = getMethodName(dateInfo.meta?.method?.id);
@@ -3430,14 +2823,13 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         if (prayerTimesGrid) {
-
             const prayers = [
-                { name: "Fajr",    icon: "🌅", time: timings.Fajr },
+                { name: "Fajr", icon: "🌅", time: timings.Fajr },
                 { name: "Sunrise", icon: "🌄", time: timings.Sunrise },
-                { name: "Dhuhr",   icon: "☀️", time: timings.Dhuhr },
-                { name: "Asr",     icon: "🌤️", time: timings.Asr },
+                { name: "Dhuhr", icon: "☀️", time: timings.Dhuhr },
+                { name: "Asr", icon: "🌤️", time: timings.Asr },
                 { name: "Maghrib", icon: "🌇", time: timings.Maghrib },
-                { name: "Isha",    icon: "🌙", time: timings.Isha }
+                { name: "Isha", icon: "🌙", time: timings.Isha }
             ];
 
             const nextPrayer = findNextPrayer(prayers);
@@ -3460,9 +2852,7 @@ document.addEventListener("DOMContentLoaded", function () {
             if (!p.time) continue;
             const [hh, mm] = p.time.split(":").map(Number);
             const prayerMinutes = hh * 60 + mm;
-            if (prayerMinutes > currentMinutes) {
-                return p.name;
-            }
+            if (prayerMinutes > currentMinutes) return p.name;
         }
         return "Fajr";
     }
@@ -3477,22 +2867,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function getMethodName(id) {
         const names = {
-            1: "University of Islamic Sciences, Karachi",
-            2: "ISNA (North America)",
-            3: "Muslim World League",
-            4: "Umm Al-Qura, Makkah",
-            5: "Egyptian General Authority",
-            8: "Gulf Region",
-            9: "Kuwait",
-            10: "Qatar",
-            11: "Singapore",
-            12: "France",
-            13: "Turkey",
-            14: "Russia",
-            17: "Malaysia (JAKIM)",
-            20: "KEMENAG Indonesia",
-            21: "Morocco",
-            23: "Jordan"
+            1: "University of Islamic Sciences, Karachi", 2: "ISNA (North America)",
+            3: "Muslim World League", 4: "Umm Al-Qura, Makkah", 5: "Egyptian General Authority",
+            8: "Gulf Region", 9: "Kuwait", 10: "Qatar", 11: "Singapore", 12: "France",
+            13: "Turkey", 14: "Russia", 17: "Malaysia (JAKIM)", 20: "KEMENAG Indonesia",
+            21: "Morocco", 23: "Jordan"
         };
         return names[id] || "Auto-detected";
     }
@@ -3533,8 +2912,7 @@ document.addEventListener("DOMContentLoaded", function () {
     if (changeLocationBtn) {
         changeLocationBtn.addEventListener("click", () => {
             if (manualLocationBox) {
-                manualLocationBox.style.display =
-                    manualLocationBox.style.display === "none" ? "block" : "none";
+                manualLocationBox.style.display = manualLocationBox.style.display === "none" ? "block" : "none";
             }
             if (manualCityInput) manualCityInput.focus();
         });
@@ -3550,17 +2928,9 @@ document.addEventListener("DOMContentLoaded", function () {
                 return;
             }
 
-            userLocation = {
-                city: city,
-                country: country,
-                lat: null,
-                lng: null,
-                source: "manual"
-            };
-
+            userLocation = { city, country, lat: null, lng: null, source: "manual" };
             saveLocation(userLocation);
             if (manualLocationBox) manualLocationBox.style.display = "none";
-
             await fetchPrayerTimes();
         });
     }
@@ -3579,7 +2949,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     async function initPrayerTimes() {
-        console.log("[Prayer] Initializing...");
         await detectLocation();
         await fetchPrayerTimes();
         startAutoUpdate();
@@ -3589,12 +2958,9 @@ document.addEventListener("DOMContentLoaded", function () {
     if (typeof originalShowPage === "function") {
         window.showPage = function (pageName, updateUrl = true) {
             originalShowPage(pageName, updateUrl);
-            if (pageName === "prayer" && !prayerData) {
-                initPrayerTimes();
-            }
+            if (pageName === "prayer" && !prayerData) initPrayerTimes();
         };
     }
 
     initPrayerTimes();
-
 });

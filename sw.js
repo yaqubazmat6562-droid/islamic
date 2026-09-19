@@ -2,7 +2,7 @@
    ISLAMICWAY — SERVICE WORKER (FIXED)
    ========================================================= */
 
-const CACHE_NAME = "islamicway-v1.1.0";
+const CACHE_NAME = "islamicway-v1.2.0";
 
 const CACHE_FILES = [
     "./",
@@ -12,7 +12,11 @@ const CACHE_FILES = [
     "./script.js",
     "./search.js",
     "./manifest.json",
-    "./IMG 1.png"
+    "./IMG 1.png",
+    "./audio/adhan-alafasy.mp3",
+    "./audio/adhan-basit.mp3",
+    "./audio/adhan-husary.mp3",
+    "./audio/adhan-minshawi.mp3"
 ];
 
 self.addEventListener("install", (event) => {
@@ -41,7 +45,14 @@ self.addEventListener("activate", (event) => {
         }).then(() => self.clients.claim())
     );
 });
-
+/* =========================================================
+   SKIP WAITING — Update foran activate karo
+========================================================= */
+self.addEventListener("message", (event) => {
+    if (event.data && event.data.type === "SKIP_WAITING") {
+        self.skipWaiting();
+    }
+});
 self.addEventListener("fetch", (event) => {
     if (event.request.method !== "GET") return;
 

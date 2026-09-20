@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Age Calculator | IslamicWay</title>
+    <meta name="description" content="Advanced Age Calculator - Calculate exact age in years, months, days, hours, minutes and seconds. Also get Hijri age, zodiac sign, next birthday countdown.">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="age-calculator.css">
+</head>
+<body>
+
+<div class="age-website">
+
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
+    <header class="age-header">
+        <div class="age-header-container">
+            <a href="index.html" class="age-back-btn">
+                <span>←</span> Back to IslamicWay
+            </a>
+
+            <div class="age-logo">
+                <div class="age-logo-icon">🎂</div>
+                <div class="age-logo-text">
+                    <h2>Age Calculator</h2>
+                    <span>Exact • Hijri • Advanced</span>
+                </div>
+            </div>
+
+            <button class="age-theme-btn" id="ageThemeBtn" aria-label="Toggle Theme">☀️</button>
+        </div>
+    </header>
+
+    <!-- =====================================================
+         MAIN
+    ====================================================== -->
+    <main class="age-main">
+
+        <!-- ============= HERO ============= -->
+        <div class="age-hero">
+            <div class="age-hero-icon">🎂</div>
+            <div class="age-hero-content">
+                <h1>Calculate Your Exact Age</h1>
+                <p>Know your age in years, months, days, hours, minutes and seconds — with Hijri age, zodiac sign and next birthday countdown.</p>
+            </div>
+        </div>
+
+        <!-- ============= INPUT CARD ============= -->
+        <div class="age-input-card">
+
+            <div class="age-input-tabs">
+                <button class="age-tab-btn active" data-tab="dob">
+                    <span>📅</span> Date of Birth
+                </button>
+                <button class="age-tab-btn" data-tab="age">
+                    <span>⏳</span> Age Difference
+                </button>
+            </div>
+
+            <!-- DOB MODE -->
+            <div class="age-tab-content" id="dobTab" style="display:block;">
+                <div class="age-input-grid">
+                    <div class="age-field">
+                        <label>Date of Birth</label>
+                        <input type="date" id="birthDate" max="">
+                    </div>
+                    <div class="age-field">
+                        <label>Calculate As Of</label>
+                        <input type="date" id="calcDate" max="">
+                        <button class="age-today-btn" id="todayBtn">Today</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AGE DIFF MODE -->
+            <div class="age-tab-content" id="ageTab" style="display:none;">
+                <div class="age-input-grid">
+                    <div class="age-field">
+                        <label>First Date</label>
+                        <input type="date" id="firstDate" max="">
+                    </div>
+                    <div class="age-field">
+                        <label>Second Date</label>
+                        <input type="date" id="secondDate" max="">
+                    </div>
+                </div>
+            </div>
+
+            <div class="age-actions">
+                <button class="age-calc-btn" id="calculateBtn">
+                    <span>🧮</span> Calculate Age
+                </button>
+                <button class="age-reset-btn" id="resetBtn">
+                    <span>🔄</span> Reset
+                </button>
+            </div>
+
+            <div class="age-error" id="ageError" style="display:none;"></div>
+        </div>
+
+        <!-- ============= RESULT SECTION ============= -->
+        <div class="age-result-section" id="ageResultSection" style="display:none;">
+
+            <!-- MAIN AGE DISPLAY -->
+            <div class="age-main-result">
+                <div class="age-main-icon">🎉</div>
+                <div class="age-main-text">
+                    <span class="age-main-label">Your Age</span>
+                    <h2 id="mainAgeText">25 years, 3 months, 12 days</h2>
+                    <p id="mainAgeSubText">Born on Monday, 1 January 2000</p>
+                </div>
+            </div>
+
+            <!-- AGE BREAKDOWN CARDS -->
+            <div class="age-cards-grid">
+                <div class="age-card">
+                    <span class="age-card-icon">📅</span>
+                    <strong id="ageYears">25</strong>
+                    <span class="age-card-label">Years</span>
+                </div>
+                <div class="age-card">
+                    <span class="age-card-icon">🗓️</span>
+                    <strong id="ageMonths">3</strong>
+                    <span class="age-card-label">Months</span>
+                </div>
+                <div class="age-card">
+                    <span class="age-card-icon">📆</span>
+                    <strong id="ageDays">12</strong>
+                    <span class="age-card-label">Days</span>
+                </div>
+                <div class="age-card">
+                    <span class="age-card-icon">⏰</span>
+                    <strong id="ageHours">0</strong>
+                    <span class="age-card-label">Hours</span>
+                </div>
+                <div class="age-card">
+                    <span class="age-card-icon">⏱️</span>
+                    <strong id="ageMinutes">0</strong>
+                    <span class="age-card-label">Minutes</span>
+                </div>
+                <div class="age-card">
+                    <span class="age-card-icon">⏲️</span>
+                    <strong id="ageSeconds">0</strong>
+                    <span class="age-card-label">Seconds</span>
+                </div>
+            </div>
+
+            <!-- TOTALS -->
+            <div class="age-totals-grid">
+                <div class="age-total-card">
+                    <div class="age-total-icon">📊</div>
+                    <div>
+                        <span class="age-total-label">Total Months</span>
+                        <strong id="totalMonths">303</strong>
+                    </div>
+                </div>
+                <div class="age-total-card">
+                    <div class="age-total-icon">📈</div>
+                    <div>
+                        <span class="age-total-label">Total Weeks</span>
+                        <strong id="totalWeeks">1318</strong>
+                    </div>
+                </div>
+                <div class="age-total-card">
+                    <div class="age-total-icon">📉</div>
+                    <div>
+                        <span class="age-total-label">Total Days</span>
+                        <strong id="totalDays">9227</strong>
+                    </div>
+                </div>
+                <div class="age-total-card">
+                    <div class="age-total-icon">🕐</div>
+                    <div>
+                        <span class="age-total-label">Total Hours</span>
+                        <strong id="totalHours">221448</strong>
+                    </div>
+                </div>
+                <div class="age-total-card">
+                    <div class="age-total-icon">⏱️</div>
+                    <div>
+                        <span class="age-total-label">Total Minutes</span>
+                        <strong id="totalMinutes">13286880</strong>
+                    </div>
+                </div>
+                <div class="age-total-card">
+                    <div class="age-total-icon">💫</div>
+                    <div>
+                        <span class="age-total-label">Total Seconds</span>
+                        <strong id="totalSeconds">797212800</strong>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EXTRA INFO -->
+            <div class="age-extra-grid">
+
+                <!-- NEXT BIRTHDAY -->
+                <div class="age-extra-card birthday-card">
+                    <div class="age-extra-header">
+                        <span class="age-extra-icon">🎈</span>
+                        <h3>Next Birthday</h3>
+                    </div>
+                    <div class="age-birthday-countdown" id="birthdayCountdown">
+                        <div class="countdown-item">
+                            <strong id="bdayDays">0</strong>
+                            <span>Days</span>
+                        </div>
+                        <div class="countdown-item">
+                            <strong id="bdayHours">0</strong>
+                            <span>Hours</span>
+                        </div>
+                        <div class="countdown-item">
+                            <strong id="bdayMinutes">0</strong>
+                            <span>Minutes</span>
+                        </div>
+                        <div class="countdown-item">
+                            <strong id="bdaySeconds">0</strong>
+                            <span>Seconds</span>
+                        </div>
+                    </div>
+                    <p class="age-extra-note" id="birthdayNote">Your next birthday is on...</p>
+                </div>
+
+                <!-- HIJRI AGE -->
+                <div class="age-extra-card hijri-card">
+                    <div class="age-extra-header">
+                        <span class="age-extra-icon">🌙</span>
+                        <h3>Hijri Age (Islamic)</h3>
+                    </div>
+                    <div class="hijri-age-display">
+                        <strong id="hijriAgeText">24 years, 8 months, 5 days</strong>
+                        <p class="age-extra-note" id="hijriNote">Based on Islamic lunar calendar</p>
+                    </div>
+                </div>
+
+                <!-- ZODIAC -->
+                <div class="age-extra-card zodiac-card">
+                    <div class="age-extra-header">
+                        <span class="age-extra-icon" id="zodiacIcon">♈</span>
+                        <h3>Zodiac Sign</h3>
+                    </div>
+                    <div class="zodiac-display">
+                        <strong id="zodiacName">Aries</strong>
+                        <p class="age-extra-note" id="zodiacNote">The Ram • Fire Sign</p>
+                    </div>
+                </div>
+
+                <!-- BIRTH DAY -->
+                <div class="age-extra-card weekday-card">
+                    <div class="age-extra-header">
+                        <span class="age-extra-icon">📅</span>
+                        <h3>Day You Were Born</h3>
+                    </div>
+                    <div class="weekday-display">
+                        <strong id="birthWeekday">Monday</strong>
+                        <p class="age-extra-note">Born on this day of the week</p>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- SAVE / SHARE -->
+            <div class="age-result-actions">
+                <button class="age-action-btn" id="copyResultBtn">
+                    <span>📋</span> Copy Result
+                </button>
+                <button class="age-action-btn" id="shareResultBtn">
+                    <span>🔗</span> Share Result
+                </button>
+                <button class="age-action-btn" id="saveResultBtn">
+                    <span>💾</span> Save to History
+                </button>
+            </div>
+
+        </div>
+
+        <!-- ============= HISTORY ============= -->
+        <div class="age-history-section">
+            <div class="age-history-header">
+                <div>
+                    <h3>📜 Saved Calculations</h3>
+                    <p>Your recent age calculations</p>
+                </div>
+                <button class="age-history-clear" id="clearAgeHistory">Clear All</button>
+            </div>
+            <div class="age-history-list" id="ageHistoryList">
+                <div class="age-history-empty">
+                    <div>📭</div>
+                    <p>No saved calculations yet</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============= FEATURES ============= -->
+        <div class="age-features">
+            <div class="age-feature-card">
+                <span>🎯</span>
+                <h4>Exact Age</h4>
+                <p>Precise age in years, months, days, hours, minutes and seconds.</p>
+            </div>
+            <div class="age-feature-card">
+                <span>🌙</span>
+                <h4>Hijri Age</h4>
+                <p>Calculate your age according to the Islamic lunar calendar.</p>
+            </div>
+            <div class="age-feature-card">
+                <span>🎈</span>
+                <h4>Birthday Countdown</h4>
+                <p>Live countdown to your next birthday with days, hours and minutes.</p>
+            </div>
+            <div class="age-feature-card">
+                <span>♈</span>
+                <h4>Zodiac Sign</h4>
+                <p>Discover your zodiac sign, element and personality traits.</p>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- =====================================================
+         FOOTER
+    ====================================================== -->
+    <footer class="age-footer">
+        <p>© 2026 IslamicWay — Age Calculator</p>
+        <p class="age-footer-sub">Made with ❤️ for the Ummah</p>
+    </footer>
+
+</div>
+
+<script src="age-calculator.js"></script>
+</body>
+</html>

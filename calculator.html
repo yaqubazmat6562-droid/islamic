@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scientific Calculator | IslamicWay</title>
+    <meta name="description" content="Advanced Scientific Calculator with Islamic green theme - Basic math, trigonometry, logarithms, memory functions, history and more.">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="calculator.css">
+</head>
+<body>
+
+<div class="calc-website">
+
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
+    <header class="calc-header">
+        <div class="calc-header-container">
+            <a href="index.html" class="calc-back-btn">
+                <span>←</span> Back to IslamicWay
+            </a>
+            <div class="calc-logo">
+                <div class="calc-logo-icon">🧮</div>
+                <div class="calc-logo-text">
+                    <h2>Scientific Calculator</h2>
+                    <span>Advanced • Fast • Accurate</span>
+                </div>
+            </div>
+            <button class="calc-theme-btn" id="calcThemeBtn" aria-label="Toggle Theme">☀️</button>
+        </div>
+    </header>
+
+    <!-- =====================================================
+         MAIN
+    ====================================================== -->
+    <main class="calc-main">
+
+        <!-- CALCULATOR + HISTORY -->
+        <div class="calc-layout">
+
+            <!-- ============ CALCULATOR ============ -->
+            <div class="calculator-card">
+
+                <!-- DISPLAY -->
+                <div class="calc-display">
+                    <div class="calc-display-top">
+                        <span class="calc-mode-badge" id="calcModeBadge">DEG</span>
+                        <span class="calc-memory-badge" id="calcMemoryBadge" style="display:none;">M</span>
+                    </div>
+                    <div class="calc-expression" id="calcExpression"></div>
+                    <div class="calc-result" id="calcResult">0</div>
+                </div>
+
+                <!-- MODE TOGGLE -->
+                <div class="calc-mode-toggle">
+                    <button class="calc-mode-btn active" data-mode="basic">Basic</button>
+                    <button class="calc-mode-btn" data-mode="scientific">Scientific</button>
+                </div>
+
+                <!-- KEYPAD -->
+                <div class="calc-keypad" id="calcKeypad">
+                    <!-- Buttons JS will render -->
+                </div>
+
+                <!-- SCIENTIFIC EXTRA PANEL -->
+                <div class="calc-sci-panel" id="calcSciPanel" style="display:none;">
+                    <!-- Scientific buttons JS will render -->
+                </div>
+
+            </div>
+
+            <!-- ============ HISTORY ============ -->
+            <aside class="history-card">
+                <div class="history-header">
+                    <h3>📜 History</h3>
+                    <button id="clearHistoryBtn" class="history-clear-btn">Clear</button>
+                </div>
+                <div class="history-list" id="historyList">
+                    <div class="history-empty">
+                        <div>📭</div>
+                        <p>No calculations yet</p>
+                    </div>
+                </div>
+            </aside>
+
+        </div>
+
+        <!-- =====================================================
+             QUICK FEATURES
+        ====================================================== -->
+        <div class="calc-features">
+            <div class="feature-card">
+                <span>🔬</span>
+                <h4>Scientific Functions</h4>
+                <p>Sin, Cos, Tan, Log, Ln, √, x², x³, xʸ, π, e and more.</p>
+            </div>
+            <div class="feature-card">
+                <span>📐</span>
+                <h4>Trigonometry</h4>
+                <p>Full trigonometry support with DEG and RAD mode switching.</p>
+            </div>
+            <div class="feature-card">
+                <span>💾</span>
+                <h4>Memory & History</h4>
+                <p>Store results, recall memory and view past calculations.</p>
+            </div>
+            <div class="feature-card">
+                <span>⌨️</span>
+                <h4>Keyboard Support</h4>
+                <p>Type calculations directly with your keyboard.</p>
+            </div>
+        </div>
+
+        <!-- =====================================================
+             UNIT CONVERTER
+        ====================================================== -->
+        <div class="converter-card">
+            <div class="converter-header">
+                <div class="converter-icon">🔄</div>
+                <div>
+                    <h3>Unit Converter</h3>
+                    <p>Quick convert between common units</p>
+                </div>
+            </div>
+
+            <div class="converter-body">
+                <div class="converter-row">
+                    <select id="converterCategory">
+                        <option value="length">📏 Length</option>
+                        <option value="weight">⚖️ Weight</option>
+                        <option value="temperature">🌡️ Temperature</option>
+                        <option value="area">📐 Area</option>
+                        <option value="time">⏱️ Time</option>
+                    </select>
+                </div>
+
+                <div class="converter-inputs">
+                    <div class="converter-input-group">
+                        <input type="number" id="converterFromValue" value="1" placeholder="Value">
+                        <select id="converterFromUnit"></select>
+                    </div>
+                    <div class="converter-arrow">→</div>
+                    <div class="converter-input-group">
+                        <input type="number" id="converterToValue" placeholder="Result" readonly>
+                        <select id="converterToUnit"></select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- =====================================================
+         FOOTER
+    ====================================================== -->
+    <footer class="calc-footer">
+        <p>© 2026 IslamicWay — Scientific Calculator</p>
+        <p class="calc-footer-sub">Made with ❤️ for the Ummah</p>
+    </footer>
+
+</div>
+
+<script src="calculator.js"></script>
+</body>
+</html>

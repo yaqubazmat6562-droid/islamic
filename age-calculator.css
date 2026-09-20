@@ -1,0 +1,1294 @@
+/* =========================================================
+   ISLAMICWAY AGE CALCULATOR — GREEN THEME
+========================================================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+    font-family: "Inter", sans-serif;
+    background: #0a1f0f;
+    color: #ffffff;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+/* =========================================================
+   MAIN WRAPPER
+========================================================= */
+
+.age-website {
+    width: 100%;
+    min-height: 100vh;
+    background:
+        radial-gradient(circle at 50% 0%, rgba(34, 139, 34, 0.18), transparent 35%),
+        linear-gradient(180deg, #061a0a 0%, #0a2e12 50%, #061a0a 100%);
+    padding-bottom: 40px;
+}
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.age-header {
+    width: 100%;
+    padding: 18px 5%;
+    position: relative;
+    z-index: 100;
+}
+
+.age-header-container {
+    max-width: 1350px;
+    margin: auto;
+    min-height: 68px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 10px 25px;
+    border: 1px solid rgba(34, 200, 80, 0.45);
+    border-radius: 30px;
+    background: linear-gradient(90deg, rgba(8, 35, 15, 0.96), rgba(12, 55, 22, 0.94));
+    box-shadow: 0 10px 35px rgba(0, 0, 0, 0.35), inset 0 0 25px rgba(34, 180, 80, 0.05);
+    backdrop-filter: blur(20px);
+}
+
+.age-back-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px;
+    border-radius: 25px;
+    text-decoration: none;
+    color: #dcffe4;
+    font-size: 13px;
+    font-weight: 600;
+    background: rgba(34, 200, 80, 0.1);
+    border: 1px solid rgba(34, 200, 80, 0.35);
+    transition: all 0.3s ease;
+}
+
+.age-back-btn:hover {
+    background: rgba(34, 200, 80, 0.25);
+    color: #ffffff;
+    transform: translateX(-3px);
+}
+
+.age-back-btn span {
+    font-size: 16px;
+    color: #55ff99;
+}
+
+.age-logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.age-logo-icon {
+    width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 14px;
+    font-size: 24px;
+    background: linear-gradient(145deg, #0a5c22, #062e10);
+    border: 1px solid rgba(50, 220, 100, 0.55);
+    box-shadow: 0 0 18px rgba(34, 200, 80, 0.35);
+    animation: ageGlow 3s infinite;
+}
+
+.age-logo-text h2 {
+    font-family: "Amiri", serif;
+    font-size: 22px;
+    color: #ffffff;
+    line-height: 1.1;
+}
+
+.age-logo-text span {
+    font-size: 10px;
+    color: #9be8b0;
+    letter-spacing: 0.5px;
+}
+
+.age-theme-btn {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    border: 1px solid rgba(34, 200, 80, 0.35);
+    background: rgba(255, 255, 255, 0.08);
+    color: #ffffff;
+    font-size: 18px;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+.age-theme-btn:hover {
+    background: rgba(34, 200, 80, 0.25);
+    transform: scale(1.1) rotate(20deg);
+}
+
+@keyframes ageGlow {
+    0%, 100% { box-shadow: 0 0 18px rgba(34, 200, 80, 0.35); }
+    50%      { box-shadow: 0 0 30px rgba(34, 200, 80, 0.6); }
+}
+
+/* =========================================================
+   MAIN
+========================================================= */
+
+.age-main {
+    max-width: 1350px;
+    margin: auto;
+    padding: 30px 5% 40px;
+}
+
+/* =========================================================
+   HERO
+========================================================= */
+
+.age-hero {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    padding: 32px 35px;
+    margin-bottom: 28px;
+    border-radius: 26px;
+    background: linear-gradient(135deg, #062e10, #0a5c22, #1a8a42);
+    border: 1px solid rgba(34, 200, 80, 0.5);
+    box-shadow: 0 15px 40px rgba(0, 40, 10, 0.35), inset 0 0 40px rgba(34, 200, 80, 0.08);
+    position: relative;
+    overflow: hidden;
+}
+
+.age-hero::before {
+    content: "";
+    position: absolute;
+    width: 220px;
+    height: 220px;
+    right: -80px;
+    top: -80px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.06);
+    pointer-events: none;
+}
+
+.age-hero-icon {
+    width: 85px;
+    height: 85px;
+    min-width: 85px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 24px;
+    font-size: 44px;
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(8px);
+    position: relative;
+    z-index: 2;
+    animation: ageBounce 3s infinite ease-in-out;
+}
+
+@keyframes ageBounce {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(-8px); }
+}
+
+.age-hero-content {
+    position: relative;
+    z-index: 2;
+}
+
+.age-hero-content h1 {
+    font-family: "Amiri", serif;
+    font-size: 34px;
+    color: #ffffff;
+    margin-bottom: 8px;
+    font-weight: 700;
+}
+
+.age-hero-content p {
+    font-size: 15px;
+    color: #d4f8e0;
+    line-height: 1.7;
+    max-width: 700px;
+}
+
+/* =========================================================
+   INPUT CARD
+========================================================= */
+
+.age-input-card {
+    padding: 28px;
+    margin-bottom: 28px;
+    border-radius: 26px;
+    background: linear-gradient(145deg, rgba(12, 55, 25, 0.95), rgba(6, 28, 12, 0.98));
+    border: 1px solid rgba(34, 200, 80, 0.4);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35), inset 0 0 30px rgba(34, 180, 80, 0.05);
+}
+
+/* TABS */
+.age-input-tabs {
+    display: flex;
+    gap: 6px;
+    padding: 6px;
+    margin-bottom: 22px;
+    border-radius: 18px;
+    background: rgba(0, 0, 0, 0.25);
+    border: 1px solid rgba(34, 200, 80, 0.2);
+}
+
+.age-tab-btn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 13px 18px;
+    border: none;
+    border-radius: 13px;
+    background: transparent;
+    color: #8ed8a8;
+    font-size: 13.5px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: inherit;
+    letter-spacing: 0.3px;
+    transition: all 0.3s ease;
+}
+
+.age-tab-btn span { font-size: 16px; }
+
+.age-tab-btn:hover {
+    background: rgba(34, 200, 80, 0.12);
+    color: #ffffff;
+}
+
+.age-tab-btn.active {
+    background: linear-gradient(135deg, #1a9a45, #0a5c22);
+    color: #ffffff;
+    box-shadow: 0 5px 18px rgba(34, 200, 80, 0.35);
+}
+
+/* TAB CONTENT */
+.age-tab-content { animation: ageFadeIn 0.3s ease; }
+
+@keyframes ageFadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* INPUT GRID */
+.age-input-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+    margin-bottom: 22px;
+}
+
+.age-field {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.age-field label {
+    font-size: 12.5px;
+    font-weight: 700;
+    color: #9be8b0;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.age-field input[type="date"] {
+    padding: 15px 18px;
+    border-radius: 14px;
+    border: 1px solid rgba(34, 200, 80, 0.35);
+    background: rgba(6, 30, 12, 0.9);
+    color: #ffffff;
+    font-size: 15px;
+    font-family: inherit;
+    font-weight: 600;
+    outline: none;
+    transition: 0.3s ease;
+    cursor: pointer;
+    color-scheme: dark;
+}
+
+.age-field input[type="date"]:focus {
+    border-color: #35ff70;
+    box-shadow: 0 0 0 3px rgba(34, 200, 80, 0.15);
+}
+
+.age-field input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+    cursor: pointer;
+}
+
+.age-today-btn {
+    position: absolute;
+    right: 8px;
+    bottom: 8px;
+    padding: 6px 12px;
+    border-radius: 20px;
+    border: none;
+    background: rgba(34, 200, 80, 0.25);
+    color: #55ff99;
+    font-size: 11px;
+    font-weight: 800;
+    cursor: pointer;
+    font-family: inherit;
+    transition: 0.3s ease;
+    letter-spacing: 0.5px;
+}
+
+.age-today-btn:hover {
+    background: #1a8a42;
+    color: #ffffff;
+}
+
+/* ACTIONS */
+.age-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.age-calc-btn {
+    flex: 1;
+    min-width: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 16px 28px;
+    border: none;
+    border-radius: 16px;
+    background: linear-gradient(135deg, #1ea84e, #0d7a2e);
+    color: #ffffff;
+    font-size: 15px;
+    font-weight: 800;
+    cursor: pointer;
+    font-family: inherit;
+    letter-spacing: 0.5px;
+    box-shadow: 0 10px 30px rgba(34, 200, 80, 0.35);
+    transition: 0.3s ease;
+}
+
+.age-calc-btn span { font-size: 20px; }
+
+.age-calc-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 40px rgba(34, 200, 80, 0.5);
+    background: linear-gradient(135deg, #22c850, #1a8a42);
+}
+
+.age-calc-btn:active {
+    transform: translateY(0) scale(0.98);
+}
+
+.age-reset-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 16px 24px;
+    border-radius: 16px;
+    border: 1px solid rgba(34, 200, 80, 0.35);
+    background: rgba(34, 200, 80, 0.08);
+    color: #9be8b0;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: inherit;
+    transition: 0.3s ease;
+}
+
+.age-reset-btn:hover {
+    background: rgba(34, 200, 80, 0.2);
+    color: #ffffff;
+}
+
+.age-reset-btn span { font-size: 16px; }
+
+/* ERROR */
+.age-error {
+    margin-top: 18px;
+    padding: 14px 18px;
+    border-radius: 14px;
+    background: rgba(180, 35, 24, 0.15);
+    border: 1px solid rgba(255, 100, 100, 0.4);
+    color: #ff8a8a;
+    font-size: 13.5px;
+    font-weight: 600;
+    text-align: center;
+    animation: ageShake 0.4s ease;
+}
+
+@keyframes ageShake {
+    0%, 100% { transform: translateX(0); }
+    25%      { transform: translateX(-8px); }
+    75%      { transform: translateX(8px); }
+}
+
+/* =========================================================
+   RESULT SECTION
+========================================================= */
+
+.age-result-section {
+    animation: ageFadeIn 0.5s ease;
+}
+
+/* MAIN RESULT */
+.age-main-result {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    padding: 30px 35px;
+    margin-bottom: 22px;
+    border-radius: 26px;
+    background: linear-gradient(135deg, rgba(34, 200, 80, 0.2), rgba(10, 92, 34, 0.4));
+    border: 2px solid rgba(34, 220, 100, 0.5);
+    box-shadow: 0 20px 60px rgba(34, 200, 80, 0.15), inset 0 0 40px rgba(34, 200, 80, 0.05);
+    position: relative;
+    overflow: hidden;
+}
+
+.age-main-result::before {
+    content: "";
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    right: -100px;
+    top: -150px;
+    background: radial-gradient(circle, rgba(34, 200, 80, 0.15), transparent 70%);
+    pointer-events: none;
+}
+
+.age-main-icon {
+    width: 80px;
+    height: 80px;
+    min-width: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 22px;
+    font-size: 42px;
+    background: rgba(34, 200, 80, 0.2);
+    border: 2px solid rgba(34, 220, 100, 0.5);
+    position: relative;
+    z-index: 2;
+    animation: ageBounce 2s infinite ease-in-out;
+}
+
+.age-main-text {
+    position: relative;
+    z-index: 2;
+}
+
+.age-main-label {
+    display: inline-block;
+    padding: 4px 12px;
+    margin-bottom: 8px;
+    border-radius: 20px;
+    background: rgba(34, 200, 80, 0.2);
+    color: #55ff99;
+    font-size: 10.5px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.age-main-text h2 {
+    font-family: "Amiri", serif;
+    font-size: clamp(22px, 3vw, 30px);
+    color: #ffffff;
+    font-weight: 700;
+    line-height: 1.3;
+    margin-bottom: 6px;
+    text-shadow: 0 0 20px rgba(34, 200, 80, 0.3);
+}
+
+.age-main-text p {
+    font-size: 13.5px;
+    color: #d4f8e0;
+}
+
+/* AGE CARDS */
+.age-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 14px;
+    margin-bottom: 22px;
+}
+
+.age-card {
+    padding: 22px 14px;
+    border-radius: 20px;
+    background: linear-gradient(145deg, rgba(12, 55, 25, 0.9), rgba(6, 28, 12, 0.95));
+    border: 1px solid rgba(34, 200, 80, 0.3);
+    text-align: center;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.age-card::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #22c850, transparent);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.age-card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(34, 220, 100, 0.65);
+    box-shadow: 0 15px 35px rgba(34, 200, 80, 0.2);
+}
+
+.age-card:hover::after { opacity: 1; }
+
+.age-card-icon {
+    display: block;
+    font-size: 26px;
+    margin-bottom: 8px;
+    filter: drop-shadow(0 0 10px rgba(34, 220, 100, 0.4));
+}
+
+.age-card strong {
+    display: block;
+    font-size: 30px;
+    font-weight: 800;
+    color: #55ff99;
+    font-family: "Amiri", serif;
+    margin-bottom: 4px;
+    text-shadow: 0 0 15px rgba(34, 200, 80, 0.3);
+    line-height: 1;
+}
+
+.age-card-label {
+    font-size: 11px;
+    color: #8ed8a8;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    font-weight: 700;
+}
+
+/* TOTALS */
+.age-totals-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin-bottom: 22px;
+}
+
+.age-total-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 18px 22px;
+    border-radius: 18px;
+    background: linear-gradient(145deg, rgba(12, 55, 25, 0.85), rgba(6, 28, 12, 0.9));
+    border: 1px solid rgba(34, 200, 80, 0.25);
+    transition: all 0.3s ease;
+}
+
+.age-total-card:hover {
+    transform: translateX(5px);
+    border-color: rgba(34, 220, 100, 0.55);
+    background: linear-gradient(145deg, rgba(20, 80, 35, 0.95), rgba(10, 45, 20, 0.98));
+}
+
+.age-total-icon {
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 13px;
+    font-size: 22px;
+    background: rgba(34, 200, 80, 0.15);
+    border: 1px solid rgba(34, 200, 80, 0.35);
+}
+
+.age-total-card > div:last-child {
+    flex: 1;
+    min-width: 0;
+}
+
+.age-total-label {
+    display: block;
+    font-size: 11px;
+    color: #8ed8a8;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 700;
+    margin-bottom: 3px;
+}
+
+.age-total-card strong {
+    display: block;
+    font-size: 20px;
+    font-weight: 800;
+    color: #ffffff;
+    font-family: "Amiri", serif;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+/* EXTRA GRID */
+.age-extra-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    margin-bottom: 22px;
+}
+
+.age-extra-card {
+    padding: 24px;
+    border-radius: 22px;
+    background: linear-gradient(145deg, rgba(12, 55, 25, 0.9), rgba(6, 28, 12, 0.95));
+    border: 1px solid rgba(34, 200, 80, 0.35);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.age-extra-card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(34, 220, 100, 0.65);
+    box-shadow: 0 15px 35px rgba(34, 200, 80, 0.18);
+}
+
+.age-extra-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 18px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid rgba(34, 200, 80, 0.2);
+}
+
+.age-extra-icon {
+    width: 42px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 13px;
+    font-size: 22px;
+    background: rgba(34, 200, 80, 0.15);
+    border: 1px solid rgba(34, 200, 80, 0.35);
+}
+
+.age-extra-header h3 {
+    font-family: "Amiri", serif;
+    font-size: 19px;
+    color: #ffffff;
+    font-weight: 700;
+}
+
+/* BIRTHDAY COUNTDOWN */
+.age-birthday-countdown {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.countdown-item {
+    padding: 14px 8px;
+    border-radius: 14px;
+    background: linear-gradient(145deg, rgba(34, 200, 80, 0.15), rgba(20, 120, 50, 0.05));
+    border: 1px solid rgba(34, 200, 80, 0.3);
+    text-align: center;
+    transition: 0.3s ease;
+}
+
+.countdown-item:hover {
+    transform: scale(1.05);
+    border-color: rgba(34, 220, 100, 0.6);
+}
+
+.countdown-item strong {
+    display: block;
+    font-size: 24px;
+    font-weight: 800;
+    color: #55ff99;
+    font-family: "Amiri", serif;
+    line-height: 1;
+    margin-bottom: 4px;
+    text-shadow: 0 0 12px rgba(34, 200, 80, 0.4);
+}
+
+.countdown-item span {
+    font-size: 9.5px;
+    color: #8ed8a8;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    font-weight: 700;
+}
+
+/* HIJRI / ZODIAC / WEEKDAY */
+.hijri-age-display strong,
+.zodiac-display strong,
+.weekday-display strong {
+    display: block;
+    font-family: "Amiri", serif;
+    font-size: 22px;
+    font-weight: 800;
+    color: #ffffff;
+    margin-bottom: 8px;
+    line-height: 1.3;
+}
+
+.age-extra-note {
+    font-size: 12.5px;
+    color: #8ed8a8;
+    line-height: 1.6;
+}
+
+.zodiac-display {
+    text-align: center;
+}
+
+.zodiac-display strong {
+    font-size: 26px;
+    color: #55ff99;
+    text-shadow: 0 0 20px rgba(34, 200, 80, 0.35);
+}
+
+/* RESULT ACTIONS */
+.age-result-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    padding: 20px;
+    border-radius: 20px;
+    background: rgba(34, 200, 80, 0.06);
+    border: 1px solid rgba(34, 200, 80, 0.25);
+}
+
+.age-action-btn {
+    flex: 1;
+    min-width: 160px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 13px 20px;
+    border-radius: 14px;
+    border: 1px solid rgba(34, 200, 80, 0.35);
+    background: rgba(34, 200, 80, 0.1);
+    color: #dcffe4;
+    font-size: 13.5px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: inherit;
+    transition: 0.3s ease;
+}
+
+.age-action-btn:hover {
+    background: rgba(34, 200, 80, 0.25);
+    color: #ffffff;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(34, 200, 80, 0.25);
+}
+
+.age-action-btn span { font-size: 16px; }
+
+/* =========================================================
+   HISTORY SECTION
+========================================================= */
+
+.age-history-section {
+    padding: 26px;
+    margin-bottom: 28px;
+    border-radius: 26px;
+    background: linear-gradient(145deg, rgba(12, 55, 25, 0.95), rgba(6, 28, 12, 0.98));
+    border: 1px solid rgba(34, 200, 80, 0.4);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35), inset 0 0 30px rgba(34, 180, 80, 0.05);
+}
+
+.age-history-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid rgba(34, 200, 80, 0.2);
+}
+
+.age-history-header h3 {
+    font-family: "Amiri", serif;
+    font-size: 22px;
+    color: #ffffff;
+    margin-bottom: 4px;
+}
+
+.age-history-header p {
+    font-size: 12.5px;
+    color: #8ed8a8;
+}
+
+.age-history-clear {
+    padding: 9px 16px;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 100, 100, 0.4);
+    background: rgba(180, 35, 24, 0.15);
+    color: #ff8a8a;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: inherit;
+    transition: 0.3s ease;
+}
+
+.age-history-clear:hover {
+    background: rgba(180, 35, 24, 0.35);
+    color: #ffffff;
+}
+
+.age-history-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-height: 400px;
+    overflow-y: auto;
+    padding-right: 4px;
+}
+
+.age-history-list::-webkit-scrollbar { width: 6px; }
+.age-history-list::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.2); border-radius: 10px; }
+.age-history-list::-webkit-scrollbar-thumb {
+    background: linear-gradient(#1a8a42, #0a4a20);
+    border-radius: 10px;
+}
+
+.age-history-empty {
+    text-align: center;
+    padding: 50px 15px;
+    color: #6a9c7c;
+}
+
+.age-history-empty div {
+    font-size: 42px;
+    margin-bottom: 12px;
+    opacity: 0.6;
+}
+
+.age-history-empty p { font-size: 13px; }
+
+.age-history-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 15px 18px;
+    border-radius: 16px;
+    background: rgba(34, 200, 80, 0.06);
+    border: 1px solid rgba(34, 200, 80, 0.2);
+    transition: all 0.25s ease;
+    animation: histIn 0.3s ease;
+    cursor: pointer;
+}
+
+@keyframes histIn {
+    from { opacity: 0; transform: translateX(20px); }
+    to   { opacity: 1; transform: translateX(0); }
+}
+
+.age-history-item:hover {
+    background: rgba(34, 200, 80, 0.15);
+    border-color: rgba(34, 220, 100, 0.55);
+    transform: translateX(-4px);
+}
+
+.age-history-item-icon {
+    width: 42px;
+    height: 42px;
+    min-width: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    font-size: 20px;
+    background: rgba(34, 200, 80, 0.15);
+    border: 1px solid rgba(34, 200, 80, 0.3);
+}
+
+.age-history-item-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.age-history-item-content strong {
+    display: block;
+    font-size: 15px;
+    color: #ffffff;
+    font-weight: 700;
+    margin-bottom: 4px;
+    font-family: "Amiri", serif;
+}
+
+.age-history-item-content span {
+    display: block;
+    font-size: 11.5px;
+    color: #8ed8a8;
+}
+
+.age-history-item-delete {
+    width: 32px;
+    height: 32px;
+    min-width: 32px;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 100, 100, 0.3);
+    background: rgba(180, 35, 24, 0.15);
+    color: #ff8a8a;
+    font-size: 14px;
+    cursor: pointer;
+    transition: 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.age-history-item-delete:hover {
+    background: rgba(180, 35, 24, 0.4);
+    color: #ffffff;
+}
+
+/* =========================================================
+   FEATURES
+========================================================= */
+
+.age-features {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+}
+
+.age-feature-card {
+    padding: 24px 20px;
+    border-radius: 22px;
+    background: linear-gradient(145deg, rgba(12, 55, 25, 0.9), rgba(6, 28, 12, 0.95));
+    border: 1px solid rgba(34, 200, 80, 0.3);
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.age-feature-card:hover {
+    transform: translateY(-6px);
+    border-color: rgba(34, 220, 100, 0.65);
+    box-shadow: 0 15px 35px rgba(20, 120, 50, 0.25);
+}
+
+.age-feature-card span {
+    display: block;
+    font-size: 34px;
+    margin-bottom: 12px;
+    filter: drop-shadow(0 0 10px rgba(34, 220, 100, 0.4));
+}
+
+.age-feature-card h4 {
+    font-family: "Amiri", serif;
+    font-size: 19px;
+    color: #ffffff;
+    margin-bottom: 8px;
+}
+
+.age-feature-card p {
+    font-size: 12.5px;
+    color: #8ed8a8;
+    line-height: 1.6;
+}
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+.age-footer {
+    text-align: center;
+    padding: 30px 20px 20px;
+    border-top: 1px solid rgba(34, 200, 80, 0.15);
+    margin-top: 40px;
+}
+
+.age-footer p {
+    color: #6a9c7c;
+    font-size: 12.5px;
+    margin-bottom: 6px;
+}
+
+.age-footer-sub {
+    font-size: 11px !important;
+    color: #4a7a5a !important;
+}
+
+/* =========================================================
+   LIGHT THEME
+========================================================= */
+
+body.light-theme {
+    background: #f5faf6;
+    color: #0a2e14;
+}
+
+body.light-theme .age-website {
+    background:
+        radial-gradient(circle at 50% 0%, rgba(34, 139, 34, 0.08), transparent 35%),
+        linear-gradient(180deg, #f0f9f2 0%, #e8f5ec 50%, #f0f9f2 100%);
+}
+
+body.light-theme .age-header-container {
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0.96), rgba(240, 250, 243, 0.94));
+    border: 1px solid rgba(34, 200, 80, 0.5);
+    box-shadow: 0 10px 35px rgba(0, 0, 0, 0.08);
+}
+
+body.light-theme .age-logo-text h2 { color: #0a2e14; }
+body.light-theme .age-logo-text span { color: #2a7a3a; }
+
+body.light-theme .age-back-btn {
+    color: #1a4a24;
+    background: rgba(34, 200, 80, 0.1);
+}
+
+body.light-theme .age-theme-btn {
+    color: #1a4a24;
+    background: rgba(34, 200, 80, 0.12);
+}
+
+body.light-theme .age-input-card,
+body.light-theme .age-history-section {
+    background: linear-gradient(145deg, #ffffff, #f0faf3);
+    border: 1px solid rgba(34, 200, 80, 0.35);
+    box-shadow: 0 15px 40px rgba(0, 50, 20, 0.08);
+}
+
+body.light-theme .age-input-tabs {
+    background: rgba(34, 200, 80, 0.08);
+    border-color: rgba(34, 200, 80, 0.2);
+}
+
+body.light-theme .age-tab-btn { color: #2a7a3a; }
+body.light-theme .age-tab-btn:hover { background: rgba(34, 200, 80, 0.15); color: #0a5c22; }
+
+body.light-theme .age-field label { color: #2a7a3a; }
+
+body.light-theme .age-field input[type="date"] {
+    background: #ffffff;
+    color: #0a2e14;
+    border: 1px solid rgba(34, 200, 80, 0.35);
+    color-scheme: light;
+}
+
+body.light-theme .age-field input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: none;
+}
+
+body.light-theme .age-reset-btn {
+    color: #1a5c2a;
+    background: rgba(34, 200, 80, 0.1);
+}
+
+body.light-theme .age-main-result {
+    background: linear-gradient(135deg, rgba(34, 200, 80, 0.15), rgba(34, 200, 80, 0.05));
+    border: 2px solid rgba(34, 200, 80, 0.45);
+}
+
+body.light-theme .age-main-text h2 { color: #0a2e14; text-shadow: none; }
+body.light-theme .age-main-text p { color: #2a7a3a; }
+
+body.light-theme .age-card,
+body.light-theme .age-extra-card,
+body.light-theme .age-feature-card {
+    background: linear-gradient(145deg, #ffffff, #f5fdf8);
+    border: 1px solid rgba(34, 200, 80, 0.3);
+}
+
+body.light-theme .age-card strong { color: #0a7a2e; text-shadow: none; }
+body.light-theme .age-card-label { color: #2a7a3a; }
+
+body.light-theme .age-total-card {
+    background: linear-gradient(145deg, #ffffff, #f5fdf8);
+    border: 1px solid rgba(34, 200, 80, 0.25);
+}
+
+body.light-theme .age-total-label { color: #2a7a3a; }
+body.light-theme .age-total-card strong { color: #0a2e14; }
+
+body.light-theme .age-extra-header h3 { color: #0a2e14; }
+body.light-theme .age-extra-note { color: #2a7a3a; }
+
+body.light-theme .hijri-age-display strong,
+body.light-theme .weekday-display strong { color: #0a2e14; }
+
+body.light-theme .zodiac-display strong {
+    color: #0a7a2e;
+    text-shadow: none;
+}
+
+body.light-theme .countdown-item {
+    background: linear-gradient(145deg, rgba(34, 200, 80, 0.1), rgba(34, 200, 80, 0.03));
+    border: 1px solid rgba(34, 200, 80, 0.3);
+}
+
+body.light-theme .countdown-item strong { color: #0a7a2e; text-shadow: none; }
+body.light-theme .countdown-item span { color: #2a7a3a; }
+
+body.light-theme .age-result-actions {
+    background: rgba(34, 200, 80, 0.06);
+    border: 1px solid rgba(34, 200, 80, 0.25);
+}
+
+body.light-theme .age-action-btn {
+    color: #1a5c2a;
+    background: rgba(34, 200, 80, 0.1);
+}
+
+body.light-theme .age-history-header h3 { color: #0a2e14; }
+body.light-theme .age-history-header p { color: #2a7a3a; }
+body.light-theme .age-history-empty { color: #4a7a5a; }
+
+body.light-theme .age-history-item {
+    background: rgba(34, 200, 80, 0.06);
+    border: 1px solid rgba(34, 200, 80, 0.2);
+}
+
+body.light-theme .age-history-item-content strong { color: #0a2e14; }
+body.light-theme .age-history-item-content span { color: #2a7a3a; }
+
+body.light-theme .age-feature-card h4 { color: #0a2e14; }
+body.light-theme .age-feature-card p { color: #2a7a3a; }
+
+body.light-theme .age-footer p { color: #4a7a5a; }
+
+body.light-theme .age-today-btn {
+    background: rgba(34, 200, 80, 0.2);
+    color: #0a5c22;
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 1100px) {
+    .age-cards-grid { grid-template-columns: repeat(3, 1fr); }
+    .age-features { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 900px) {
+    .age-totals-grid { grid-template-columns: repeat(2, 1fr); }
+    .age-extra-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 768px) {
+    .age-header { padding: 12px 12px; }
+
+    .age-header-container {
+        flex-wrap: wrap;
+        border-radius: 22px;
+        gap: 10px;
+        padding: 12px 16px;
+    }
+
+    .age-back-btn {
+        padding: 8px 14px;
+        font-size: 12px;
+        order: 1;
+    }
+
+    .age-logo { order: 2; flex: 1; }
+    .age-logo-text h2 { font-size: 18px; }
+    .age-theme-btn { order: 3; }
+
+    .age-main { padding: 20px 12px 30px; }
+
+    .age-hero {
+        flex-direction: column;
+        text-align: center;
+        padding: 25px 20px;
+        gap: 18px;
+    }
+
+    .age-hero-icon {
+        width: 70px;
+        height: 70px;
+        min-width: 70px;
+        font-size: 36px;
+    }
+
+    .age-hero-content h1 { font-size: 26px; }
+    .age-hero-content p { font-size: 13.5px; }
+
+    .age-input-card { padding: 22px 18px; border-radius: 22px; }
+
+    .age-input-grid { grid-template-columns: 1fr; gap: 14px; }
+
+    .age-actions { flex-direction: column; }
+    .age-calc-btn, .age-reset-btn { width: 100%; }
+
+    .age-main-result {
+        flex-direction: column;
+        text-align: center;
+        padding: 25px 20px;
+        gap: 18px;
+    }
+
+    .age-main-icon {
+        width: 65px;
+        height: 65px;
+        min-width: 65px;
+        font-size: 32px;
+    }
+
+    .age-cards-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    .age-card { padding: 16px 10px; }
+    .age-card strong { font-size: 24px; }
+    .age-card-icon { font-size: 22px; }
+
+    .age-totals-grid { grid-template-columns: 1fr; gap: 10px; }
+
+    .age-birthday-countdown { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+
+    .age-extra-card { padding: 20px 18px; }
+
+    .age-result-actions { flex-direction: column; padding: 16px; }
+    .age-action-btn { width: 100%; min-width: auto; }
+
+    .age-history-section { padding: 20px 18px; border-radius: 22px; }
+    .age-history-header { flex-direction: column; align-items: flex-start; gap: 12px; }
+    .age-history-clear { width: 100%; }
+
+    .age-features { grid-template-columns: 1fr; }
+    .age-feature-card { padding: 20px 18px; }
+}
+
+@media (max-width: 480px) {
+    .age-main-result h2 { font-size: 20px; }
+    .age-card strong { font-size: 20px; }
+    .age-total-card strong { font-size: 16px; }
+    .zodiac-display strong { font-size: 22px; }
+
+    .hijri-age-display strong,
+    .weekday-display strong { font-size: 18px; }
+
+    .age-history-item { padding: 12px 14px; }
+    .age-history-item-icon { width: 36px; height: 36px; min-width: 36px; font-size: 17px; }
+    .age-history-item-content strong { font-size: 14px; }
+}

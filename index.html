@@ -87,7 +87,7 @@
     =================================================== -->
     <link rel="stylesheet" href="search.css">
     <link rel="stylesheet" href="style.css">
-
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <!-- ==================================================
          STRUCTURED DATA (JSON-LD) — Rich Snippets
     =================================================== -->
@@ -208,14 +208,16 @@
 
             <nav class="navigation">
                 <a href="#" class="nav-link active" data-page="home">Home</a>
+                <a href="#" class="nav-link" data-page="ai">🤖 Islamic AI</a>
                 <a href="#" class="nav-link" data-page="quran">Quran</a>
                 <a href="#" class="nav-link" data-page="hadith">Hadith</a>
                 <a href="#" class="nav-link" data-page="prayer">Prayer Times</a>
                 <a href="power-of-dua.html" class="nav-link">Power of Dua</a>
                 <a href="#" class="nav-link" data-page="articles">Islamic Articles</a>
                 <a href="#" class="nav-link" data-page="about">About Us</a>
-                <a href="calculator.html" class="nav-link">🧮 Calculator</a>
-                <a href="age-calculator.html" class="nav-link">🎂 Age Calculator</a>
+                <a href="calculator.html" class="nav-link">Calculator</a>
+                <a href="age-calculator.html" class="nav-link">Age Calculator</a>
+                <a href="#" class="nav-link" data-page="qibla">🧭 Qibla</a>
             </nav>
 
             <div class="header-actions">
@@ -279,6 +281,15 @@
                     <p>For a Peaceful Heart</p>
                     <span class="arrow">→</span>
                 </div>
+                    <!-- ==========================================
+         TOOLS HUB CARD
+    =========================================== -->
+    <div class="quick-card tools-hub-card" data-page="tools">
+        <div class="quick-icon">🧰</div>
+        <h3>Tools Hub</h3>
+        <p>Calculators & Utilities</p>
+        <span class="arrow">→</span>
+    </div>
             </section>
 
             <section class="information-section">
@@ -356,7 +367,171 @@
             </section>
 
         </section>
+         <!-- =========================================================
+     QIBLA COMPASS PAGE
+========================================================= -->
+<section class="page qibla-page" id="page-qibla">
+    <div class="qibla-container">
+        
+        <!-- QIBLA HERO -->
+        <div class="qibla-hero">
+            <div class="qibla-hero-icon">🕋</div>
+            <div>
+                <h1>Qibla Direction</h1>
+                <p>Find the exact direction of the Kaaba from your location</p>
+            </div>
+        </div>
 
+        <!-- QIBLA MAIN BOX -->
+        <div class="qibla-main-box">
+            
+            <!-- STATUS -->
+            <div class="qibla-status" id="qiblaStatus">
+                <span>📍</span> Detecting your location...
+            </div>
+
+            <!-- COMPASS WRAPPER -->
+            <div class="compass-wrapper">
+                <div class="compass-ring" id="compassRing">
+                    <div class="compass-cardinal n">N</div>
+                    <div class="compass-cardinal e">E</div>
+                    <div class="compass-cardinal s">S</div>
+                    <div class="compass-cardinal w">W</div>
+                    
+                    <div class="compass-ticks" id="compassTicks"></div>
+
+                    <!-- KAABA MARKER (Needle) -->
+                    <div class="kaaba-needle" id="kaabaNeedle">
+                        <div class="kaaba-icon">🕋</div>
+                    </div>
+                    
+                    <div class="compass-center-dot"></div>
+                </div>
+            </div>
+
+            <!-- DEGREES INFO -->
+            <div class="qibla-degrees-box">
+                <div class="qibla-degrees-value" id="qiblaDegrees">--°</div>
+                <div class="qibla-degrees-label">Qibla Angle from North</div>
+            </div>
+
+            <!-- LOCATION INFO -->
+            <div class="qibla-location-info" id="qiblaLocationInfo">
+                <p>🌍 Location: <strong id="qiblaCity">Detecting...</strong></p>
+                <p>📏 Distance to Kaaba: <strong id="qiblaDistance">-- km</strong></p>
+            </div>
+
+            <!-- ACTION BUTTONS -->
+            <div class="qibla-actions">
+                <button id="qiblaDetectBtn" class="qibla-btn primary">📍 Detect My Location</button>
+                <button id="qiblaResetBtn" class="qibla-btn secondary">↺ Reset</button>
+            </div>
+
+            <!-- MANUAL LOCATION -->
+            <div class="qibla-manual-box" id="qiblaManualBox" style="display: none;">
+                <h3>Enter Location Manually</h3>
+                <input type="text" id="qiblaCityInput" placeholder="City (e.g. Karachi)">
+                <input type="text" id="qiblaCountryInput" placeholder="Country (e.g. Pakistan)">
+                <div class="qibla-manual-buttons">
+                    <button id="qiblaSaveManual" class="qibla-btn primary">Save</button>
+                    <button id="qiblaCancelManual" class="qibla-btn secondary">Cancel</button>
+                </div>
+            </div>
+            
+            <!-- ERROR -->
+            <div class="qibla-error" id="qiblaError" style="display: none;">
+                <span>⚠️</span>
+                <p id="qiblaErrorText">Unable to detect location. Please allow GPS or enter manually.</p>
+                <button id="qiblaManualBtn" class="qibla-btn primary">Enter Location Manually</button>
+            </div>
+        </div>
+
+        <!-- MAP BOX -->
+        <div class="qibla-map-box">
+            <div class="qibla-map-header">
+                <h2>🗺️ Map View</h2>
+                <p>Your location and the direction to the Kaaba</p>
+            </div>
+            <div id="qiblaMap" class="qibla-map"></div>
+        </div>
+
+    </div>
+</section>
+        <!-- =========================================================
+     ISLAMIC AI ASSISTANT PAGE
+========================================================= -->
+<section class="page ai-page" id="page-ai">
+    <div class="ai-container">
+
+        <!-- AI HERO -->
+        <div class="ai-hero">
+            <div class="ai-hero-icon">🤖</div>
+            <div>
+                <h1>Islamic AI Assistant</h1>
+                <p>Ask anything about Islam — Quran, Hadith, Fiqh & Daily Life</p>
+            </div>
+        </div>
+
+        <!-- CHAT BOX -->
+        <div class="ai-chat-box">
+            
+            <div class="ai-chat-header">
+                <div class="ai-chat-avatar">🕌</div>
+                <div>
+                    <h3>IslamicWay AI</h3>
+                    <span class="ai-status">● Online</span>
+                </div>
+                <button id="aiClearBtn" class="ai-clear-btn" title="Clear Chat">🗑️</button>
+            </div>
+
+            <div class="ai-messages" id="aiMessages">
+                <!-- Welcome Message -->
+                <div class="ai-message ai-bot">
+                    <div class="ai-message-avatar">🕌</div>
+                    <div class="ai-message-content">
+                        <p><strong>Assalamu Alaikum! 🌙</strong></p>
+                        <p>Main IslamicWay AI hoon. Aap mujhse Islam ke baare mein kuch bhi pooch sakte hain — Quran, Hadith, Namaz, Zakat, Dua, ya daily life ke sawal.</p>
+                        <p><strong>Try asking:</strong></p>
+                        <ul>
+                            <li>Namaz ka tareeqa kya hai?</li>
+                            <li>Zakat kis par farz hai?</li>
+                            <li>Sabr ki ahmiyat Quran mein</li>
+                            <li>Subah ki dua kya hai?</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- QUICK SUGGESTIONS -->
+            <div class="ai-suggestions" id="aiSuggestions">
+                <button class="ai-suggestion-chip" data-question="Namaz ka tareeqa kya hai?">🕌 Namaz ka tareeqa</button>
+                <button class="ai-suggestion-chip" data-question="Zakat kis par farz hai?">💰 Zakat</button>
+                <button class="ai-suggestion-chip" data-question="Sabr ki ahmiyat kya hai?">🤲 Sabr</button>
+                <button class="ai-suggestion-chip" data-question="Subah ki dua kya hai?">🌅 Morning Dua</button>
+                <button class="ai-suggestion-chip" data-question="Ramadan ke faraiz kya hain?">🌙 Ramadan</button>
+            </div>
+
+            <!-- INPUT AREA -->
+            <div class="ai-input-area">
+                <textarea 
+                    id="aiInput" 
+                    placeholder="Type your Islamic question here..." 
+                    rows="1"
+                    maxlength="500"
+                ></textarea>
+                <button id="aiSendBtn" class="ai-send-btn" title="Send">
+                    <span>➤</span>
+                </button>
+            </div>
+
+            <div class="ai-footer-note">
+                ⚠️ AI answers are for guidance only. For important matters, please consult a qualified Islamic scholar.
+            </div>
+
+        </div>
+
+    </div>
+</section>
         <!-- =====================================================
              QURAN PAGE
         ====================================================== -->
@@ -1088,7 +1263,165 @@
 
             </div>
         </section>
+        <!-- =========================================================
+     TOOLS HUB PAGE
+========================================================= -->
+<section class="page tools-page" id="page-tools">
+    <div class="tools-container">
 
+        <!-- TOOLS HERO -->
+        <div class="tools-hero">
+            <div class="tools-hero-icon">🧰</div>
+            <div>
+                <h1>Tools Hub</h1>
+                <p>Islamic Calculators & Helpful Utilities</p>
+            </div>
+        </div>
+
+        <!-- TOOLS GRID -->
+        <div class="tools-grid">
+
+            <!-- =========================================
+                 CALCULATOR 1: ZAKAT CALCULATOR
+            ========================================== -->
+            <div class="tool-card">
+                <div class="tool-card-header">
+                    <div class="tool-card-icon">💰</div>
+                    <div>
+                        <h2>Zakat Calculator</h2>
+                        <p>Calculate your annual Zakat (2.5%)</p>
+                    </div>
+                </div>
+
+                <div class="tool-card-body">
+                    <div class="tool-input-group">
+                        <label for="zakatCash">💵 Cash & Bank Balance</label>
+                        <input type="number" id="zakatCash" placeholder="0.00" min="0" step="0.01">
+                    </div>
+
+                    <div class="tool-input-group">
+                        <label for="zakatGold">🥇 Gold Value</label>
+                        <input type="number" id="zakatGold" placeholder="0.00" min="0" step="0.01">
+                    </div>
+
+                    <div class="tool-input-group">
+                        <label for="zakatSilver">🥈 Silver Value</label>
+                        <input type="number" id="zakatSilver" placeholder="0.00" min="0" step="0.01">
+                    </div>
+
+                    <div class="tool-input-group">
+                        <label for="zakatInvestments">📈 Investments & Shares</label>
+                        <input type="number" id="zakatInvestments" placeholder="0.00" min="0" step="0.01">
+                    </div>
+
+                    <div class="tool-input-group">
+                        <label for="zakatBusiness">🏪 Business Assets</label>
+                        <input type="number" id="zakatBusiness" placeholder="0.00" min="0" step="0.01">
+                    </div>
+
+                    <div class="tool-input-group">
+                        <label for="zakatDebts">📉 Debts (to subtract)</label>
+                        <input type="number" id="zakatDebts" placeholder="0.00" min="0" step="0.01">
+                    </div>
+                </div>
+
+                <div class="tool-card-footer">
+                    <button class="tool-calc-btn" onclick="calculateZakat()">
+                        🧮 Calculate Zakat
+                    </button>
+                    <button class="tool-reset-btn" onclick="resetZakat()">
+                        ↺ Reset
+                    </button>
+                </div>
+
+                <div class="tool-result" id="zakatResult" style="display: none;">
+                    <div class="result-row">
+                        <span>Total Assets:</span>
+                        <strong id="zakatTotalAssets">—</strong>
+                    </div>
+                    <div class="result-row">
+                        <span>Net Wealth:</span>
+                        <strong id="zakatNetWealth">—</strong>
+                    </div>
+                    <div class="result-row highlight">
+                        <span>Zakat Due (2.5%):</span>
+                        <strong id="zakatAmount">—</strong>
+                    </div>
+                    <div class="result-note" id="zakatNote"></div>
+                </div>
+            </div>
+
+            <!-- =========================================
+                 CALCULATOR 2: INHERITANCE CALCULATOR (Faraid - Simple)
+            ========================================== -->
+            <div class="tool-card">
+                <div class="tool-card-header">
+                    <div class="tool-card-icon">⚖️</div>
+                    <div>
+                        <h2>Inheritance Calculator</h2>
+                        <p>Simple Islamic Inheritance (Faraid)</p>
+                    </div>
+                </div>
+
+                <div class="tool-card-body">
+                    <div class="tool-input-group">
+                        <label for="inheritTotal">💵 Total Estate Value</label>
+                        <input type="number" id="inheritTotal" placeholder="0.00" min="0" step="0.01">
+                    </div>
+
+                    <div class="tool-input-group">
+                        <label for="inheritWife">👰 Wives (0-4)</label>
+                        <input type="number" id="inheritWife" placeholder="0" min="0" max="4" step="1">
+                    </div>
+
+                    <div class="tool-input-group">
+                        <label for="inheritSons">👦 Sons</label>
+                        <input type="number" id="inheritSons" placeholder="0" min="0" step="1">
+                    </div>
+
+                    <div class="tool-input-group">
+                        <label for="inheritDaughters">👧 Daughters</label>
+                        <input type="number" id="inheritDaughters" placeholder="0" min="0" step="1">
+                    </div>
+
+                    <div class="tool-input-group">
+                        <label for="inheritFather">👨 Father Alive?</label>
+                        <select id="inheritFather">
+                            <option value="yes">Yes</option>
+                            <option value="no" selected>No</option>
+                        </select>
+                    </div>
+
+                    <div class="tool-input-group">
+                        <label for="inheritMother">👩 Mother Alive?</label>
+                        <select id="inheritMother">
+                            <option value="yes">Yes</option>
+                            <option value="no" selected>No</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="tool-card-footer">
+                    <button class="tool-calc-btn" onclick="calculateInheritance()">
+                        ⚖️ Calculate Shares
+                    </button>
+                    <button class="tool-reset-btn" onclick="resetInheritance()">
+                        ↺ Reset
+                    </button>
+                </div>
+
+                <div class="tool-result" id="inheritResult" style="display: none;">
+                    <div id="inheritShares"></div>
+                    <div class="result-note">
+                        ⚠️ This is a simplified calculator. For real cases, please consult a qualified Islamic scholar.
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</section>
     </main>
 
     <footer class="footer">
@@ -1137,5 +1470,6 @@
 <script src="script.js"></script>
 <script src="search.js"></script>
 <script src="pwa-install.js"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 </body>
 </html>

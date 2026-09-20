@@ -2963,4 +2963,868 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     initPrayerTimes();
+});/* =========================================================
+   TOOLS HUB — CALCULATORS
+========================================================= */
+
+/* ============================================
+   ZAKAT CALCULATOR
+=========================================== */
+
+function calculateZakat() {
+    const cash = parseFloat(document.getElementById("zakatCash").value) || 0;
+    const gold = parseFloat(document.getElementById("zakatGold").value) || 0;
+    const silver = parseFloat(document.getElementById("zakatSilver").value) || 0;
+    const investments = parseFloat(document.getElementById("zakatInvestments").value) || 0;
+    const business = parseFloat(document.getElementById("zakatBusiness").value) || 0;
+    const debts = parseFloat(document.getElementById("zakatDebts").value) || 0;
+
+    const totalAssets = cash + gold + silver + investments + business;
+    const netWealth = totalAssets - debts;
+
+    if (netWealth <= 0) {
+        alert("⚠️ Please enter some assets to calculate Zakat.");
+        return;
+    }
+
+    // Nisab threshold (approx. 87.48g gold value). Let's use $5000 as example.
+    // You can adjust this value or make it dynamic.
+    const NISAB = 5000;
+
+    const zakatAmount = netWealth * 0.025;
+
+    document.getElementById("zakatTotalAssets").textContent = "$" + totalAssets.toFixed(2);
+    document.getElementById("zakatNetWealth").textContent = "$" + netWealth.toFixed(2);
+    document.getElementById("zakatAmount").textContent = "$" + zakatAmount.toFixed(2);
+
+    const noteEl = document.getElementById("zakatNote");
+    if (netWealth < NISAB) {
+        noteEl.innerHTML = "📌 Your net wealth is below the Nisab threshold ($" + NISAB + "). Zakat is not obligatory, but you may still give charity (Sadaqah).";
+    } else {
+        noteEl.innerHTML = "✅ Your net wealth exceeds the Nisab threshold. Zakat is obligatory at 2.5%.";
+    }
+
+    document.getElementById("zakatResult").style.display = "block";
+    document.getElementById("zakatResult").scrollIntoView({ behavior: "smooth", block: "nearest" });
+}
+
+function resetZakat() {
+    ["zakatCash", "zakatGold", "zakatSilver", "zakatInvestments", "zakatBusiness", "zakatDebts"].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.value = "";
+    });
+    document.getElementById("zakatResult").style.display = "none";
+}
+
+/* ============================================
+   INHERITANCE CALCULATOR (Simplified Faraid)
+=========================================== */
+
+function calculateInheritance() {
+    const total = parseFloat(document.getElementById("inheritTotal").value) || 0;
+    const wives = parseInt(document.getElementById("inheritWife").value) || 0;
+    const sons = parseInt(document.getElementById("inheritSons").value) || 0;
+    const daughters = parseInt(document.getElementById("inheritDaughters").value) || 0;
+    const fatherAlive = document.getElementById("inheritFather").value === "yes";
+    const motherAlive = document.getElementById("inheritMother").value === "yes";
+
+    if (total <= 0) {
+        alert("⚠️ Please enter the total estate value.");
+        return;
+    }
+
+    if (wives === 0 && sons === 0 && daughters === 0 && !fatherAlive && !motherAlive) {
+        alert("⚠️ Please enter at least one heir.");
+        return;
+    }
+
+    const shares = [];
+
+    // ---- SPOUSE SHARE ----
+    let wifeShare = 0;
+    if (wives > 0) {
+        // Wife gets 1/8 if children exist, else 1/4
+        const hasChildren = sons > 0 || daughters > 0;
+        wifeShare = hasChildren ? total / 8 : total / 4;
+        shares.push({
+            name: `Wives (${wives})`,
+            amount: wifeShare,
+            detail: hasChildren ? "1/8 (with children)" : "1/4 (no children)"
+        });
+    }
+
+    // ---- PARENTS SHARE ----
+    let fatherShare = 0;
+    let motherShare = 0;
+    const hasChildren = sons > 0 || daughters > 0;
+
+    if (motherAlive) {
+        // Mother gets 1/6 if children exist, else 1/3
+        motherShare = hasChildren ? total / 6 : total / 3;
+        shares.push({
+            name: "Mother",
+            amount: motherShare,
+            detail: hasChildren ? "1/6 (with children)" : "1/3 (no children)"
+        });
+    }
+
+    if (fatherAlive) {
+        if (sons > 0) {
+            // Father gets 1/6 if sons exist
+            fatherShare = total / 6;
+            shares.push({
+                name: "Father",
+                amount: fatherShare,
+                detail: "1/6 (with sons)"
+            });
+        } else if (daughters > 0) {
+            // Father gets 1/6 + residue
+            fatherShare = total / 6;
+            shares.push({
+                name: "Father",
+                amount: fatherShare,
+                detail: "1/6 + residue"
+            });
+        } else {
+            // Father is residuary
+            fatherShare = total - wifeShare - motherShare;
+            shares.push({
+                name: "Father",
+                amount: fatherShare,
+                detail: "Residuary (Asabah)"
+            });
+        }
+    }
+
+    // ---- CHILDREN SHARE (Residue) ----
+    let childrenShare = total - wifeShare - motherShare - fatherShare;
+    if (childrenShare < 0) childrenShare = 0;
+
+    if (sons > 0 || daughters > 0) {
+        // Sons get 2x daughters
+        const totalUnits = (sons * 2) + daughters;
+        if (totalUnits > 0) {
+            const unitValue = childrenShare / totalUnits;
+
+            if (sons > 0) {
+                shares.push({
+                    name: `Sons (${sons}) each`,
+                    amount: unitValue * 2,
+                    detail: "2x daughter's share"
+                });
+            }
+
+            if (daughters > 0) {
+                shares.push({
+                    name: `Daughters (${daughters}) each`,
+                    amount: unitValue,
+                    detail: "1x share"
+                });
+            }
+        }
+    }
+
+    // ---- Render Shares ----
+    const container = document.getElementById("inheritShares");
+    container.innerHTML = shares.map(s => `
+        <div class="share-row">
+            <span>${s.name} <small style="color:#648171; font-weight:500;">(${s.detail})</small></span>
+            <span>$${s.amount.toFixed(2)}</span>
+        </div>
+    `).join("");
+
+    document.getElementById("inheritResult").style.display = "block";
+    document.getElementById("inheritResult").scrollIntoView({ behavior: "smooth", block: "nearest" });
+}
+
+function resetInheritance() {
+    ["inheritTotal", "inheritWife", "inheritSons", "inheritDaughters"].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.value = "";
+    });
+    document.getElementById("inheritFather").value = "no";
+    document.getElementById("inheritMother").value = "no";
+    document.getElementById("inheritResult").style.display = "none";
+}/* =========================================================
+   QIBLA COMPASS SYSTEM
+========================================================= */
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    // Kaaba Coordinates (Makkah)
+    const KAABA_LAT = 21.4225;
+    const KAABA_LNG = 39.8262;
+
+    // Elements
+    const compassRing      = document.getElementById("compassRing");
+    const kaabaNeedle      = document.getElementById("kaabaNeedle");
+    const qiblaDegrees     = document.getElementById("qiblaDegrees");
+    const qiblaStatus      = document.getElementById("qiblaStatus");
+    const qiblaCity        = document.getElementById("qiblaCity");
+    const qiblaDistance    = document.getElementById("qiblaDistance");
+    const qiblaError       = document.getElementById("qiblaError");
+    const qiblaErrorText   = document.getElementById("qiblaErrorText");
+    const qiblaDetectBtn   = document.getElementById("qiblaDetectBtn");
+    const qiblaResetBtn    = document.getElementById("qiblaResetBtn");
+    const qiblaManualBtn   = document.getElementById("qiblaManualBtn");
+    const qiblaManualBox   = document.getElementById("qiblaManualBox");
+    const qiblaCityInput   = document.getElementById("qiblaCityInput");
+    const qiblaCountryInput= document.getElementById("qiblaCountryInput");
+    const qiblaSaveManual  = document.getElementById("qiblaSaveManual");
+    const qiblaCancelManual= document.getElementById("qiblaCancelManual");
+    const compassTicks     = document.getElementById("compassTicks");
+
+    let qiblaMap = null;
+    let mapMarker = null;
+    let mapLine = null;
+    let currentDeviceHeading = 0;
+    let currentQiblaAngle = 0;
+
+    /* =====================================================
+       GENERATE COMPASS TICKS
+    ===================================================== */
+    function generateTicks() {
+        if (!compassTicks) return;
+        compassTicks.innerHTML = "";
+        const isMobile = window.innerWidth <= 600;
+        const radius = isMobile ? 130 : 160;
+
+        for (let i = 0; i < 72; i++) {
+            const tick = document.createElement("div");
+            tick.className = "compass-tick" + (i % 9 === 0 ? " major" : "");
+            tick.style.transform = `rotate(${i * 5}deg)`;
+            tick.style.transformOrigin = `50% ${radius}px`;
+            compassTicks.appendChild(tick);
+        }
+    }
+    generateTicks();
+    window.addEventListener("resize", generateTicks);
+
+    /* =====================================================
+       CALCULATE QIBLA DIRECTION
+    ===================================================== */
+    function calculateQibla(lat, lng) {
+        const phiK = KAABA_LAT * Math.PI / 180;
+        const lambdaK = KAABA_LNG * Math.PI / 180;
+        const phi = lat * Math.PI / 180;
+        const lambda = lng * Math.PI / 180;
+
+        const deltaLambda = lambdaK - lambda;
+
+        const numerator = Math.sin(deltaLambda);
+        const denominator = Math.cos(phi) * Math.tan(phiK) - Math.sin(phi) * Math.cos(deltaLambda);
+
+        let qibla = Math.atan2(numerator, denominator);
+        qibla = qibla * 180 / Math.PI;
+
+        return (qibla + 360) % 360;
+    }
+
+    /* =====================================================
+       CALCULATE DISTANCE TO KAABA
+    ===================================================== */
+    function calculateDistance(lat1, lng1, lat2, lng2) {
+        const R = 6371; // Earth radius in km
+        const dLat = (lat2 - lat1) * Math.PI / 180;
+        const dLng = (lng2 - lng1) * Math.PI / 180;
+        const a =
+            Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+            Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+            Math.sin(dLng / 2) * Math.sin(dLng / 2);
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        return Math.round(R * c);
+    }
+
+    /* =====================================================
+       INITIALIZE MAP (Leaflet)
+    ===================================================== */
+    function initMap(lat, lng, qiblaAngle, distance) {
+        const mapContainer = document.getElementById("qiblaMap");
+        if (!mapContainer) return;
+
+        // Remove existing map
+        if (qiblaMap) {
+            qiblaMap.remove();
+            qiblaMap = null;
+        }
+
+        // Create map
+        qiblaMap = L.map("qiblaMap", {
+            center: [lat, lng],
+            zoom: 5,
+            zoomControl: true,
+            scrollWheelZoom: true
+        });
+
+        // Tile layer (dark theme for dark mode, normal for light)
+        const isLight = document.body.classList.contains("light-theme");
+        const tileUrl = isLight
+            ? "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            : "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png";
+
+        L.tileLayer(tileUrl, {
+            attribution: '&copy; OpenStreetMap &copy; CartoDB',
+            maxZoom: 19
+        }).addTo(qiblaMap);
+
+        // User marker
+        const userIcon = L.divIcon({
+            className: "qibla-user-marker",
+            html: '<div style="background:#1a8a42;width:20px;height:20px;border-radius:50%;border:3px solid #fff;box-shadow:0 0 15px #1a8a42;"></div>',
+            iconSize: [20, 20],
+            iconAnchor: [10, 10]
+        });
+
+        L.marker([lat, lng], { icon: userIcon })
+            .addTo(qiblaMap)
+            .bindPopup("<b>📍 Your Location</b><br>" + (qiblaCity ? qiblaCity.textContent : ""));
+
+        // Kaaba marker
+        const kaabaIcon = L.divIcon({
+            className: "qibla-kaaba-marker",
+            html: '<div style="font-size:28px;filter:drop-shadow(0 0 10px #b42318);">🕋</div>',
+            iconSize: [30, 30],
+            iconAnchor: [15, 15]
+        });
+
+        L.marker([KAABA_LAT, KAABA_LNG], { icon: kaabaIcon })
+            .addTo(qiblaMap)
+            .bindPopup("<b>🕋 Kaaba</b><br>Makkah, Saudi Arabia");
+
+        // Line from user to Kaaba
+        L.polyline([
+            [lat, lng],
+            [KAABA_LAT, KAABA_LNG]
+        ], {
+            color: "#b42318",
+            weight: 3,
+            opacity: 0.7,
+            dashArray: "10, 10"
+        }).addTo(qiblaMap);
+
+        // Fit bounds
+        const bounds = L.latLngBounds([
+            [lat, lng],
+            [KAABA_LAT, KAABA_LNG]
+        ]);
+        qiblaMap.fitBounds(bounds, { padding: [50, 50] });
+    }
+
+    /* =====================================================
+       UPDATE COMPASS UI
+    ===================================================== */
+    function updateCompass(qiblaAngle, deviceHeading = 0) {
+        currentQiblaAngle = qiblaAngle;
+
+        // Rotate compass ring opposite to device heading
+        if (compassRing) {
+            compassRing.style.transform = `rotate(${-deviceHeading}deg)`;
+        }
+
+        // Point needle to Qibla (relative to device heading)
+        const needleAngle = qiblaAngle - deviceHeading;
+        if (kaabaNeedle) {
+            kaabaNeedle.style.transform = `rotate(${needleAngle}deg)`;
+        }
+
+        // Update degrees display
+        if (qiblaDegrees) {
+            qiblaDegrees.textContent = Math.round(qiblaAngle) + "°";
+        }
+    }
+
+    /* =====================================================
+       DEVICE ORIENTATION (Compass Sensor)
+    ===================================================== */
+    function startDeviceOrientation() {
+        if (window.DeviceOrientationEvent) {
+            window.addEventListener("deviceorientationabsolute", handleOrientation, true);
+            window.addEventListener("deviceorientation", handleOrientation, true);
+        }
+    }
+
+    function handleOrientation(event) {
+        let heading = null;
+
+        if (event.webkitCompassHeading !== undefined) {
+            // iOS
+            heading = event.webkitCompassHeading;
+        } else if (event.alpha !== null) {
+            // Android
+            heading = 360 - event.alpha;
+        }
+
+        if (heading !== null) {
+            currentDeviceHeading = heading;
+            updateCompass(currentQiblaAngle, currentDeviceHeading);
+        }
+    }
+
+    /* =====================================================
+       GET LOCATION & UPDATE ALL
+    ===================================================== */
+    function updateQiblaForLocation(lat, lng, cityName) {
+        const qiblaAngle = calculateQibla(lat, lng);
+        const distance = calculateDistance(lat, lng, KAABA_LAT, KAABA_LNG);
+
+        updateCompass(qiblaAngle, currentDeviceHeading);
+
+        if (qiblaCity) qiblaCity.textContent = cityName || `${lat.toFixed(3)}, ${lng.toFixed(3)}`;
+        if (qiblaDistance) qiblaDistance.textContent = distance.toLocaleString() + " km";
+        if (qiblaStatus) {
+            qiblaStatus.innerHTML = `<span>✅</span> Qibla direction found!`;
+        }
+        if (qiblaError) qiblaError.style.display = "none";
+
+        initMap(lat, lng, qiblaAngle, distance);
+    }
+
+    /* =====================================================
+       DETECT LOCATION
+    ===================================================== */
+    async function detectQiblaLocation() {
+        if (qiblaStatus) qiblaStatus.innerHTML = `<span>⏳</span> Detecting your location...`;
+        if (qiblaError) qiblaError.style.display = "none";
+
+        if (!navigator.geolocation) {
+            showQiblaError("Geolocation is not supported by your browser.");
+            return;
+        }
+
+        navigator.geolocation.getCurrentPosition(
+            async function (position) {
+                const lat = position.coords.latitude;
+                const lng = position.coords.longitude;
+
+                let cityName = "Your Location";
+                try {
+                    const res = await fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lng}&localityLanguage=en`);
+                    const data = await res.json();
+                    cityName = [data.city, data.countryName].filter(Boolean).join(", ");
+                } catch (e) {
+                    console.warn("Reverse geocode failed");
+                }
+
+                updateQiblaForLocation(lat, lng, cityName);
+                startDeviceOrientation();
+            },
+            function (error) {
+                let msg = "Unable to detect location.";
+                if (error.code === 1) msg = "Location permission denied. Please allow GPS access.";
+                if (error.code === 2) msg = "Location unavailable. Please check your GPS.";
+                if (error.code === 3) msg = "Location request timed out. Please try again.";
+                showQiblaError(msg);
+            },
+            { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }
+        );
+    }
+
+    function showQiblaError(msg) {
+        if (qiblaStatus) qiblaStatus.innerHTML = `<span>⚠️</span> ${msg}`;
+        if (qiblaError) {
+            qiblaError.style.display = "block";
+            if (qiblaErrorText) qiblaErrorText.textContent = msg;
+        }
+    }
+
+    /* =====================================================
+       MANUAL LOCATION
+    ===================================================== */
+    async function saveManualQiblaLocation() {
+        const city = qiblaCityInput?.value.trim();
+        const country = qiblaCountryInput?.value.trim();
+
+        if (!city || !country) {
+            alert("Please enter both city and country.");
+            return;
+        }
+
+        if (qiblaStatus) qiblaStatus.innerHTML = `<span>⏳</span> Loading location...`;
+
+        try {
+            const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(city + ", " + country)}&limit=1`);
+            const data = await res.json();
+
+            if (data && data.length > 0) {
+                const lat = parseFloat(data[0].lat);
+                const lng = parseFloat(data[0].lon);
+                updateQiblaForLocation(lat, lng, `${city}, ${country}`);
+                if (qiblaManualBox) qiblaManualBox.style.display = "none";
+                startDeviceOrientation();
+            } else {
+                alert("Location not found. Please check the spelling.");
+                if (qiblaStatus) qiblaStatus.innerHTML = `<span>⚠️</span> Location not found.`;
+            }
+        } catch (e) {
+            alert("Error fetching location. Please try again.");
+        }
+    }
+
+    /* =====================================================
+       EVENT LISTENERS
+    ===================================================== */
+
+    // Detect button
+    if (qiblaDetectBtn) {
+        qiblaDetectBtn.addEventListener("click", detectQiblaLocation);
+    }
+
+    // Reset button
+    if (qiblaResetBtn) {
+        qiblaResetBtn.addEventListener("click", () => {
+            if (qiblaManualBox) qiblaManualBox.style.display = "none";
+            if (qiblaError) qiblaError.style.display = "none";
+            if (qiblaStatus) qiblaStatus.innerHTML = `<span>📍</span> Detecting your location...`;
+            if (qiblaDegrees) qiblaDegrees.textContent = "--°";
+            if (qiblaCity) qiblaCity.textContent = "Detecting...";
+            if (qiblaDistance) qiblaDistance.textContent = "-- km";
+            detectQiblaLocation();
+        });
+    }
+
+    // Manual button (from error)
+    if (qiblaManualBtn) {
+        qiblaManualBtn.addEventListener("click", () => {
+            if (qiblaManualBox) {
+                qiblaManualBox.style.display = "block";
+                if (qiblaCityInput) qiblaCityInput.focus();
+            }
+            if (qiblaError) qiblaError.style.display = "none";
+        });
+    }
+
+    // Save manual
+    if (qiblaSaveManual) {
+        qiblaSaveManual.addEventListener("click", saveManualQiblaLocation);
+    }
+
+    // Cancel manual
+    if (qiblaCancelManual) {
+        qiblaCancelManual.addEventListener("click", () => {
+            if (qiblaManualBox) qiblaManualBox.style.display = "none";
+        });
+    }
+
+    // Enter key in manual inputs
+    [qiblaCityInput, qiblaCountryInput].forEach(input => {
+        if (input) {
+            input.addEventListener("keyup", (e) => {
+                if (e.key === "Enter") saveManualQiblaLocation();
+            });
+        }
+    });
+
+    /* =====================================================
+       PAGE NAVIGATION HOOK
+       (Load map when Qibla page opens)
+    ===================================================== */
+    const originalShowPageForQibla = window.showPage;
+    if (typeof originalShowPageForQibla === "function") {
+        window.showPage = function (pageName, updateUrl = true) {
+            originalShowPageForQibla(pageName, updateUrl);
+            if (pageName === "qibla") {
+                // Re-initialize map (in case it was removed)
+                setTimeout(() => {
+                    if (qiblaMap) {
+                        qiblaMap.invalidateSize();
+                    }
+                }, 300);
+            }
+        };
+    }
+
+    // Initialize if Qibla page is already active
+    if (window.location.hash === "#qibla") {
+        setTimeout(detectQiblaLocation, 500);
+    }
+});/* =========================================================
+   ISLAMIC AI ASSISTANT
+   ⚠️ IMPORTANT: Apni Gemini API key yahan paste karein
+========================================================= */
+
+const GEMINI_API_KEY = "AQ.Ab8RN6ILxcm71SOmxjnkKNaMdzeVpE-A5ouUb6v-kw0g3FFi-A";
+const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`;
+const ISLAMIC_SYSTEM_PROMPT = `You are "IslamicWay AI", a helpful and respectful Islamic assistant.
+
+RULES:
+1. Answer questions about Islam based on the Quran, authentic Hadith, and mainstream Islamic scholarship.
+2. Always be respectful, humble, and kind. Start with "Assalamu Alaikum" only if the user greets you first.
+3. When quoting Quran, mention the Surah name and verse number.
+4. When quoting Hadith, mention the book (e.g., Sahih Bukhari, Sahih Muslim) and Hadith number if possible.
+5. If a question is outside Islamic knowledge, politely redirect to Islamic topics.
+6. For fiqh matters with differences of opinion, mention that scholars differ and advise consulting a local scholar.
+7. Keep answers clear, well-structured, and easy to read.
+8. If the user writes in Urdu, reply in Urdu. If in English, reply in English. If in Arabic, reply in Arabic.
+9. Use emojis sparingly (🕌, 🌙, 📖, 🤲) to make the answer warm but respectful.
+10. NEVER give fatwas on complex personal matters — always advise consulting a qualified scholar.
+11. Avoid political opinions. Stay neutral and focus on Islamic teachings.
+12. Keep answers concise — max 3-4 paragraphs unless asked for detail.
+
+You are talking to a Muslim user who wants authentic Islamic guidance.`;
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const aiInput        = document.getElementById("aiInput");
+    const aiSendBtn      = document.getElementById("aiSendBtn");
+    const aiMessages     = document.getElementById("aiMessages");
+    const aiClearBtn     = document.getElementById("aiClearBtn");
+    const aiSuggestions  = document.getElementById("aiSuggestions");
+
+    let conversationHistory = [];
+    let isProcessing = false;
+
+    /* =====================================================
+       ADD MESSAGE TO CHAT
+    ===================================================== */
+    function addMessage(text, sender) {
+        const messageDiv = document.createElement("div");
+        messageDiv.className = `ai-message ai-${sender}`;
+
+        const avatar = sender === "bot" ? "🕌" : "👤";
+        const formattedText = formatMessage(text);
+
+        messageDiv.innerHTML = `
+            <div class="ai-message-avatar">${avatar}</div>
+            <div class="ai-message-content">${formattedText}</div>
+        `;
+
+        aiMessages.appendChild(messageDiv);
+        aiMessages.scrollTop = aiMessages.scrollHeight;
+    }
+
+    /* =====================================================
+       FORMAT MESSAGE (Markdown-like)
+    ===================================================== */
+    function formatMessage(text) {
+        if (!text) return "";
+
+        // Escape HTML
+        let safe = text
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;");
+
+        // Bold **text**
+        safe = safe.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
+
+        // Italic *text*
+        safe = safe.replace(/(?<!\*)\*(?!\*)(.+?)(?<!\*)\*(?!\*)/g, "<em>$1</em>");
+
+        // Headers ## Text
+        safe = safe.replace(/^### (.+)$/gm, "<strong>$1</strong>");
+        safe = safe.replace(/^## (.+)$/gm, "<strong>$1</strong>");
+        safe = safe.replace(/^# (.+)$/gm, "<strong>$1</strong>");
+
+        // Bullet points
+        safe = safe.replace(/^[\-\*] (.+)$/gm, "<li>$1</li>");
+        if (safe.includes("<li>")) {
+            safe = safe.replace(/(<li>[\s\S]*?<\/li>)/g, "<ul>$1</ul>");
+        }
+
+        // Numbered lists
+        safe = safe.replace(/^\d+\. (.+)$/gm, "<li>$1</li>");
+
+        // Line breaks
+        safe = safe.replace(/\n\n/g, "</p><p>");
+        safe = safe.replace(/\n/g, "<br>");
+
+        return `<p>${safe}</p>`;
+    }
+
+    /* =====================================================
+       SHOW TYPING INDICATOR
+    ===================================================== */
+    function showTyping() {
+        const typing = document.createElement("div");
+        typing.className = "ai-message ai-bot ai-typing";
+        typing.id = "aiTypingIndicator";
+        typing.innerHTML = `
+            <div class="ai-message-avatar">🕌</div>
+            <div class="ai-message-content">
+                <div class="ai-typing-dot"></div>
+                <div class="ai-typing-dot"></div>
+                <div class="ai-typing-dot"></div>
+            </div>
+        `;
+        aiMessages.appendChild(typing);
+        aiMessages.scrollTop = aiMessages.scrollHeight;
+    }
+
+    function hideTyping() {
+        const typing = document.getElementById("aiTypingIndicator");
+        if (typing) typing.remove();
+    }
+
+    /* =====================================================
+       CALL GEMINI AI
+    ===================================================== */
+    async function askGemini(question) {
+        if (!GEMINI_API_KEY || GEMINI_API_KEY === "YOUR_GEMINI_API_KEY_HERE") {
+            return "⚠️ **API Key Missing**\n\nPlease add your Gemini API key in `script.js` file.\n\nGet a free key from: https://aistudio.google.com/app/apikey";
+        }
+
+        // Add to conversation history
+        conversationHistory.push({
+            role: "user",
+            parts: [{ text: question }]
+        });
+
+        // Keep only last 10 messages for context
+        if (conversationHistory.length > 20) {
+            conversationHistory = conversationHistory.slice(-20);
+        }
+
+        const payload = {
+            system_instruction: {
+                parts: [{ text: ISLAMIC_SYSTEM_PROMPT }]
+            },
+            contents: conversationHistory,
+            generationConfig: {
+                temperature: 0.7,
+                maxOutputTokens: 1024,
+                topP: 0.95,
+                topK: 40
+            },
+            safetySettings: [
+                { category: "HARM_CATEGORY_HARASSMENT",        threshold: "BLOCK_ONLY_HIGH" },
+                { category: "HARM_CATEGORY_HATE_SPEECH",       threshold: "BLOCK_ONLY_HIGH" },
+                { category: "HARM_CATEGORY_SEXUALLY_EXPLICIT", threshold: "BLOCK_ONLY_HIGH" },
+                { category: "HARM_CATEGORY_DANGEROUS_CONTENT", threshold: "BLOCK_ONLY_HIGH" }
+            ]
+        };
+
+        try {
+            const res = await fetch(GEMINI_URL, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            });
+
+            if (!res.ok) {
+                const errData = await res.json().catch(() => ({}));
+                console.error("Gemini API Error:", errData);
+                throw new Error(errData.error?.message || "API request failed");
+            }
+
+            const data = await res.json();
+            const answer = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+
+            if (!answer) {
+                throw new Error("No answer received from AI");
+            }
+
+            // Add AI response to history
+            conversationHistory.push({
+                role: "model",
+                parts: [{ text: answer }]
+            });
+
+            return answer;
+
+        } catch (error) {
+            console.error("Gemini Error:", error);
+
+            if (error.message.includes("API key")) {
+                return "⚠️ **Invalid API Key**\n\nPlease check your Gemini API key in `script.js`.";
+            }
+            if (error.message.includes("quota") || error.message.includes("429")) {
+                return "⚠️ **Daily limit reached**\n\nPlease try again later or use a new API key.";
+            }
+
+            return "❌ **Sorry, kuch masla ho gaya.**\n\nPlease check your internet connection and try again.";
+        }
+    }
+
+    /* =====================================================
+       SEND MESSAGE
+    ===================================================== */
+    async function sendMessage() {
+        const question = aiInput.value.trim();
+
+        if (!question || isProcessing) return;
+
+        isProcessing = true;
+        aiSendBtn.disabled = true;
+
+        // Hide suggestions after first message
+        if (aiSuggestions && conversationHistory.length === 0) {
+            aiSuggestions.style.display = "none";
+        }
+
+        // Add user message
+        addMessage(question, "user");
+        aiInput.value = "";
+        aiInput.style.height = "auto";
+
+        // Show typing
+        showTyping();
+
+        // Get AI answer
+        const answer = await askGemini(question);
+
+        // Remove typing, add answer
+        hideTyping();
+        addMessage(answer, "bot");
+
+        isProcessing = false;
+        aiSendBtn.disabled = false;
+        aiInput.focus();
+    }
+
+    /* =====================================================
+       CLEAR CHAT
+    ===================================================== */
+    function clearChat() {
+        if (!confirm("Are you sure you want to clear the chat?")) return;
+
+        conversationHistory = [];
+        aiMessages.innerHTML = `
+            <div class="ai-message ai-bot">
+                <div class="ai-message-avatar">🕌</div>
+                <div class="ai-message-content">
+                    <p><strong>Chat cleared! 🌙</strong></p>
+                    <p>Ask me anything about Islam.</p>
+                </div>
+            </div>
+        `;
+        if (aiSuggestions) aiSuggestions.style.display = "flex";
+    }
+
+    /* =====================================================
+       EVENT LISTENERS
+    ===================================================== */
+    if (aiSendBtn) {
+        aiSendBtn.addEventListener("click", sendMessage);
+    }
+
+    if (aiInput) {
+        aiInput.addEventListener("keydown", function (e) {
+            if (e.key === "Enter" && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
+
+        // Auto-resize textarea
+        aiInput.addEventListener("input", function () {
+            this.style.height = "auto";
+            this.style.height = Math.min(this.scrollHeight, 120) + "px";
+        });
+    }
+
+    if (aiClearBtn) {
+        aiClearBtn.addEventListener("click", clearChat);
+    }
+
+    // Suggestion chips
+    document.querySelectorAll(".ai-suggestion-chip").forEach(chip => {
+        chip.addEventListener("click", function () {
+            const question = this.dataset.question;
+            if (question) {
+                aiInput.value = question;
+                sendMessage();
+            }
+        });
+    });
+
 });

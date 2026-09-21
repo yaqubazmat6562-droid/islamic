@@ -13,25 +13,25 @@
     "dir": "ltr",
     "icons": [
         {
-            "src": "IMG 1.png",
+            "src": "IMG 2.jpg",
             "sizes": "192x192",
-            "type": "image/png",
+            "type": "image/jpg",
             "purpose": "any"
         },
         {
-            "src": "IMG 1.png",
+            "src": "IMG 2.jpg",
             "sizes": "512x512",
-            "type": "image/png",
+            "type": "image/jpg",
             "purpose": "any"
         },
         {
-            "src": "IMG 1.png",
+            "src": "IMG 2.jpg",
             "sizes": "192x192",
             "type": "image/png",
             "purpose": "maskable"
         },
         {
-            "src": "IMG 1.png",
+            "src": "IMG 2.jpg",
             "sizes": "512x512",
             "type": "image/png",
             "purpose": "maskable"
@@ -43,19 +43,19 @@
             "name": "Read Quran",
             "short_name": "Quran",
             "url": "./index.html#quran",
-            "icons": [{ "src": "IMG 1.png", "sizes": "192x192" }]
+            "icons": [{ "src": "IMG 2.jpg", "sizes": "192x192" }]
         },
         {
             "name": "Read Hadith",
             "short_name": "Hadith",
             "url": "./index.html#hadith",
-            "icons": [{ "src": "IMG 1.png", "sizes": "192x192" }]
+            "icons": [{ "src": "IMG 2.jpg", "sizes": "192x192" }]
         },
         {
             "name": "Daily Duas",
             "short_name": "Duas",
             "url": "./index.html#duas",
-            "icons": [{ "src": "IMG 1.png", "sizes": "192x192" }]
+            "icons": [{ "src": "IMG 2.jpg", "sizes": "192x192" }]
         }
     ]
 }

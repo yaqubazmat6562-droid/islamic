@@ -3146,43 +3146,59 @@ function resetInheritance() {
     document.getElementById("inheritMother").value = "no";
     document.getElementById("inheritResult").style.display = "none";
 }/* =========================================================
-   QIBLA COMPASS SYSTEM
+   QIBLA COMPASS SYSTEM - DYNAMIC v2.0
+   ✅ Desktop + Mobile support
+   ✅ Manual rotation (slider)
+   ✅ iOS permission support
+   ✅ Sensor fallback
 ========================================================= */
 
 document.addEventListener("DOMContentLoaded", function () {
 
-    // Kaaba Coordinates (Makkah)
+    // ============================================
+    // CONSTANTS
+    // ============================================
     const KAABA_LAT = 21.4225;
     const KAABA_LNG = 39.8262;
 
-    // Elements
-    const compassRing      = document.getElementById("compassRing");
-    const kaabaNeedle      = document.getElementById("kaabaNeedle");
-    const qiblaDegrees     = document.getElementById("qiblaDegrees");
-    const qiblaStatus      = document.getElementById("qiblaStatus");
-    const qiblaCity        = document.getElementById("qiblaCity");
-    const qiblaDistance    = document.getElementById("qiblaDistance");
-    const qiblaError       = document.getElementById("qiblaError");
-    const qiblaErrorText   = document.getElementById("qiblaErrorText");
-    const qiblaDetectBtn   = document.getElementById("qiblaDetectBtn");
-    const qiblaResetBtn    = document.getElementById("qiblaResetBtn");
-    const qiblaManualBtn   = document.getElementById("qiblaManualBtn");
-    const qiblaManualBox   = document.getElementById("qiblaManualBox");
-    const qiblaCityInput   = document.getElementById("qiblaCityInput");
-    const qiblaCountryInput= document.getElementById("qiblaCountryInput");
-    const qiblaSaveManual  = document.getElementById("qiblaSaveManual");
-    const qiblaCancelManual= document.getElementById("qiblaCancelManual");
-    const compassTicks     = document.getElementById("compassTicks");
+    // ============================================
+    // ELEMENTS
+    // ============================================
+    const compassRing       = document.getElementById("compassRing");
+    const kaabaNeedle       = document.getElementById("kaabaNeedle");
+    const qiblaDegrees      = document.getElementById("qiblaDegrees");
+    const qiblaStatus       = document.getElementById("qiblaStatus");
+    const qiblaCity         = document.getElementById("qiblaCity");
+    const qiblaDistance     = document.getElementById("qiblaDistance");
+    const qiblaError        = document.getElementById("qiblaError");
+    const qiblaErrorText    = document.getElementById("qiblaErrorText");
+    const qiblaDetectBtn    = document.getElementById("qiblaDetectBtn");
+    const qiblaResetBtn     = document.getElementById("qiblaResetBtn");
+    const qiblaManualBtn    = document.getElementById("qiblaManualBtn");
+    const qiblaManualBox    = document.getElementById("qiblaManualBox");
+    const qiblaCityInput    = document.getElementById("qiblaCityInput");
+    const qiblaCountryInput = document.getElementById("qiblaCountryInput");
+    const qiblaSaveManual   = document.getElementById("qiblaSaveManual");
+    const qiblaCancelManual = document.getElementById("qiblaCancelManual");
+    const compassTicks      = document.getElementById("compassTicks");
+    const compassEnableBtn  = document.getElementById("compassEnableBtn");
+    const compassSlider     = document.getElementById("compassSlider");
+    const compassSliderValue= document.getElementById("compassSliderValue");
+    const compassMode       = document.getElementById("compassMode");
 
+    // ============================================
+    // STATE
+    // ============================================
     let qiblaMap = null;
-    let mapMarker = null;
-    let mapLine = null;
     let currentDeviceHeading = 0;
     let currentQiblaAngle = 0;
+    let isLiveCompassActive = false;
+    let sensorSupported = false;
+    let orientationHandler = null;
 
-    /* =====================================================
-       GENERATE COMPASS TICKS
-    ===================================================== */
+    // ============================================
+    // GENERATE COMPASS TICKS
+    // ============================================
     function generateTicks() {
         if (!compassTicks) return;
         compassTicks.innerHTML = "";
@@ -3200,9 +3216,9 @@ document.addEventListener("DOMContentLoaded", function () {
     generateTicks();
     window.addEventListener("resize", generateTicks);
 
-    /* =====================================================
-       CALCULATE QIBLA DIRECTION
-    ===================================================== */
+    // ============================================
+    // CALCULATE QIBLA DIRECTION (Kaaba angle from North)
+    // ============================================
     function calculateQibla(lat, lng) {
         const phiK = KAABA_LAT * Math.PI / 180;
         const lambdaK = KAABA_LNG * Math.PI / 180;
@@ -3212,7 +3228,9 @@ document.addEventListener("DOMContentLoaded", function () {
         const deltaLambda = lambdaK - lambda;
 
         const numerator = Math.sin(deltaLambda);
-        const denominator = Math.cos(phi) * Math.tan(phiK) - Math.sin(phi) * Math.cos(deltaLambda);
+        const denominator =
+            Math.cos(phi) * Math.tan(phiK) -
+            Math.sin(phi) * Math.cos(deltaLambda);
 
         let qibla = Math.atan2(numerator, denominator);
         qibla = qibla * 180 / Math.PI;
@@ -3220,27 +3238,154 @@ document.addEventListener("DOMContentLoaded", function () {
         return (qibla + 360) % 360;
     }
 
-    /* =====================================================
-       CALCULATE DISTANCE TO KAABA
-    ===================================================== */
+    // ============================================
+    // CALCULATE DISTANCE TO KAABA (Haversine)
+    // ============================================
     function calculateDistance(lat1, lng1, lat2, lng2) {
-        const R = 6371; // Earth radius in km
+        const R = 6371;
         const dLat = (lat2 - lat1) * Math.PI / 180;
         const dLng = (lng2 - lng1) * Math.PI / 180;
         const a =
             Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-            Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
-            Math.sin(dLng / 2) * Math.sin(dLng / 2);
+            Math.cos(lat1 * Math.PI / 180) *
+                Math.cos(lat2 * Math.PI / 180) *
+                Math.sin(dLng / 2) * Math.sin(dLng / 2);
         const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
         return Math.round(R * c);
     }
 
-    /* =====================================================
-       INITIALIZE MAP (Leaflet)
-    ===================================================== */
-    function initMap(lat, lng, qiblaAngle, distance) {
+    // ============================================
+    // UPDATE COMPASS VISUAL
+    // ============================================
+    function updateCompassVisual() {
+        // Compass ring rotates OPPOSITE to device heading
+        // so that North always points to actual North
+        if (compassRing) {
+            compassRing.style.transform = `rotate(${-currentDeviceHeading}deg)`;
+        }
+
+        // Qibla needle rotates relative to compass ring
+        const needleAngle = currentQiblaAngle;
+        if (kaabaNeedle) {
+            kaabaNeedle.style.transform = `rotate(${needleAngle}deg)`;
+        }
+
+        // Update degrees text
+        if (qiblaDegrees) {
+            qiblaDegrees.textContent = Math.round(currentQiblaAngle) + "°";
+        }
+    }
+
+    // ============================================
+    // DEVICE ORIENTATION HANDLER
+    // ============================================
+    function handleOrientation(event) {
+        let heading = null;
+
+        // iOS
+        if (event.webkitCompassHeading !== undefined && event.webkitCompassHeading !== null) {
+            heading = event.webkitCompassHeading;
+        }
+        // Android (absolute)
+        else if (event.absolute === true && event.alpha !== null) {
+            heading = 360 - event.alpha;
+        }
+        // Android (fallback)
+        else if (event.alpha !== null && event.alpha !== undefined) {
+            heading = 360 - event.alpha;
+        }
+
+        if (heading !== null && !isNaN(heading)) {
+            currentDeviceHeading = heading;
+            updateCompassVisual();
+        }
+    }
+
+    // ============================================
+    // ENABLE LIVE COMPASS (with iOS permission)
+    // ============================================
+    async function enableLiveCompass() {
+        // Check if DeviceOrientationEvent exists
+        if (typeof DeviceOrientationEvent === "undefined") {
+            alert("⚠️ Aapka device compass sensor support nahi karta. Manual slider use karein.");
+            return;
+        }
+
+        // iOS 13+ needs permission
+        if (typeof DeviceOrientationEvent.requestPermission === "function") {
+            try {
+                const permission = await DeviceOrientationEvent.requestPermission();
+                if (permission !== "granted") {
+                    alert("❌ Compass permission denied. Manual slider use karein.");
+                    return;
+                }
+            } catch (err) {
+                console.warn("iOS permission error:", err);
+                alert("⚠️ Compass permission failed. Manual slider use karein.");
+                return;
+            }
+        }
+
+        // Remove old listener if any
+        if (orientationHandler) {
+            window.removeEventListener("deviceorientationabsolute", orientationHandler, true);
+            window.removeEventListener("deviceorientation", orientationHandler, true);
+        }
+
+        orientationHandler = handleOrientation;
+
+        // Listen to both for maximum compatibility
+        window.addEventListener("deviceorientationabsolute", orientationHandler, true);
+        window.addEventListener("deviceorientation", orientationHandler, true);
+
+        isLiveCompassActive = true;
+        sensorSupported = true;
+
+        // Update UI
+        if (compassEnableBtn) {
+            compassEnableBtn.textContent = "✅ Live Compass Active";
+            compassEnableBtn.classList.add("active");
+            compassEnableBtn.disabled = true;
+        }
+        if (compassMode) {
+            compassMode.innerHTML = `📡 Mode: <strong>Live Sensor</strong>`;
+        }
+        if (compassSlider) {
+            compassSlider.disabled = true;
+        }
+
+        // Reset manual heading
+        currentDeviceHeading = 0;
+        updateCompassVisual();
+    }
+
+    // ============================================
+    // MANUAL SLIDER HANDLER
+    // ============================================
+    if (compassSlider) {
+        compassSlider.addEventListener("input", function () {
+            if (isLiveCompassActive) return;
+            currentDeviceHeading = Number(this.value);
+            if (compassSliderValue) {
+                compassSliderValue.textContent = this.value + "°";
+            }
+            updateCompassVisual();
+        });
+    }
+
+    // ============================================
+    // ENABLE BUTTON
+    // ============================================
+    if (compassEnableBtn) {
+        compassEnableBtn.addEventListener("click", enableLiveCompass);
+    }
+
+    // ============================================
+    // INITIALIZE MAP (Leaflet)
+    // ============================================
+    function initMap(lat, lng) {
         const mapContainer = document.getElementById("qiblaMap");
-        if (!mapContainer) return;
+        if (!mapContainer || typeof L === "undefined") return;
 
         // Remove existing map
         if (qiblaMap) {
@@ -3248,7 +3393,6 @@ document.addEventListener("DOMContentLoaded", function () {
             qiblaMap = null;
         }
 
-        // Create map
         qiblaMap = L.map("qiblaMap", {
             center: [lat, lng],
             zoom: 5,
@@ -3256,7 +3400,6 @@ document.addEventListener("DOMContentLoaded", function () {
             scrollWheelZoom: true
         });
 
-        // Tile layer (dark theme for dark mode, normal for light)
         const isLight = document.body.classList.contains("light-theme");
         const tileUrl = isLight
             ? "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -3277,7 +3420,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         L.marker([lat, lng], { icon: userIcon })
             .addTo(qiblaMap)
-            .bindPopup("<b>📍 Your Location</b><br>" + (qiblaCity ? qiblaCity.textContent : ""));
+            .bindPopup("<b>📍 Your Location</b>");
 
         // Kaaba marker
         const kaabaIcon = L.divIcon({
@@ -3291,7 +3434,7 @@ document.addEventListener("DOMContentLoaded", function () {
             .addTo(qiblaMap)
             .bindPopup("<b>🕋 Kaaba</b><br>Makkah, Saudi Arabia");
 
-        // Line from user to Kaaba
+        // Line user → Kaaba
         L.polyline([
             [lat, lng],
             [KAABA_LAT, KAABA_LNG]
@@ -3302,7 +3445,6 @@ document.addEventListener("DOMContentLoaded", function () {
             dashArray: "10, 10"
         }).addTo(qiblaMap);
 
-        // Fit bounds
         const bounds = L.latLngBounds([
             [lat, lng],
             [KAABA_LAT, KAABA_LNG]
@@ -3310,64 +3452,14 @@ document.addEventListener("DOMContentLoaded", function () {
         qiblaMap.fitBounds(bounds, { padding: [50, 50] });
     }
 
-    /* =====================================================
-       UPDATE COMPASS UI
-    ===================================================== */
-    function updateCompass(qiblaAngle, deviceHeading = 0) {
-        currentQiblaAngle = qiblaAngle;
-
-        // Rotate compass ring opposite to device heading
-        if (compassRing) {
-            compassRing.style.transform = `rotate(${-deviceHeading}deg)`;
-        }
-
-        // Point needle to Qibla (relative to device heading)
-        const needleAngle = qiblaAngle - deviceHeading;
-        if (kaabaNeedle) {
-            kaabaNeedle.style.transform = `rotate(${needleAngle}deg)`;
-        }
-
-        // Update degrees display
-        if (qiblaDegrees) {
-            qiblaDegrees.textContent = Math.round(qiblaAngle) + "°";
-        }
-    }
-
-    /* =====================================================
-       DEVICE ORIENTATION (Compass Sensor)
-    ===================================================== */
-    function startDeviceOrientation() {
-        if (window.DeviceOrientationEvent) {
-            window.addEventListener("deviceorientationabsolute", handleOrientation, true);
-            window.addEventListener("deviceorientation", handleOrientation, true);
-        }
-    }
-
-    function handleOrientation(event) {
-        let heading = null;
-
-        if (event.webkitCompassHeading !== undefined) {
-            // iOS
-            heading = event.webkitCompassHeading;
-        } else if (event.alpha !== null) {
-            // Android
-            heading = 360 - event.alpha;
-        }
-
-        if (heading !== null) {
-            currentDeviceHeading = heading;
-            updateCompass(currentQiblaAngle, currentDeviceHeading);
-        }
-    }
-
-    /* =====================================================
-       GET LOCATION & UPDATE ALL
-    ===================================================== */
+    // ============================================
+    // UPDATE QIBLA FOR GIVEN LOCATION
+    // ============================================
     function updateQiblaForLocation(lat, lng, cityName) {
-        const qiblaAngle = calculateQibla(lat, lng);
+        currentQiblaAngle = calculateQibla(lat, lng);
         const distance = calculateDistance(lat, lng, KAABA_LAT, KAABA_LNG);
 
-        updateCompass(qiblaAngle, currentDeviceHeading);
+        updateCompassVisual();
 
         if (qiblaCity) qiblaCity.textContent = cityName || `${lat.toFixed(3)}, ${lng.toFixed(3)}`;
         if (qiblaDistance) qiblaDistance.textContent = distance.toLocaleString() + " km";
@@ -3376,12 +3468,12 @@ document.addEventListener("DOMContentLoaded", function () {
         }
         if (qiblaError) qiblaError.style.display = "none";
 
-        initMap(lat, lng, qiblaAngle, distance);
+        initMap(lat, lng);
     }
 
-    /* =====================================================
-       DETECT LOCATION
-    ===================================================== */
+    // ============================================
+    // DETECT LOCATION
+    // ============================================
     async function detectQiblaLocation() {
         if (qiblaStatus) qiblaStatus.innerHTML = `<span>⏳</span> Detecting your location...`;
         if (qiblaError) qiblaError.style.display = "none";
@@ -3406,11 +3498,10 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
 
                 updateQiblaForLocation(lat, lng, cityName);
-                startDeviceOrientation();
             },
             function (error) {
                 let msg = "Unable to detect location.";
-                if (error.code === 1) msg = "Location permission denied. Please allow GPS access.";
+                if (error.code === 1) msg = "Location permission denied. Please allow GPS or enter manually.";
                 if (error.code === 2) msg = "Location unavailable. Please check your GPS.";
                 if (error.code === 3) msg = "Location request timed out. Please try again.";
                 showQiblaError(msg);
@@ -3427,9 +3518,9 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    /* =====================================================
-       MANUAL LOCATION
-    ===================================================== */
+    // ============================================
+    // MANUAL LOCATION
+    // ============================================
     async function saveManualQiblaLocation() {
         const city = qiblaCityInput?.value.trim();
         const country = qiblaCountryInput?.value.trim();
@@ -3450,7 +3541,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 const lng = parseFloat(data[0].lon);
                 updateQiblaForLocation(lat, lng, `${city}, ${country}`);
                 if (qiblaManualBox) qiblaManualBox.style.display = "none";
-                startDeviceOrientation();
             } else {
                 alert("Location not found. Please check the spelling.");
                 if (qiblaStatus) qiblaStatus.innerHTML = `<span>⚠️</span> Location not found.`;
@@ -3460,16 +3550,11 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    /* =====================================================
-       EVENT LISTENERS
-    ===================================================== */
+    // ============================================
+    // EVENT LISTENERS
+    // ============================================
+    if (qiblaDetectBtn) qiblaDetectBtn.addEventListener("click", detectQiblaLocation);
 
-    // Detect button
-    if (qiblaDetectBtn) {
-        qiblaDetectBtn.addEventListener("click", detectQiblaLocation);
-    }
-
-    // Reset button
     if (qiblaResetBtn) {
         qiblaResetBtn.addEventListener("click", () => {
             if (qiblaManualBox) qiblaManualBox.style.display = "none";
@@ -3482,7 +3567,6 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // Manual button (from error)
     if (qiblaManualBtn) {
         qiblaManualBtn.addEventListener("click", () => {
             if (qiblaManualBox) {
@@ -3493,19 +3577,14 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // Save manual
-    if (qiblaSaveManual) {
-        qiblaSaveManual.addEventListener("click", saveManualQiblaLocation);
-    }
+    if (qiblaSaveManual) qiblaSaveManual.addEventListener("click", saveManualQiblaLocation);
 
-    // Cancel manual
     if (qiblaCancelManual) {
         qiblaCancelManual.addEventListener("click", () => {
             if (qiblaManualBox) qiblaManualBox.style.display = "none";
         });
     }
 
-    // Enter key in manual inputs
     [qiblaCityInput, qiblaCountryInput].forEach(input => {
         if (input) {
             input.addEventListener("keyup", (e) => {
@@ -3514,26 +3593,22 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-    /* =====================================================
-       PAGE NAVIGATION HOOK
-       (Load map when Qibla page opens)
-    ===================================================== */
+    // ============================================
+    // PAGE NAVIGATION HOOK
+    // ============================================
     const originalShowPageForQibla = window.showPage;
     if (typeof originalShowPageForQibla === "function") {
         window.showPage = function (pageName, updateUrl = true) {
             originalShowPageForQibla(pageName, updateUrl);
             if (pageName === "qibla") {
-                // Re-initialize map (in case it was removed)
                 setTimeout(() => {
-                    if (qiblaMap) {
-                        qiblaMap.invalidateSize();
-                    }
+                    if (qiblaMap) qiblaMap.invalidateSize();
                 }, 300);
             }
         };
     }
 
-    // Initialize if Qibla page is already active
+    // Auto-init if Qibla page loaded directly
     if (window.location.hash === "#qibla") {
         setTimeout(detectQiblaLocation, 500);
     }

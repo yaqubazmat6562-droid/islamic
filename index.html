@@ -389,24 +389,39 @@
                 <span>📍</span> Detecting your location...
             </div>
 
-            <!-- COMPASS WRAPPER -->
-            <div class="compass-wrapper">
-                <div class="compass-ring" id="compassRing">
-                    <div class="compass-cardinal n">N</div>
-                    <div class="compass-cardinal e">E</div>
-                    <div class="compass-cardinal s">S</div>
-                    <div class="compass-cardinal w">W</div>
-                    
-                    <div class="compass-ticks" id="compassTicks"></div>
+           <!-- COMPASS WRAPPER -->
+<div class="compass-wrapper">
+    <div class="compass-ring" id="compassRing">
+        <div class="compass-cardinal n">N</div>
+        <div class="compass-cardinal e">E</div>
+        <div class="compass-cardinal s">S</div>
+        <div class="compass-cardinal w">W</div>
+        
+        <div class="compass-ticks" id="compassTicks"></div>
 
-                    <!-- KAABA MARKER (Needle) -->
-                    <div class="kaaba-needle" id="kaabaNeedle">
-                        <div class="kaaba-icon">🕋</div>
-                    </div>
-                    
-                    <div class="compass-center-dot"></div>
-                </div>
-            </div>
+        <!-- KAABA MARKER (Needle) -->
+        <div class="kaaba-needle" id="kaabaNeedle">
+            <div class="kaaba-icon">🕋</div>
+        </div>
+        
+        <div class="compass-center-dot"></div>
+    </div>
+</div>
+
+<!-- COMPASS CONTROLS (NEW) -->
+<div class="compass-controls" id="compassControls">
+    <button id="compassEnableBtn" class="compass-enable-btn">
+        🧭 Enable Live Compass (Mobile)
+    </button>
+    <div class="compass-manual-slider">
+        <label for="compassSlider">🧭 Rotate Manually:</label>
+        <input type="range" id="compassSlider" min="0" max="360" value="0" step="1">
+        <span id="compassSliderValue">0°</span>
+    </div>
+    <div class="compass-mode" id="compassMode">
+        📱 Mode: <strong>Manual</strong>
+    </div>
+</div>
 
             <!-- DEGREES INFO -->
             <div class="qibla-degrees-box">

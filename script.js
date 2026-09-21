@@ -3612,4 +3612,104 @@ document.addEventListener("DOMContentLoaded", function () {
     if (window.location.hash === "#qibla") {
         setTimeout(detectQiblaLocation, 500);
     }
+});/* =========================================================
+   HERO SLIDESHOW — AUTO CHANGE EVERY 3 SECONDS
+   ✅ 5 Images
+   ✅ Smooth Fade + Zoom (Ken Burns) Effect
+   ✅ Clickable Dots
+   ✅ Auto Pause on Tab Hidden
+========================================================= */
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const slides = document.querySelectorAll(".hero-slide");
+    const dots = document.querySelectorAll(".hero-dot");
+
+    if (!slides.length) return; // Agar hero slideshow nahi hai to kuch na karo
+
+    let currentSlide = 0;
+    const SLIDE_DURATION = 3000; // 3 seconds
+    let slideInterval = null;
+
+    /* ============================================
+       SHOW SPECIFIC SLIDE
+    ============================================ */
+    function showSlide(index) {
+        // Remove active from all
+        slides.forEach(slide => slide.classList.remove("active"));
+        dots.forEach(dot => dot.classList.remove("active"));
+
+        // Wrap around
+        if (index >= slides.length) index = 0;
+        if (index < 0) index = slides.length - 1;
+
+        // Add active to current
+        slides[index].classList.add("active");
+        if (dots[index]) dots[index].classList.add("active");
+
+        currentSlide = index;
+    }
+
+    /* ============================================
+       NEXT SLIDE
+    ============================================ */
+    function nextSlide() {
+        showSlide(currentSlide + 1);
+    }
+
+    /* ============================================
+       START AUTO SLIDER
+    ============================================ */
+    function startSlider() {
+        stopSlider();
+        slideInterval = setInterval(nextSlide, SLIDE_DURATION);
+    }
+
+    /* ============================================
+       STOP AUTO SLIDER
+    ============================================ */
+    function stopSlider() {
+        if (slideInterval) {
+            clearInterval(slideInterval);
+            slideInterval = null;
+        }
+    }
+
+    /* ============================================
+       DOT CLICK HANDLER
+    ============================================ */
+    dots.forEach((dot, index) => {
+        dot.addEventListener("click", () => {
+            showSlide(index);
+            startSlider(); // Restart timer
+        });
+    });
+
+    /* ============================================
+       PAUSE WHEN TAB HIDDEN (Performance)
+    ============================================ */
+    document.addEventListener("visibilitychange", () => {
+        if (document.hidden) {
+            stopSlider();
+        } else {
+            startSlider();
+        }
+    });
+
+    /* ============================================
+       PAUSE ON HOVER (Optional - Better UX)
+    ============================================ */
+    const heroSection = document.querySelector(".hero");
+    if (heroSection) {
+        heroSection.addEventListener("mouseenter", stopSlider);
+        heroSection.addEventListener("mouseleave", startSlider);
+    }
+
+    /* ============================================
+       INITIALIZE
+    ============================================ */
+    showSlide(0);
+    startSlider();
+
+    console.log("[Hero] Slideshow started with " + slides.length + " images ✅");
 });

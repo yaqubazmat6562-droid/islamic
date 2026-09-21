@@ -1572,11 +1572,31 @@ body.light-theme .hero-dot.active {
     box-shadow: 0 15px 40px rgba(34, 200, 80, 0.25);
 }
 
-.book-icon { font-size: 55px; margin-bottom: 15px; }
-.hadith-book-card h3 { color: white; font-size: 24px; margin: 10px 0; }
-.hadith-book-card p { color: #55ff90; font-size: 20px; direction: rtl; margin: 8px 0; }
-.hadith-book-card span { display: block; color: #a9d8b8; margin: 15px 0 20px; font-size: 14px; }
+..book-icon {
+    width: 100px;
+    height: 100px;
+    margin: 0 auto 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 15px;
+    overflow: hidden;
+    background: rgba(34, 200, 80, 0.08);
+    border: 1px solid rgba(34, 200, 80, 0.25);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
 
+.book-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.hadith-book-card:hover .book-icon {
+    transform: scale(1.08);
+    box-shadow: 0 8px 25px rgba(34, 200, 80, 0.35);
+}
 .hadith-book-card button {
     border: none;
     padding: 12px 22px;

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GREEN MUTABIC · GOOGLE MAPS STYLE 3D EARTH</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="er-style.css">
+</head>
+<body>
+  <div class="globe-wrapper">
+    <div class="globe-header">
+      <div class="logo-area">
+        <span class="logo-icon">🌍</span>
+        <h1>green mutabic <span>google maps style · deep zoom earth</span></h1>
+      </div>
+      <div class="globe-stats">
+        <span>🛰️ <i id="fpsCounter">60</i> FPS</span>
+        <span>📍 <i id="zoomLevelTag">WORLD</i></span>
+        <span>🗺️ <i id="mapModeTag">3D GLOBE</i></span>
+      </div>
+    </div>
+
+    <div class="canvas-container" id="canvasContainer">
+      <!-- 3D Globe View -->
+      <div class="globe-view" id="globeView">
+        <div class="globe-loading" id="loadingOverlay">
+          <div class="spinner"></div>
+          <p id="loadingTitle">Loading 4K Earth...</p>
+          <div class="load-progress-track">
+            <div class="load-progress-fill" id="loadProgressFill"></div>
+          </div>
+          <span id="loadingProgress" style="font-size:0.85rem;opacity:0.75;">0%</span>
+          <button id="skipLoadingBtn" class="skip-btn">⚡ Start Anyway</button>
+        </div>
+
+        <div class="zoom-hud" id="zoomHud">
+          <div class="zoom-bar">
+            <span class="zoom-label" id="zoomLabel">WORLD VIEW</span>
+            <div class="zoom-track">
+              <div class="zoom-fill" id="zoomFill"></div>
+              <div class="zoom-marker" id="zoomMarker"></div>
+            </div>
+            <span class="zoom-scale" id="zoomScale">1×</span>
+          </div>
+        </div>
+
+        <div class="city-tooltip" id="cityTooltip">
+          <div class="city-name" id="tooltipName">—</div>
+          <div class="city-info" id="tooltipInfo">—</div>
+        </div>
+
+        <div class="layer-legend" id="layerLegend">
+          <div class="legend-title">🗺️ Active Layers</div>
+          <div class="legend-item" data-layer="countries"><span class="legend-dot"></span> Countries</div>
+          <div class="legend-item" data-layer="states"><span class="legend-dot"></span> Provinces</div>
+          <div class="legend-item" data-layer="cities"><span class="legend-dot"></span> Cities</div>
+          <div class="legend-item" data-layer="streets"><span class="legend-dot"></span> Streets</div>
+          <div class="legend-item" data-layer="buildings"><span class="legend-dot"></span> 3D Buildings</div>
+        </div>
+      </div>
+
+      <!-- Real Map View (Google Maps style) -->
+      <div class="map-view" id="mapView">
+        <div id="leafletMap"></div>
+        
+        <div class="map-controls-top">
+          <button class="map-btn" id="backToGlobeBtn" title="Back to Globe">🌍 3D GLOBE</button>
+          <button class="map-btn active" id="satelliteBtn" title="Satellite view">🛰️ Satellite</button>
+          <button class="map-btn" id="streetsBtn" title="Streets view">🗺️ Streets</button>
+          <button class="map-btn" id="darkBtn" title="Dark mode">🌙 Dark</button>
+          <button class="map-btn" id="terrainBtn" title="Terrain">⛰️ Terrain</button>
+        </div>
+
+        <div class="map-info-panel" id="mapInfoPanel">
+          <div class="info-title" id="mapInfoTitle">Location</div>
+          <div class="info-coords" id="mapInfoCoords">0, 0</div>
+          <div class="info-zoom" id="mapInfoZoom">Zoom: 13</div>
+        </div>
+
+        <div class="map-search-box">
+          <input type="text" id="mapSearchInput" placeholder="Search city or place..." autocomplete="off">
+          <button id="mapSearchBtn">🔍</button>
+        </div>
+
+        <div class="map-quick-jump">
+          <button class="quick-btn" data-lat="24.8607" data-lng="67.0011" data-zoom="14">🇵🇰 Karachi</button>
+          <button class="quick-btn" data-lat="31.5204" data-lng="74.3587" data-zoom="14">🇵🇰 Lahore</button>
+          <button class="quick-btn" data-lat="33.6844" data-lng="73.0479" data-zoom="14">🇵🇰 Islamabad</button>
+          <button class="quick-btn" data-lat="40.7128" data-lng="-74.0060" data-zoom="14">🗽 New York</button>
+          <button class="quick-btn" data-lat="51.5074" data-lng="-0.1278" data-zoom="14">🇬🇧 London</button>
+          <button class="quick-btn" data-lat="35.6762" data-lng="139.6503" data-zoom="14">🇯🇵 Tokyo</button>
+          <button class="quick-btn" data-lat="4.2105" data-lng="101.9758" data-zoom="14">🇲🇾 Ipoh</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="globe-controls">
+      <button class="ctrl-btn" id="zoomInBtn" title="Zoom in">➕</button>
+      <button class="ctrl-btn" id="zoomOutBtn" title="Zoom out">➖</button>
+      <button class="ctrl-btn active" id="toggleAutoBtn" title="Auto rotate">⏸️</button>
+      <button class="ctrl-btn active" id="toggleCloudsBtn" title="Clouds">☁️</button>
+      <button class="ctrl-btn" id="flyToPakistanBtn" title="Fly to Pakistan">🇵🇰</button>
+      <button class="ctrl-btn" id="flyToKarachiBtn" title="Fly to Karachi">🏙️</button>
+      <button class="ctrl-btn" id="openMapBtn" title="Open real map">🗺️</button>
+      <button class="ctrl-btn" id="resetViewBtn" title="Reset">🎯</button>
+      <div class="spacer"></div>
+      <div class="control-slider">
+        <label for="speedSlider">Rotate</label>
+        <input type="range" id="speedSlider" min="0" max="2" step="0.05" value="0.3">
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="er-script.js"></script>
+</body>
+</html>

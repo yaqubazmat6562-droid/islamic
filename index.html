@@ -220,10 +220,80 @@
             <div class="header-actions">
                 <button class="icon-button" data-page="search" aria-label="Search">🔍</button>
                 <button class="theme-button" id="themeButton" aria-label="Change Theme">☀️</button>
+                <button class="login-header-btn" id="loginHeaderBtn" aria-label="Login">
+    <span id="loginBtnIcon">👤</span>
+    <span id="loginBtnText">Login</span>
+</button>
             </div>
         </div>
     </header>
+     <!-- =====================================================
+     LOGIN MODAL
+===================================================== -->
+<div id="loginModal" class="login-modal" style="display: none;">
+    <div class="login-box">
+        <button class="login-close" id="loginClose">✕</button>
+        
+        <div class="login-icon">🕌</div>
+        <h2 id="loginTitle">Welcome Back</h2>
+        <p id="loginSubtitle">Login to IslamicWay</p>
 
+        <!-- LOGIN FORM -->
+        <div id="loginForm">
+            <div class="login-input-group">
+                <label>📧 Email</label>
+                <input type="email" id="loginEmail" placeholder="your@email.com" autocomplete="email">
+            </div>
+            <div class="login-input-group">
+                <label>🔒 Password</label>
+                <input type="password" id="loginPassword" placeholder="Enter password" autocomplete="current-password">
+            </div>
+            <button class="login-submit-btn" id="loginSubmitBtn">🔓 Login</button>
+            <p class="login-switch-text">
+                Don't have an account? 
+                <a href="#" id="switchToSignup">Sign Up</a>
+            </p>
+        </div>
+
+        <!-- SIGNUP FORM -->
+        <div id="signupForm" style="display: none;">
+            <div class="login-input-group">
+                <label>👤 Full Name</label>
+                <input type="text" id="signupName" placeholder="Your name">
+            </div>
+            <div class="login-input-group">
+                <label>📧 Email</label>
+                <input type="email" id="signupEmail" placeholder="your@email.com">
+            </div>
+            <div class="login-input-group">
+                <label>🔒 Password</label>
+                <input type="password" id="signupPassword" placeholder="Min 6 characters">
+            </div>
+            <button class="login-submit-btn" id="signupSubmitBtn">📝 Create Account</button>
+            <p class="login-switch-text">
+                Already have an account? 
+                <a href="#" id="switchToLogin">Login</a>
+            </p>
+        </div>
+
+        <!-- LOGGED IN VIEW -->
+        <div id="loggedInView" style="display: none;">
+            <div class="user-avatar" id="userAvatar">👤</div>
+            <h3 id="userNameDisplay">User</h3>
+            <p id="userEmailDisplay">user@email.com</p>
+            
+            <div class="notification-toggle-box">
+                <label class="toggle-label">
+                    <span>🔔 Prayer Notifications</span>
+                    <input type="checkbox" id="notificationToggle" checked>
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+
+            <button class="login-submit-btn logout-btn" id="logoutBtn">🚪 Logout</button>
+        </div>
+    </div>
+</div>
     <main id="mainContent">
 
         <!-- =====================================================
@@ -318,6 +388,13 @@
     <div class="quick-icon">🎂</div>
     <h3>Age Calculator</h3>
     <p>Calculate Your Age</p>
+    <span class="arrow">→</span>
+</a>
+<!-- note pad Card -->
+<a href="note-index.html" class="quick-card">
+    <div class="quick-icon">🎂</div>
+    <h3>note pad</h3>
+    <p>inter your words</p>
     <span class="arrow">→</span>
 </a>
             </section>

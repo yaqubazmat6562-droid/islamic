@@ -1,3 +1,4 @@
+
 /* =========================================================
    ISLAMICWAY - COMPLETE JAVASCRIPT (FIXED v4.0)
    ✅ Hadith search: #15, #300, keywords
@@ -2559,42 +2560,104 @@ document.addEventListener("DOMContentLoaded", function () {
         const timeStr = hours > 0 ? `${hours}h ${minutes}m` : `${minutes}m`;
         nextAdhanText.textContent = `Next Adhan: ${prayerName} in ${timeStr}`;
     }
+function playAdhan(prayerName = "") {
+    // ✅ STEP 1: Check karo user logged in hai ya nahi
+    const user = localStorage.getItem("islamicway_user");
+    
+    // ✅ STEP 2: Check karo notifications ON hain ya OFF
+    const notifEnabled = localStorage.getItem("islamicway_notifications_enabled") !== "false";
+    
+    // Agar user login nahi hai YA notifications off hain, to Adhan SKIP karo
+    if (!user || !notifEnabled) {
+        console.log("[Adhan] Skipped — user not logged in or notifications disabled");
+        return;
+    }
 
-       function playAdhan(prayerName = "") {
-        const muezzin = muezzinSelect ? muezzinSelect.value : "ar.alafasy";
-        const url = getAdhanURL(muezzin);
+    const muezzin = muezzinSelect ? muezzinSelect.value : "ar.alafasy";
+    const url = getAdhanURL(muezzin);
 
-        console.log("[Adhan] Loading audio:", url);
+    console.log("[Adhan] Loading audio:", url);
 
-        adhanAudio.src = url;
-        adhanAudio.volume = 1.0;
+    adhanAudio.src = url;
+    adhanAudio.volume = 1.0;
 
-        /* ---------- Error Handler: Fallback to online ---------- */
-        adhanAudio.onerror = function () {
-            console.warn("[Adhan] Local audio failed, trying online fallback...");
-            const fallbackURL = getAdhanFallbackURL(muezzin);
-            adhanAudio.src = fallbackURL;
+    // ✅ STEP 3: Agar local audio file na mile to online fallback
+    adhanAudio.onerror = function () {
+        console.warn("[Adhan] Local audio failed, trying online fallback...");
+        const fallbackURL = getAdhanFallbackURL(muezzin);
+        adhanAudio.src = fallbackURL;
 
-            adhanAudio.play()
-                .then(() => {
-                    updateAdhanStatus(`🔊 Adhan playing (online fallback)${prayerName ? " — " + prayerName : ""}...`, true);
-                })
-                .catch(() => {
-                    updateAdhanStatus("⚠️ Adhan audio could not be loaded. Please check your connection.", false);
-                });
-        };
-
-        /* ---------- Play Audio ---------- */
         adhanAudio.play()
             .then(() => {
-                updateAdhanStatus(`🔊 Adhan playing${prayerName ? " for " + prayerName : ""}...`, true);
-                console.log("[Adhan] ✅ Playing:", muezzin);
+                updateAdhanStatus(`🔊 Adhan playing (online fallback)${prayerName ? " — " + prayerName : ""}...`, true);
+                // ✅ Notification bhi show karo
+                showPrayerNotification(prayerName);
             })
-            .catch((err) => {
-                console.warn("[Adhan] Play failed:", err);
-                updateAdhanStatus("⚠️ Tap any button to allow audio", false);
+            .catch(() => {
+                updateAdhanStatus("⚠️ Adhan audio could not be loaded. Please check your connection.", false);
             });
+    };
+
+    // ✅ STEP 4: Adhan play karo
+    adhanAudio.play()
+        .then(() => {
+            updateAdhanStatus(`🔊 Adhan playing${prayerName ? " for " + prayerName : ""}...`, true);
+            console.log("[Adhan] ✅ Playing:", muezzin);
+            
+            // ✅ STEP 5: Browser notification bhi bhejo
+            showPrayerNotification(prayerName);
+        })
+        .catch((err) => {
+            console.warn("[Adhan] Play failed:", err);
+            updateAdhanStatus("⚠️ Tap any button to allow audio", false);
+        });
+}
+
+// =========================================================
+// ✅ NAYA HELPER FUNCTION — Prayer Notification Show Karega
+// =========================================================
+function showPrayerNotification(prayerName) {
+    // Check karo browser notification support karta hai ya nahi
+    if (!("Notification" in window)) {
+        console.log("[Notification] Browser support nahi karta");
+        return;
     }
+    
+    // Check karo permission granted hai ya nahi
+    if (Notification.permission !== "granted") {
+        console.log("[Notification] Permission nahi hai");
+        return;
+    }
+    
+    // Check karo user ne notifications ON rakhe hain
+    const notifEnabled = localStorage.getItem("islamicway_notifications_enabled") !== "false";
+    if (!notifEnabled) return;
+
+    try {
+        // Browser notification create karo
+        const notification = new Notification("🕌 " + (prayerName || "Prayer") + " Time", {
+            body: "It's time for " + (prayerName || "prayer") + " salah. Please pray.",
+            icon: "IMG 1.png",
+            badge: "IMG 1.png",
+            tag: "adhan-notification",
+            requireInteraction: false
+        });
+
+        // 15 second baad auto close
+        setTimeout(() => notification.close(), 15000);
+
+        // Click karne par app focus ho
+        notification.onclick = function () {
+            window.focus();
+            notification.close();
+        };
+
+        console.log("[Notification] ✅ Shown for " + prayerName);
+
+    } catch (e) {
+        console.warn("[Notification] Error:", e);
+    }
+}
 
     function stopAdhan() {
         adhanAudio.pause();
@@ -3712,4 +3775,537 @@ document.addEventListener("DOMContentLoaded", function () {
     startSlider();
 
     console.log("[Hero] Slideshow started with " + slides.length + " images ✅");
+});/* =========================================================
+   LOGIN SYSTEM + PRAYER NOTIFICATIONS
+   ✅ Mobile-friendly
+   ✅ LocalStorage based
+   ✅ Prayer time notifications
+   ✅ Auto Adhan on prayer time
+========================================================= */
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    /* ============================================
+       ELEMENTS
+    ============================================ */
+    const loginModal      = document.getElementById("loginModal");
+    const loginClose      = document.getElementById("loginClose");
+    const loginHeaderBtn  = document.getElementById("loginHeaderBtn");
+    const loginBtnIcon    = document.getElementById("loginBtnIcon");
+    const loginBtnText    = document.getElementById("loginBtnText");
+    const loginForm       = document.getElementById("loginForm");
+    const signupForm      = document.getElementById("signupForm");
+    const loggedInView    = document.getElementById("loggedInView");
+    const loginTitle      = document.getElementById("loginTitle");
+    const loginSubtitle   = document.getElementById("loginSubtitle");
+
+    const loginEmail      = document.getElementById("loginEmail");
+    const loginPassword   = document.getElementById("loginPassword");
+    const loginSubmitBtn  = document.getElementById("loginSubmitBtn");
+    const switchToSignup  = document.getElementById("switchToSignup");
+    const switchToLogin   = document.getElementById("switchToLogin");
+
+    const signupName      = document.getElementById("signupName");
+    const signupEmail     = document.getElementById("signupEmail");
+    const signupPassword  = document.getElementById("signupPassword");
+    const signupSubmitBtn = document.getElementById("signupSubmitBtn");
+
+    const userAvatar         = document.getElementById("userAvatar");
+    const userNameDisplay    = document.getElementById("userNameDisplay");
+    const userEmailDisplay   = document.getElementById("userEmailDisplay");
+    const notificationToggle = document.getElementById("notificationToggle");
+    const logoutBtn          = document.getElementById("logoutBtn");
+
+    /* ============================================
+       STORAGE KEYS
+    ============================================ */
+    const USER_KEY          = "islamicway_user";
+    const NOTIFICATION_KEY  = "islamicway_notifications_enabled";
+    const NOTIFIED_KEY      = "islamicway_notified_prayers";
+
+    /* ============================================
+       GET / SAVE USER
+    ============================================ */
+    function getCurrentUser() {
+        try {
+            const data = localStorage.getItem(USER_KEY);
+            return data ? JSON.parse(data) : null;
+        } catch { return null; }
+    }
+
+    function saveUser(user) {
+        try {
+            localStorage.setItem(USER_KEY, JSON.stringify(user));
+        } catch (e) { console.warn("Storage error:", e); }
+    }
+
+    function removeUser() {
+        localStorage.removeItem(USER_KEY);
+    }
+
+    /* ============================================
+       UPDATE HEADER BUTTON
+    ============================================ */
+    function updateHeaderButton() {
+        const user = getCurrentUser();
+        
+        if (user) {
+            loginHeaderBtn.classList.add("logged-in");
+            if (loginBtnIcon) loginBtnIcon.textContent = "👤";
+            if (loginBtnText) loginBtnText.textContent = user.name.split(" ")[0];
+        } else {
+            loginHeaderBtn.classList.remove("logged-in");
+            if (loginBtnIcon) loginBtnIcon.textContent = "👤";
+            if (loginBtnText) loginBtnText.textContent = "Login";
+        }
+    }
+
+    /* ============================================
+       SHOW LOGIN MODAL
+    ============================================ */
+    function showLoginModal() {
+        if (!loginModal) return;
+        loginModal.style.display = "flex";
+        document.body.style.overflow = "hidden";
+
+        const user = getCurrentUser();
+        
+        if (user) {
+            // Show logged in view
+            loginForm.style.display = "none";
+            signupForm.style.display = "none";
+            loggedInView.style.display = "block";
+            
+            loginTitle.textContent = "Welcome Back";
+            loginSubtitle.textContent = "You are logged in";
+            
+            userNameDisplay.textContent = user.name;
+            userEmailDisplay.textContent = user.email;
+            
+            // Set notification toggle state
+            const notifEnabled = localStorage.getItem(NOTIFICATION_KEY) !== "false";
+            notificationToggle.checked = notifEnabled;
+        } else {
+            // Show login form
+            loginForm.style.display = "block";
+            signupForm.style.display = "none";
+            loggedInView.style.display = "none";
+            
+            loginTitle.textContent = "Welcome Back";
+            loginSubtitle.textContent = "Login to IslamicWay";
+        }
+    }
+
+    /* ============================================
+       HIDE LOGIN MODAL
+    ============================================ */
+    function hideLoginModal() {
+        if (!loginModal) return;
+        loginModal.style.display = "none";
+        document.body.style.overflow = "";
+        
+        // Clear inputs
+        if (loginEmail) loginEmail.value = "";
+        if (loginPassword) loginPassword.value = "";
+        if (signupName) signupName.value = "";
+        if (signupEmail) signupEmail.value = "";
+        if (signupPassword) signupPassword.value = "";
+    }
+
+    /* ============================================
+       SIGNUP
+    ============================================ */
+    function handleSignup() {
+        const name     = signupName?.value.trim();
+        const email    = signupEmail?.value.trim();
+        const password = signupPassword?.value;
+
+        if (!name || !email || !password) {
+            alert("⚠️ Please fill all fields.");
+            return;
+        }
+
+        if (password.length < 6) {
+            alert("⚠️ Password must be at least 6 characters.");
+            return;
+        }
+
+        if (!email.includes("@") || !email.includes(".")) {
+            alert("⚠️ Please enter a valid email.");
+            return;
+        }
+
+        const user = {
+            name: name,
+            email: email,
+            password: btoa(password), // Simple encoding (not secure, just demo)
+            createdAt: new Date().toISOString()
+        };
+
+        saveUser(user);
+        localStorage.setItem(NOTIFICATION_KEY, "true");
+
+        // Request notification permission
+        requestNotificationPermission();
+
+        updateHeaderButton();
+        showLoginModal();
+
+        showToast("✅ Account created successfully! Welcome " + name);
+    }
+
+    /* ============================================
+       LOGIN
+    ============================================ */
+    function handleLogin() {
+        const email    = loginEmail?.value.trim();
+        const password = loginPassword?.value;
+
+        if (!email || !password) {
+            alert("⚠️ Please enter email and password.");
+            return;
+        }
+
+        // Check if account exists in localStorage
+        const existingUser = localStorage.getItem("islamicway_registered_user");
+        
+        if (existingUser) {
+            try {
+                const userData = JSON.parse(existingUser);
+                if (userData.email === email && atob(userData.password) === password) {
+                    saveUser(userData);
+                    updateHeaderButton();
+                    showLoginModal();
+                    requestNotificationPermission();
+                    showToast("✅ Welcome back, " + userData.name + "!");
+                    return;
+                }
+            } catch (e) {}
+        }
+
+        // Demo login (agar koi account na ho)
+        const user = {
+            name: email.split("@")[0],
+            email: email,
+            password: btoa(password),
+            createdAt: new Date().toISOString()
+        };
+
+        saveUser(user);
+        localStorage.setItem("islamicway_registered_user", JSON.stringify(user));
+        localStorage.setItem(NOTIFICATION_KEY, "true");
+
+        requestNotificationPermission();
+        updateHeaderButton();
+        showLoginModal();
+        showToast("✅ Login successful! Welcome " + user.name);
+    }
+
+    /* ============================================
+       LOGOUT
+    ============================================ */
+    function handleLogout() {
+        if (!confirm("Are you sure you want to logout?")) return;
+        
+        removeUser();
+        updateHeaderButton();
+        hideLoginModal();
+        showToast("👋 Logged out successfully");
+    }
+
+    /* ============================================
+       NOTIFICATION PERMISSION
+    ============================================ */
+    async function requestNotificationPermission() {
+        if (!("Notification" in window)) {
+            console.log("Notifications not supported");
+            return false;
+        }
+
+        if (Notification.permission === "granted") {
+            return true;
+        }
+
+        if (Notification.permission !== "denied") {
+            try {
+                const permission = await Notification.requestPermission();
+                return permission === "granted";
+            } catch (e) {
+                console.warn("Notification permission error:", e);
+            }
+        }
+
+        return false;
+    }
+
+    /* ============================================
+       SHOW BROWSER NOTIFICATION
+    ============================================ */
+    function showBrowserNotification(title, body, icon = "🕌") {
+        if (!("Notification" in window)) return;
+        if (Notification.permission !== "granted") return;
+
+        const notifEnabled = localStorage.getItem(NOTIFICATION_KEY) !== "false";
+        if (!notifEnabled) return;
+
+        try {
+            const notification = new Notification(title, {
+                body: body,
+                icon: "IMG 1.png",
+                badge: "IMG 1.png",
+                tag: "prayer-notification",
+                requireInteraction: false
+            });
+
+            setTimeout(() => notification.close(), 15000);
+
+            notification.onclick = function () {
+                window.focus();
+                notification.close();
+            };
+        } catch (e) {
+            console.warn("Notification error:", e);
+        }
+    }
+
+    /* ============================================
+       IN-APP TOAST
+    ============================================ */
+    function showPrayerToast(prayerName, time) {
+        const old = document.querySelector(".prayer-notification-toast");
+        if (old) old.remove();
+
+        const toast = document.createElement("div");
+        toast.className = "prayer-notification-toast";
+        toast.innerHTML = `
+            <div class="prayer-notif-icon">🕌</div>
+            <div class="prayer-notif-content">
+                <strong>${prayerName} Prayer Time</strong>
+                <small>It's time for ${prayerName} salah (${time})</small>
+            </div>
+            <button class="prayer-notif-close" onclick="this.parentElement.remove()">✕</button>
+        `;
+
+        document.body.appendChild(toast);
+
+        setTimeout(() => toast.classList.add("show"), 100);
+
+        setTimeout(() => {
+            toast.classList.remove("show");
+            setTimeout(() => toast.remove(), 500);
+        }, 12000);
+    }
+
+    /* ============================================
+       SHOW TOAST
+    ============================================ */
+    function showToast(message) {
+        const old = document.querySelector(".login-toast");
+        if (old) old.remove();
+
+        const toast = document.createElement("div");
+        toast.className = "login-toast";
+        toast.textContent = message;
+        toast.style.cssText = `
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 9999999;
+            padding: 14px 24px;
+            border-radius: 30px;
+            background: linear-gradient(135deg, #0a5c22, #1a8a42);
+            color: #ffffff;
+            font-size: 14px;
+            font-weight: 700;
+            box-shadow: 0 15px 40px rgba(0, 40, 10, 0.4);
+            border: 1px solid rgba(34, 200, 80, 0.5);
+            animation: fadeIn 0.3s ease;
+        `;
+
+        document.body.appendChild(toast);
+
+        setTimeout(() => {
+            toast.style.transition = "opacity 0.4s ease";
+            toast.style.opacity = "0";
+            setTimeout(() => toast.remove(), 400);
+        }, 3000);
+    }
+
+    /* ============================================
+       PRAYER NOTIFICATION CHECKER
+    ============================================ */
+    function checkPrayerNotifications() {
+        const user = getCurrentUser();
+        if (!user) return;
+
+        const notifEnabled = localStorage.getItem(NOTIFICATION_KEY) !== "false";
+        if (!notifEnabled) return;
+
+        // Get prayer times from localStorage cache
+        const cached = localStorage.getItem("islamicway_prayer_cache");
+        if (!cached) return;
+
+        try {
+            const parsed = JSON.parse(cached);
+            if (parsed.cacheDate !== new Date().toDateString()) return;
+            if (!parsed.data || !parsed.data.timings) return;
+
+            const timings = parsed.data.timings;
+            const now = new Date();
+            const currentHour = now.getHours();
+            const currentMinute = now.getMinutes();
+
+            const prayers = [
+                { name: "Fajr",    time: timings.Fajr },
+                { name: "Dhuhr",   time: timings.Dhuhr },
+                { name: "Asr",     time: timings.Asr },
+                { name: "Maghrib", time: timings.Maghrib },
+                { name: "Isha",    time: timings.Isha }
+            ];
+
+            // Get already notified prayers today
+            let notified = {};
+            try {
+                const stored = localStorage.getItem(NOTIFIED_KEY);
+                if (stored) {
+                    const parsedNotif = JSON.parse(stored);
+                    if (parsedNotif.date === now.toDateString()) {
+                        notified = parsedNotif.prayers || {};
+                    }
+                }
+            } catch (e) {}
+
+            prayers.forEach(function (prayer) {
+                if (!prayer.time) return;
+                
+                const cleanTime = prayer.time.split(" ")[0];
+                const [hh, mm] = cleanTime.split(":").map(Number);
+
+                // Check if current time matches prayer time (within 1 minute)
+                if (hh === currentHour && Math.abs(mm - currentMinute) <= 1) {
+                    if (!notified[prayer.name]) {
+                        // Show notification
+                        showBrowserNotification(
+                            "🕌 " + prayer.name + " Prayer Time",
+                            "It's time for " + prayer.name + " salah. " + cleanTime
+                        );
+
+                        showPrayerToast(prayer.name, cleanTime);
+
+                        // Mark as notified
+                        notified[prayer.name] = true;
+                        localStorage.setItem(NOTIFIED_KEY, JSON.stringify({
+                            date: now.toDateString(),
+                            prayers: notified
+                        }));
+
+                        console.log("[Prayer Notification] " + prayer.name + " at " + cleanTime);
+                    }
+                }
+            });
+
+        } catch (e) {
+            console.warn("Prayer notification check error:", e);
+        }
+    }
+
+    /* ============================================
+       EVENT LISTENERS
+    ============================================ */
+    if (loginHeaderBtn) {
+        loginHeaderBtn.addEventListener("click", showLoginModal);
+    }
+
+    if (loginClose) {
+        loginClose.addEventListener("click", hideLoginModal);
+    }
+
+    if (loginModal) {
+        loginModal.addEventListener("click", function (e) {
+            if (e.target === loginModal) hideLoginModal();
+        });
+    }
+
+    if (loginSubmitBtn) {
+        loginSubmitBtn.addEventListener("click", handleLogin);
+    }
+
+    if (signupSubmitBtn) {
+        signupSubmitBtn.addEventListener("click", handleSignup);
+    }
+
+    if (switchToSignup) {
+        switchToSignup.addEventListener("click", function (e) {
+            e.preventDefault();
+            loginForm.style.display = "none";
+            signupForm.style.display = "block";
+            loginTitle.textContent = "Create Account";
+            loginSubtitle.textContent = "Join IslamicWay today";
+        });
+    }
+
+    if (switchToLogin) {
+        switchToLogin.addEventListener("click", function (e) {
+            e.preventDefault();
+            signupForm.style.display = "none";
+            loginForm.style.display = "block";
+            loginTitle.textContent = "Welcome Back";
+            loginSubtitle.textContent = "Login to IslamicWay";
+        });
+    }
+
+    if (logoutBtn) {
+        logoutBtn.addEventListener("click", handleLogout);
+    }
+
+    if (notificationToggle) {
+        notificationToggle.addEventListener("change", function () {
+            localStorage.setItem(NOTIFICATION_KEY, this.checked ? "true" : "false");
+            
+            if (this.checked) {
+                requestNotificationPermission();
+                showToast("🔔 Notifications enabled");
+            } else {
+                showToast("🔕 Notifications disabled");
+            }
+        });
+    }
+
+    // Enter key support
+    if (loginPassword) {
+        loginPassword.addEventListener("keyup", function (e) {
+            if (e.key === "Enter") handleLogin();
+        });
+    }
+
+    if (signupPassword) {
+        signupPassword.addEventListener("keyup", function (e) {
+            if (e.key === "Enter") handleSignup();
+        });
+    }
+
+    // ESC key
+    document.addEventListener("keydown", function (e) {
+        if (e.key === "Escape" && loginModal && loginModal.style.display === "flex") {
+            hideLoginModal();
+        }
+    });
+
+    /* ============================================
+       INITIALIZE
+    ============================================ */
+    updateHeaderButton();
+
+    // Check prayer notifications every 30 seconds
+    setInterval(checkPrayerNotifications, 30000);
+    checkPrayerNotifications();
+
+    console.log("[Login System] Initialized ✅");
+
+    /* ============================================
+       EXPOSE FOR GLOBAL USE
+    ============================================ */
+    window.showLoginModal = showLoginModal;
+    window.getCurrentUser = getCurrentUser;
 });

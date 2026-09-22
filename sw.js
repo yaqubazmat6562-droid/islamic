@@ -12,11 +12,11 @@ const CACHE_FILES = [
     "./script.js",
     "./search.js",
     "./manifest.json",
-    "./IMG 1.png",
+    "./IMG 2.jpg",
     "./audio/adhan-alafasy.mp3",
     "./audio/adhan-basit.mp3",
     "./audio/adhan-husary.mp3",
-    "./audio/adhan-minshawi.mp3"
+        "./audio/adhan-minshawi.mp3"
 ];
 
 self.addEventListener("install", (event) => {

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GREEN THEME · DYNAMIC NOTEPAD</title>
+  <link rel="stylesheet" href="note-style.css">
+</head>
+<body>
+  <div class="notepad" id="app">
+    <!-- HEADER -->
+    <div class="pad-header">
+      <div class="logo-area">
+        <div class="logo-icon">🌿</div>
+        <h1>islamic <span>green mutabic notepad</span></h1>
+      </div>
+      <div class="stats">
+        <span>📝 <i id="noteCount">0</i> notes</span>
+        <span>🔍 <i id="filteredCount">0</i> shown</span>
+      </div>
+    </div>
+
+    <!-- TOOLBAR -->
+    <div class="toolbar">
+      <button class="tool-btn success" id="newNoteBtn">
+        <span>➕</span> New Note
+      </button>
+      <button class="tool-btn" id="clearAllBtn">
+        <span>🧹</span> Clear All
+      </button>
+      <button class="tool-btn danger" id="deleteLastBtn">
+        <span>🗑️</span> Delete Last
+      </button>
+      <div class="spacer"></div>
+      <div class="search-wrapper">
+        <input type="text" id="searchInput" placeholder="Search notes..." autocomplete="off">
+        <button id="clearSearchBtn" title="clear search">✕</button>
+      </div>
+    </div>
+
+    <!-- NOTES GRID -->
+    <div class="notes-container" id="notesContainer"></div>
+  </div>
+
+  <script src="note-script.js"></script>
+</body>
+</html>

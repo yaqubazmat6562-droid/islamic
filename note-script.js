@@ -1,10 +1,10 @@
 (function () {
-  // ---------- DATA & STATE ----------
+  // ---------- DATA ----------
   let notes = [];
   let editModeId = null;
   let searchQuery = '';
 
-  // DOM elements
+  // DOM refs
   const notesContainer = document.getElementById('notesContainer');
   const noteCountSpan = document.getElementById('noteCount');
   const filteredCountSpan = document.getElementById('filteredCount');
@@ -13,19 +13,21 @@
   const clearAllBtn = document.getElementById('clearAllBtn');
   const deleteLastBtn = document.getElementById('deleteLastBtn');
   const clearSearchBtn = document.getElementById('clearSearchBtn');
+  const fabNewNote = document.getElementById('fabNewNote');
+  const modalOverlay = document.getElementById('modalOverlay');
+  const modalTitle = document.getElementById('modalTitle');
+  const modalContent = document.getElementById('modalContent');
+  const modalCancel = document.getElementById('modalCancel');
+  const modalSave = document.getElementById('modalSave');
 
-  // ---------- UTILITIES ----------
+  // ---------- UTILS ----------
   const generateId = () =>
     Date.now() + '-' + Math.random().toString(36).substring(2, 9);
 
   const formatDate = (timestamp) => {
     const d = new Date(timestamp);
     return (
-      d.toLocaleDateString(undefined, {
-        month: 'short',
-        day: 'numeric',
-        year: 'numeric',
-      }) +
+      d.toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) +
       ' · ' +
       d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
     );
@@ -41,8 +43,8 @@
       .replace(/'/g, '&#039;');
   }
 
-  // ---------- PERSISTENCE ----------
-  const STORAGE_KEY = 'mujy_green_notepad';
+  // ---------- STORAGE ----------
+  const STORAGE_KEY = 'green_mobile_notepad_v2';
 
   function loadFromStorage() {
     try {
@@ -66,9 +68,9 @@
       notes = [
         {
           id: generateId(),
-          title: '🌱 Welcome to MUJY Green',
+          title: '🌱 Welcome to Green Note',
           content:
-            'This is your dynamic notepad.\n\n• Edit title & content by clicking on them.\n• Use the toolbar to create, delete, or clear notes.\n• Search filters notes in real time.\n\nEverything is saved automatically in your browser.',
+            'This is your dynamic notepad.\n\n• Tap any note to edit.\n• Use the toolbar to create, delete, or search.\n• Everything saves automatically.',
           createdAt: now,
           updatedAt: now,
         },
@@ -90,8 +92,8 @@
     const filtered = query
       ? notes.filter(
           (n) =>
-            n.title.toLowerCase().includes(query) ||
-            n.content.toLowerCase().includes(query)
+            (n.title || '').toLowerCase().includes(query) ||
+            (n.content || '').toLowerCase().includes(query)
         )
       : notes;
 
@@ -101,9 +103,9 @@
     if (notes.length === 0) {
       notesContainer.innerHTML = `
         <div class="empty-state">
-          <span>🌿</span>
+          <i class="fas fa-seedling"></i>
           <div>Your green notepad is empty.</div>
-          <div style="font-size:1rem;">Click <strong>“New Note”</strong> to begin.</div>
+          <div style="font-size:0.9rem;">Tap <strong>“New”</strong> to begin.</div>
         </div>
       `;
       return;
@@ -112,9 +114,9 @@
     if (filtered.length === 0) {
       notesContainer.innerHTML = `
         <div class="empty-state">
-          <span>🔍</span>
+          <i class="fas fa-search"></i>
           <div>No notes match “${escapeHtml(searchQuery)}”.</div>
-          <div style="font-size:1rem; margin-top:0.5rem;">Try a different keyword.</div>
+          <div style="font-size:0.9rem;">Try a different keyword.</div>
         </div>
       `;
       return;
@@ -128,20 +130,12 @@
             <div class="note-header">
               <span class="note-date">${formatDate(note.updatedAt || note.createdAt)}</span>
               <div class="note-actions">
-                <button class="edit-btn" data-action="edit" data-id="${note.id}" title="Edit note">✏️</button>
-                <button class="delete-btn" data-action="delete" data-id="${note.id}" title="Delete note">🗑️</button>
+                <button data-action="edit" data-id="${note.id}" title="Edit"><i class="fas fa-pen"></i></button>
+                <button data-action="delete" data-id="${note.id}" title="Delete"><i class="fas fa-trash-alt"></i></button>
               </div>
             </div>
-            <div class="note-title"
-                 contenteditable="${isEditing}"
-                 data-field="title"
-                 data-id="${note.id}"
-                 spellcheck="false">${escapeHtml(note.title)}</div>
-            <div class="note-content"
-                 contenteditable="${isEditing}"
-                 data-field="content"
-                 data-id="${note.id}"
-                 spellcheck="false">${escapeHtml(note.content)}</div>
+            <div class="note-title" contenteditable="${isEditing}" data-field="title" data-id="${note.id}" spellcheck="false">${escapeHtml(note.title)}</div>
+            <div class="note-content" contenteditable="${isEditing}" data-field="content" data-id="${note.id}" spellcheck="false">${escapeHtml(note.content)}</div>
           </div>
         `;
       })
@@ -151,12 +145,11 @@
   // ---------- EVENT LISTENERS ----------
   function attachContainerListeners() {
     notesContainer.addEventListener('click', (e) => {
-      const target = e.target.closest('button');
-      if (!target) return;
-      const action = target.dataset.action;
-      if (!action) return;
-      const noteId = target.dataset.id;
-      if (!noteId) return;
+      const btn = e.target.closest('button');
+      if (!btn) return;
+      const action = btn.dataset.action;
+      const noteId = btn.dataset.id;
+      if (!action || !noteId) return;
 
       if (action === 'delete') {
         deleteNoteById(noteId);
@@ -194,7 +187,7 @@
         if (editModeId === noteId) {
           editModeId = null;
         }
-        setTimeout(() => renderNotes(), 50);
+        setTimeout(renderNotes, 40);
       },
       true
     );
@@ -248,17 +241,27 @@
   }
 
   function addNewNote() {
+    modalTitle.value = '🌿 New note';
+    modalContent.value = 'Write something green...';
+    modalOverlay.classList.add('active');
+    setTimeout(() => modalTitle.focus(), 100);
+  }
+
+  function saveNewNoteFromModal() {
+    const title = modalTitle.value.trim() || 'Untitled';
+    const content = modalContent.value.trim() || '';
     const now = Date.now();
     const newNote = {
       id: generateId(),
-      title: '🌿 New note',
-      content: 'Write something green...',
+      title: title,
+      content: content,
       createdAt: now,
       updatedAt: now,
     };
     notes.unshift(newNote);
     saveToStorage();
     editModeId = newNote.id;
+    modalOverlay.classList.remove('active');
     renderNotes();
 
     setTimeout(() => {
@@ -266,7 +269,7 @@
         `.note-card[data-note-id="${newNote.id}"] .note-title`
       );
       if (newCard) newCard.focus();
-    }, 60);
+    }, 80);
   }
 
   function clearAllNotes() {
@@ -300,8 +303,17 @@
     attachContainerListeners();
 
     newNoteBtn.addEventListener('click', addNewNote);
+    fabNewNote.addEventListener('click', addNewNote);
     clearAllBtn.addEventListener('click', clearAllNotes);
     deleteLastBtn.addEventListener('click', deleteLastNote);
+
+    modalCancel.addEventListener('click', () => {
+      modalOverlay.classList.remove('active');
+    });
+    modalSave.addEventListener('click', saveNewNoteFromModal);
+    modalOverlay.addEventListener('click', (e) => {
+      if (e.target === modalOverlay) modalOverlay.classList.remove('active');
+    });
 
     searchInput.addEventListener('input', handleSearch);
     clearSearchBtn.addEventListener('click', () => {

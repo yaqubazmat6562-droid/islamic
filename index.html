@@ -1539,10 +1539,53 @@
 
 </div><!-- /.website -->
 
-<script src="database.js"></script>
+<script src="full-database.js"></script>
 <script src="script.js"></script>
 <script src="search.js"></script>
 <script src="pwa-install.js"></script>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<!-- =========================================================
+     AL ASSISTANT
+========================================================= -->
+<link rel="stylesheet" href="al-assistant.css">
+
+<!-- Floating Chat Button -->
+<button class="al-assistant-btn" id="alAssistantBtn" aria-label="Al Assistant">
+    🤖
+</button>
+
+<!-- Chat Window -->
+<div class="al-chat-window" id="alChatWindow">
+    
+    <!-- Header -->
+    <div class="al-chat-header">
+        <div class="al-chat-avatar">🤖</div>
+        <div class="al-chat-title">
+            <h3>Al Assistant</h3>
+            <span>Online</span>
+        </div>
+        <button class="al-chat-close" id="alChatClose" aria-label="Close">✕</button>
+    </div>
+    
+    <!-- Messages -->
+    <div class="al-chat-messages" id="alChatMessages"></div>
+    
+    <!-- Suggestions -->
+    <div class="al-suggestions" id="alSuggestions"></div>
+    
+    <!-- Input -->
+    <div class="al-chat-input">
+        <input 
+            type="text" 
+            id="alChatInput" 
+            placeholder="اپنا سوال لکھیں..." 
+            autocomplete="off"
+        >
+        <button class="al-chat-send" id="alChatSend" aria-label="Send">➤</button>
+    </div>
+</div>
+
+<!-- Scripts -->
+<script src="al-assistant.js"></script>
 </body>
 </html>
